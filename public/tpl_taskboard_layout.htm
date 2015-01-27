@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>There are no sprints in the sele</title>
+</head>
+
+<body>
+
+<!-- target: taskboard_layout -->
+<style type="text/css">
+.content {margin-left: 20px; margin-right: 20px;}
+#needsUpdate {cursor: pointer; /* see: http://www.mandarindesign.com/opacity.html */; opacity: .85; filter: alpha(opacity=85); position: absolute; left: 57px; /* centered in the taskboard table: left margin + half of the diff between the table width and the image width */; z-index: 9999;}
+.error {font-size: 8pt; font-weight: bold; color: black; padding-left: 8px; margin-bottom: 12px;}
+.sectionHeader.nextSection {margin-top: 40px;}
+.sectionHeader {width: 930px; font-size: 12pt; color: white; text-align: left; background: transparent; margin-bottom: 12px; line-height: 21px; /* using line-height so that the text is vertically centered. */}
+.sectionHeader_table {border-collapse: collapse; border-spacing: 0; width: 100%; margin: 0px; padding: 0px;}
+.sectionHeader_w {width: 2px; height: 28px; background: url('vm/img/taskboard-header-left.gif') no-repeat 0 0;}
+.sectionHeader_n {height: 28px; background: url('vm/img/taskboard-header-slice.gif') repeat-x 0 0;}
+.sectionHeaderText {color: white; margin-left: 5px;}
+.sectionHeader_e {width: 4px; height: 28px; background: url('vm/img/taskboard-header-right.gif') no-repeat 0 0;}
+.burndownChart {margin-top: 20px;}
+#burndownImg {border-width: 0px; padding-left: 8px; height: 480px;}
+#newImpediment {margin-bottom: 10px;}
+#impedimentsTable {border: none; font-size: 9pt; width: 900px;}
+col#entered {width: 100px;}
+col#lastmodified {width: 100px;}
+col#title {width: 200px;}
+col#description {width: 350px;}
+col#reporter {width: 150px;}
+th.impedimentattribute {font-size: 9pt; color: black; font-weight: bold; text-align: left; border: none; padding-bottom: 12px; padding-left: 8px;}
+.header {width: 970px; height: 61px; font-size: 8pt; display: block; background-image: url('vm/img/webclient-header.gif'); background-repeat: no-repeat; position: relative; top: 0px; left: 0px; color: white; margin-bottom: 12px;}
+.header .headertext {position: absolute; bottom: 12px; left: 21px; color: white;}
+.header a {text-decoration: underline; color: white;}
+</style>
+
+<div class="header">
+	<div class="headertext">
+		Welcome: <span id="welcome_user">andy.wang</span>
+		<span style="padding-left: 20px; font-size: 8pt;">
+		<a href="#/login~logout=true">Log out</a> |
+		<a href="#">ScrumWorks Pro Home</a> |
+		<a href="#/help" target="_blank">Help</a>
+		</span>
+	</div>
+</div>
+<div class="content">
+	<div id="needsUpdate" style="display: none;">
+		<img src="vm/img/refresh_alert_final.gif" alt="Changes have been made to this page by another User. Click this message to update display." onclick="bui.Locator.reload();" />
+	</div>
+	<div class="error" id="noSprints" style="display: none">
+		There are no sprints in the selected product.
+	</div>
+	<div class="error" id="noPbis" style="display: none">
+		There are no backlog items in this sprint.
+	</div>
+	<div class="error" id="noTaskAccess" style="display: none">
+		You don&#39;t have access to view any tasks for this product.
+	</div>
+	
+    <style type="text/css">
+    div#displayMode {width: 930px;}
+    .contentf {background: #ddd;}
+    table#displayMode {width: 100%;}
+    span#displayMode {font-weight: bold; vertical-align: bottom;}
+    input {vertical-align: middle;}
+    table#displayMode label {vertical-align: bottom;}
+    div#todaysDate {font-size: 12pt; text-align: right;}
+    .contentf div {margin-left: 5px;}
+    </style>
+    <div id="displayMode">
+		<b class="b1f"></b><b class="b2f"></b><b class="b3f"></b><b class="b4f">
+		</b>
+		<div style="padding: 10px;" class="contentf">
+			<table id="displayMode" width="100%">
+				<tbody>
+				<tr>
+					<td><span id="displayMode">Taskboard View:</span>
+					<input type="radio" checked="true" class="displaymode" value="teamview" name="displaymode" id="teamview">
+					<label for="teamview">All Tasks</label>
+					<input type="radio" class="displaymode" value="mytasksview" name="displaymode" id="mytasksview">
+					<label for="mytasksview">My Tasks</label> </td>
+					<td>
+					<div id="todaysDate">
+						Today's Date: <span id="today">11/26/13</span></div>
+					</td>
+				</tr>
+			</tbody>
+			</table>
+		</div>
+		<b class="b4f"></b><b class="b3f"></b><b class="b2f"></b><b class="b1f">
+		</b>
+	</div>
+    
+    <style type="text/css">
+    #selectors {margin-top: 20px; margin-bottom: 20px;}
+    #productSelector {width: 250px;}
+    #sprintSelector {width: 250px;}
+    #filterSprints {margin-left: 30px;}
+    input {vertical-align: middle;}
+    </style>
+    <div id="selectors">
+        <table class="selectors">
+            <tr>
+                <td>
+                    <span>View Product:</span> 
+                    <button class="link" style="margin-left: 0px;" onclick="bui.Action.get().addProduct()">add</button><i>/</i><button class="link" style="margin-left:0px;" onclick="bui.Action.get().editProduct()">edit</button>
+                </td>
+                <td>
+                    <span>View Sprint:</span>
+                    <button class="link" style="" onclick="bui.Action.get().addSprint()">add</button><i>/</i><button class="link" style="margin-left:0px;" onclick="bui.Action.get().editSprint()">edit</button>
+                </td>
+            </tr>
+            <tr>
+                <td><select ui="type:'Select',formName:'product_list',data_value:'product_id',data_text:'product_name'" style="width:150px;"></select></td>
+                <td><select ui="type:'Select',formName:'sprint_list',data_value:'sprint_id',data_text:'sprint_name'" style="width:450px;"></select></td>
+                <td>
+                <input id="filterSprints" name="filterSprints" type="checkbox" />
+                <label for="filterSprints">Show Sprints only for Teams to which I belong</label>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    
+    <div class="sectionHeader" id="taskboardSectionHeader">
+		<table class="sectionHeader_table">
+			<tbody>
+			<tr>
+				<td class="sectionHeader_w"></td>
+				<td class="sectionHeader_n">
+				<div class="sectionHeaderText">
+					Taskboard: All Tasks</div>
+				</td>
+				<td class="sectionHeader_e"></td>
+			</tr>
+		</tbody>
+		</table>
+	</div>
+    <!-- import: taskboard_highlight -->
+    <div ui="type:'Taskboard',formName:'taskboard'"></div>
+    
+    
+    <div class="sectionHeader nextSection">
+		<table class="sectionHeader_table">
+			<tr>
+				<td class="sectionHeader_w"></td>
+				<td class="sectionHeader_n">
+				<div class="sectionHeaderText">
+					Sprint Burndown</div>
+				</td>
+				<td class="sectionHeader_e"></td>
+			</tr>
+		</table>
+	</div>
+	<div id="burndownChart">
+		<!--img src="vm/img/-270223436412208026.png" id="burndownImg" alt="Sprint Burndown" /-->
+	</div>
+	
+    <div class="sectionHeader nextSection">
+		<table class="sectionHeader_table">
+			<tr>
+				<td class="sectionHeader_w"></td>
+				<td class="sectionHeader_n">
+				<div class="sectionHeaderText">
+					Team Member Loeded</div>
+				</td>
+				<td class="sectionHeader_e"></td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<!--img src="vm/img/-270223436412208026.png" id="burndownImg" alt="Sprint Burndown" /-->
+        <canvas id="chartBurden" height="450" width="800"></canvas>
+	</div>
+	
+    
+    <div class="error" id="noBurndown" style="display: none">
+		You either do not have permission to view tasks or there are no sprints 
+		for this product.
+	</div>
+	<div class="sectionHeader nextSection" id="impedimentsSectionHeader">
+		<table class="sectionHeader_table">
+			<tr>
+				<td class="sectionHeader_w"></td>
+				<td class="sectionHeader_n">
+				<div class="sectionHeaderText">
+					Impediments</div>
+				</td>
+				<td class="sectionHeader_e"></td>
+			</tr>
+		</table>
+	</div>
+	<img class="newImpediment" style="cursor: pointer;" id="newImpediment" src="vm/img/new-impediment.gif" alt="New Impediment" />
+	<table id="impedimentsTable" style="display: none">
+		<colgroup>
+			<col id="entered" /><col id="lastmodified" /><col id="title" />
+			<col id="description" /><col id="reporter" />
+		</colgroup>
+		<thead>
+			<tr>
+				<th class="impedimentattribute">Entered</th>
+				<th class="impedimentattribute">Last Modified</th>
+				<th class="impedimentattribute">Title</th>
+				<th class="impedimentattribute">Description</th>
+				<th class="impedimentattribute">Reporter</th>
+			</tr>
+		</thead>
+		<tbody id="impediments">
+	</table>
+	<div class="error" id="noImpedimentsAccess" style="display: none; padding-bottom: 12px;">
+		You don&#39;t have access to view impediments.
+	</div>
+	<div class="error" id="noImpedimentsTeam" style="display: none; padding-bottom: 12px;">
+		A sprint must be selected to view impediments.
+	</div>
+	<div class="error" id="noImpediments" style="padding-bottom: 12px;">
+		There are no impediments for this team.
+	</div>
+</div>
+<div style="    color: #AAAAAA;
+    margin: 20px;
+    text-align: center;
+    width: 970px;">Copyright &copy; 2010 CollabNet, Inc.  All rights reserved.</div>
+<!-- target: blank -->
+
+</body>
+
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>locator - A simple browser address locator.</title>
+<script type="text/javascript" src="../../helper/require.js"></script>
+<script type="text/javascript" src="../../helper/ext_json.js"></script>
+<script type="text/javascript" src="../../helper/bui.js"></script>
+<script type="text/javascript" src="../../helper/bui_locator.js"></script>
+<script type="text/javascript">
+<!--
+window.onload = function() {
+define('./text', ['./bui', './bui.Locator'], function() {
+    //bui.Locator.addAuthorizer(function(loc){if(loc=='/aaa') return '/a';});
+    define('./test', ['./bui','./bui.Locator'], function(){
+        bui.Locator.switchToLocation = function(loc) {
+            document.getElementById('log').innerHTML = loc;
+        };
+        bui.Locator.init();
+    });
+});
+};
+
+//-->
+</script>
+</head>
+
+<body>Current path is: <span id="log"></span><br/>
+<a href="#/aaa">aaa</a>  
+<a href="#/bbb">bbb</a>  
+<a href="#/ccc">ccc</a>  
+</body>
+
+</html>

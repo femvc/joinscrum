@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Collapse Backlog Item rows when</title>
+</head>
+
+<body>
+
+<!-- target: taskboard_highlight -->
+<style type="text/css">
+table#displayPrefs {border: 0px; width: 930px; table-layout: fixed; margin-bottom: 6px;}
+table#displayPrefs td {border: 0px; white-space: nowrap; vertical-align: middle;}
+input {vertical-align: middle;}
+#colorSelector {vertical-align: top; border: 1px solid black; white-space: nowrap; margin-left: 12px; margin-right: 26px; padding: 2px; padding-bottom: 3px; padding-top: 1px;}
+#colorSelector img {vertical-align: middle;}
+</style>
+<style type="text/css">
+div.myTaskColorMenu {position: absolute; z-index: 1000; border: 1px solid #888; background-color: white; margin: 0px 0px 0px 34px; padding: 0px;}
+div.myTaskColorMenu ul {list-style-type: none; margin: 0px; padding: 0px;}
+div.myTaskColorMenu ul li {list-style-type: none; display: block; margin: 0px; padding: 2px;}
+</style>
+<table id="displayPrefs">
+	<tr>
+		<td width="55%">
+		<input id="include_deleted" name="include_deleted" type="checkbox" onclick="bui.Action.get().switchSprint()" />
+		<label for="include_deleted">Show deleted task</label> </td>
+		<td>
+		<label>Highlight Tasks</label>
+        <select ui="type:'Select',formName:'user_list',data_value:'user_id',data_text:'user_label'" style="width:230px;">
+                    <!--option value="Aaron.lu (aaron.lu)">Aaron.lu (aaron.lu)</option-->
+                </select>		
+        </td>
+        <td width="100">
+            <div id="colorSelector">
+                <img class="swatch" src="vm/img/Color_0.png" />
+                <img class="myTaskColor" src="vm/img/Dropdown_Arrow_button.gif" width="14" height="14" />
+            </div>
+            <div class="myTaskColorMenu" id="myTaskColorMenu" style="display:none;">
+                <ul>
+                    <li id="li_color_0">
+                    <img id="color_0" src="vm/img/Color_0.png" /></li>
+                    <li id="li_color_1">
+                    <img id="color_1" src="vm/img/Color_1.png" /></li>
+                    <li id="li_color_2">
+                    <img id="color_2" src="vm/img/Color_2.png" /></li>
+                    <li id="li_color_3">
+                    <img id="color_3" src="vm/img/Color_3.png" /></li>
+                    <li id="li_color_4">
+                    <img id="color_4" src="vm/img/Color_4.png" /></li>
+                    <li id="li_color_5">
+                    <img id="color_5" src="vm/img/Color_5.png" /></li>
+                </ul>
+            </div>
+        </td>
+	</tr>
+</table>
+<!-- target: blank -->
+
+</body>
+
+</html>

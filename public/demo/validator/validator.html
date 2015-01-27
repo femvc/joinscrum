@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Validator - A simple form data validator. </title>
+<style type="text/css">
+.validate-error .validate {color:red;}
+</style>
+<script type="text/javascript" src="../../helper/require.js"></script>
+<script type="text/javascript" src="../../helper/ext_json.js"></script>
+<script type="text/javascript" src="../../helper/bui.js"></script>
+<script type="text/javascript" src="../../helper/bui_validator.js"></script>
+<script type="text/javascript">
+<!--
+var ctrMap = {};
+
+define('./test', ['./bui','./bui.Validator'], function(){
+//非原生HTML控件方式, 需要控件提供的接口
+bui.Control = {};
+bui.Control.getById = function(id){return ctrMap[id];};
+
+//增加校验规则
+bui.Validator.addRule('confirm', {
+        'validate': function(text, text1) {
+            var len = text.length;
+            if (len === 0) {
+                return 1;
+            } else if (text != text1) {
+                return 2;
+            }
+
+            return 0;
+        },
+
+        'notice': bui.Validator.noticeInTailNoTitle,
+        'cancelNotice': bui.Validator.cancelNoticeInTile,
+        'noticeText': {
+            1: 'Password can not be empty',
+            2: 'The password you twice enter is inconsistent，please re-enter'
+        }
+});
+
+});
+
+function checkControl() {
+    //待校验控件
+    var control01 = {};
+    control01.main = 'control01';//显示的提示信息需要根据一个页面元素来确定位置
+    control01.getValue = function(){return document.getElementById('password01').value;};
+    control01.getMain  = function(){return document.getElementById('control01');};
+    
+    //作为参数的控件[可以多个]
+    ctrMap['control2'] = {};
+    ctrMap['control2'].getValue = function(){return document.getElementById('password02').value;};
+    ctrMap['control2'].getState = function(){return false;};
+    
+    //调用校验方法
+    bui.Validator.applyRule(control01, 'confirm,control2');
+}
+function checkInput() {
+    document.getElementById('textInput01').getMain = function(){return document.getElementById('textInput01');};
+    bui.Validator.applyRule(document.getElementById('textInput01'), 'confirm,textInput02');
+}
+
+//-->
+</script>
+</head>
+
+<body>
+<h1>Validator - A simple form data validator.</h1>
+
+<!--control01控件对应的页面挂载dom对象-->
+<div id="control01">
+    Password:
+    <input type="text" id="password01" />
+    <input type="text" id="password02" />
+</div>
+<div>
+    <!--control01的提示信息[如果没有指定则会在最后面自动生成]-->
+    <div id="control01-validate" class="validate"><div id="control01-validateIcon" class="validate-icon"></div><div id="control01-validateText" class="validate-text"></div>
+</div>
+
+<p>
+<button type="button" onclick="checkControl()">validate</button>
+<button type="button" onclick="bui.Validator.cancelNoticeInTile(document.getElementById('control01'))">Hide error</button>
+</p>
+</div>
+<br/><br/><br/>
+<div>
+Password:
+<input type="text" id="textInput01" />
+<input type="text" id="textInput02" />
+<p>
+<button type="button" onclick="checkInput()">validate</button>
+<button type="button" onclick="bui.Validator.cancelNoticeInTile(document.getElementById('textInput01'))">Hide error</button>
+</p>
+<!--textInput01的提示信息[如果没有指定则会在最后面自动生成]-->
+<!--div id="textInput01-validate" class="validate"><div id="textInput01-validateIcon" class="validate-icon"></div><div id="textInput01-validateText" class="validate-text">Error message here.</div></div-->
+
+</div>
+</body>
+
+</html>

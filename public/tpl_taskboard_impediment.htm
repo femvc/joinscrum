@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Title</title>
+</head>
+
+<body>
+<!-- target: taskboard_impediment -->
+<style type="text/css">
+#editImpedimentTable {margin: 5px;}
+#editImpedimentDiv td {padding-bottom: 2px; padding-right: 2px;}
+.inputLabel {width: 100px; text-align: right; font-size: 9pt; color: black;}
+#impediment_Title {width: 250px;}
+input {vertical-align: middle;}
+#impediment_Description {width: 250px;}
+textarea {font-size: 10pt; font-family: Arial, Helvetica, sans-serif;}
+#impediment_Reporter {width: 150px;}
+</style>
+<div id="editImpedimentDiv">
+	<table id="editImpedimentTable">
+		<tr>
+			<td class="inputLabel">Title:</td>
+			<td><input id="impediment_Title" type="text" /></td>
+		</tr>
+		<tr>
+			<td class="inputLabel" style="vertical-align: top;">Description:</td>
+			<td>
+			<textarea id="impediment_Description" cols="40" rows="6" name="S1"></textarea></td>
+		</tr>
+		<tr>
+			<td class="inputLabel">Reporter:</td>
+			<td><select id="impediment_Reporter" name="D1">
+			<option value="">(unspecified)</option>
+			<option value="Aaron.lu (aaron.lu)">Aaron.lu (aaron.lu)</option>
+			<option value="Ada.yang (ada.yang)">Ada.yang (ada.yang)</option>
+			<option value="Andy.wang (andy.wang)">Andy.wang (andy.wang)</option>
+			<option value="Blanche.xu (blanche.xu)">Blanche.xu (blanche.xu)
+			</option>
+			<option value="Chloe.yang (chloe.yang)">Chloe.yang (chloe.yang)
+			</option>
+			<option value="Cindy.liu (cindy.liu)">Cindy.liu (cindy.liu)</option>
+			<option value="Colin.zhang (colin.zhang)">Colin.zhang (colin.zhang)
+			</option>
+			<option value="Daini.xu (daini.xu)">Daini.xu (daini.xu)</option>
+			<option value="David (david)">David (david)</option>
+			<option value="Ethan (ethan)">Ethan (ethan)</option>
+			<option value="Harrison.lin (harrison.lin)">Harrison.lin (harrison.lin)
+			</option>
+			<option value="Jason (jason)">Jason (jason)</option>
+			<option value="Jicheng.li (jicheng.li)">Jicheng.li (jicheng.li)
+			</option>
+			<option value="Richard.xu (richard.xu)">Richard.xu (richard.xu)
+			</option>
+			<option value="Steven.cheng (steven.cheng)">Steven.cheng (steven.cheng)
+			</option>
+			<option value="Tiennan.lin (tiennan.lin)">Tiennan.lin (tiennan.lin)
+			</option>
+			</select></td>
+		</tr>
+		<tr>
+			<td class="inputLabel">Resolved:</td>
+			<td>
+			<input id="impediment_Resolved" name="impediment_Resolved" type="checkbox" /></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td style="text-align: right;">
+			<input class="impediment_OK" style="cursor: pointer;" id="impediment_OK" src="file:///X:/andy/D/vm/img/ok-button-active.gif" title="OK" type="image" />
+			<input class="impediment_Cancel" style="cursor: pointer;" id="impediment_Cancel" src="file:///X:/andy/D/vm/img/cancel-button-active.gif" title="Cancel" type="image" />
+			</td>
+		</tr>
+	</table>
+</div>
+<!-- target: blank -->
+</body>
+
+</html>

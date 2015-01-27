@@ -1,0 +1,771 @@
+﻿html {
+    height: 100%;
+}
+
+body {
+	height: 100%;
+	margin: 0px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 9pt; 
+	font-style: normal; 
+	line-height: normal; 
+	font-weight: normal;
+	min-width: 750px;
+	min-height: 100%;
+    letter-spacing: .075px;
+   background-color: #ffffff;
+}
+
+textarea {
+   font-size: 10pt;
+   font-family: Arial, Helvetica, sans-serif;
+}
+
+input {
+   vertical-align:middle;
+}
+
+div.content {
+   margin-left: 20px;
+   margin-right: 20px;
+}
+
+div.title {
+    font-weight: bold;
+    font-size: 12pt;
+    color: black;
+    float: left;
+}
+
+div.pageheader {
+    width: 100%;
+}
+
+div.header {
+   width: 970px;
+   height: 61px;
+   font-size: 8pt;
+   display: block;
+   background-image: url('images/webclient-header.gif');
+   background-repeat: no-repeat;
+   position: relative;
+   top: 0px;
+   left: 0px;
+   color: white;
+   margin-bottom: 12px;
+}
+
+div.header div.headertext {
+   position: absolute;
+   bottom: 12px;
+   left: 21px;
+   color: white;
+}
+
+div.header a {
+    text-decoration:underline;
+    color: white;
+}
+
+img.logo {
+    text-align: right;
+    margin-left:auto;
+    display:block;
+}
+
+div.footer {
+    width: 970px;
+    color: #AAA;
+    text-align: center;
+    margin: 20px;
+}
+
+div.loginbox, div.loginboxtitle {
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    border: 1px solid #c0c0c0;
+    margin-left: 70px;
+    margin-right: 70px;
+    padding-left: 11px;
+    padding-right: 11px;
+    width: 830px;
+}
+
+div.loginbox {
+    margin-top: 0px;
+    font-size: 8pt;
+    padding-top: 20px;
+    color: #808080;
+}
+
+div.loginboxtitle {
+    background: #c0c0c0;
+    font-size: 10pt;
+    font-weight: bold;
+    line-height: 21px;
+    margin-top: 30px;
+    margin-bottom: 0px;
+}
+
+div.logintable {
+    margin-top: 20px;
+}
+
+td.loginprompt {
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    text-align: right;
+    color: #808080;
+    font-size: 8pt;
+    vertical-align: top;
+}
+
+input.loginprompt {
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    color: #252525;
+    font-size: 10pt;
+    border: 1px solid;
+    margin-bottom: 11px;
+}
+
+div.errorbox {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: red;
+}
+
+table.center {
+    display: inline;
+    text-align: center;
+}
+
+div#selectors {
+   margin-top: 20px;
+    margin-bottom:20px;
+}
+
+select#productSelector, select#sprintSelector {
+    width: 250px;
+}
+
+#filterSprints {
+    margin-left: 30px;
+}
+
+#needsUpdate {
+   cursor: pointer;
+   /* see: http://www.mandarindesign.com/opacity.html */
+   opacity:.85;
+   filter:alpha(opacity=85);
+   
+   position:absolute;
+   left: 57px; /* centered in the taskboard table: left margin + half of the diff between the table width and the image width */
+   z-index: 9999;
+}
+
+#needsUpdate:hover {
+   text-decoration:underline;
+}
+
+div.error { 
+   font-size: 8pt;
+   font-weight: bold;
+   color: black;
+   padding-left: 8px;
+   margin-bottom: 12px;
+}
+
+div#burndownChart {
+    margin-top: 20px;
+}
+
+#burndownImg {
+    border-width: 0px;
+    padding-left:8px;
+    height:480px;
+}
+
+
+table.taskboard {
+    border-spacing: 0px;
+    border: 2px solid #cccccc;
+    width: 900px;
+    table-layout:fixed;
+}
+
+table.taskboard col.fixedWidth {
+    width: 180px;
+}
+
+.inputLabel {
+   width: 100px;
+   text-align: right;
+   font-size:9pt;
+   color: black;
+}
+
+.commentsLabel {
+   text-align: left;
+   font-size:9pt;
+   color: black;
+}
+
+#addTaskDiv td {
+   padding-bottom: 2px;
+   padding-right: 2px;
+}
+
+#addTaskTable {
+   margin: 5px;
+}
+
+#addTask_Title, #addTask_Description {
+   width: 250px;
+}
+
+#addTask_PointPerson {
+   width: 254px;
+}
+
+#addTask_Estimate, #addTask_mySpentToday, #pbieffort {
+   width: 3em;
+}
+
+#pbiinfo td {
+   padding-bottom: 1px;
+   padding-right: 2px;
+   vertical-align: top;
+   padding-top: 2px;
+}
+
+#pbiinfo input, #pbiinfo div, #addTaskDiv div {
+   border: 1px solid #A9A9A9;
+   font-size: 8pt;
+   color: #909090;
+}
+
+#pbiaddcomment, #taskaddcomment {
+   color: black;
+   height: 68px;
+   padding: 2px;
+   width: 260px;
+}
+
+#pbiaddcomment, #taskaddcomment, #pbicomments, #taskcomments {
+   border: 1px solid #A9A9A9;
+}
+
+#addTaskDiv #taskaddcommentbuttondiv, #pbiinfo #pbiaddcommentbuttondiv  {
+   text-align:right; 
+   padding-top: 5px;
+   border: 0px;
+   width: 264px;
+}
+
+#pbithemes, #pbirelease {
+	height: 12pt;
+	overflow: hidden;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+.pbiinfo, #pbidesc, #pbiattachment, #pbithemes {
+   width: 260px;
+}
+
+a#attachmentLink {
+  line-height: 12pt; 
+  color: black;
+}
+
+#pbidesc {
+   height: 150px;
+   overflow: scroll;
+   padding-left: 2px;
+   padding-right: 2px;
+}
+
+#pbicomments, #taskcomments {
+   width: 264px;
+   height: 270px;
+   overflow: scroll;
+   padding-top: 2px;
+   padding-bottom: 2px;
+   vertical-align: top;
+}
+
+span.commentHeader {
+   font-weight: bold;
+}
+
+#pbicomments div, #taskcomments div {
+   width: 97%;
+   vertical-align: top;
+   border: 0px;
+   padding-left: 3px;
+   padding-right: 3px
+}
+
+div.comment2 {
+   background-color: #eff7ff;
+}
+
+#pbibenefit, #pbipenalty {
+   width: 11em;
+}
+
+#pbiattachment {
+   height: 70px;
+   overflow: scroll;
+}
+
+#editImpedimentDiv td {
+   padding-bottom: 2px;
+   padding-right: 2px;
+}
+
+#editImpedimentTable {
+   margin: 5px;
+}
+
+#impediment_Title, #impediment_Description {
+   width: 250px;
+}
+
+#impediment_Reporter {
+   width: 150px;
+}
+
+td.taskboardCell, td.emptyTaskCell, table.taskboard th {
+    text-align: left;
+    vertical-align:top;
+    padding: 5px;
+    border: 2px solid #cccccc;
+    margin: 0px;
+}
+
+#newImpediment {
+   margin-bottom: 10px;
+}
+
+.taskStatus {
+    float: left;
+}
+
+.taskStatusCount {
+    float: right;
+}
+
+td.taskboardCell,td.emptyTaskCell {
+    padding-top: 3px;
+    padding-bottom: 5px;
+    padding-left: 4px;
+    padding-right: 4px;
+    font-size: 1px; /* the filler element on the top looks big in IE6 */
+}
+
+td.emptyTaskCell {
+   background-color: #f2f2f2;
+   background-repeat: no-repeat;
+   background-position: center;
+}
+
+table.taskboard th {
+    font-size: 9pt;
+    color:black;
+    font-weight: bold;
+}
+
+tr.header, tr.header th {
+    background-color: #f2f2f2;
+}
+
+td.pbiCell {
+    background-color: #e6e6e6;
+    color: #999999;
+    font-size: 1pt; /* so the filler element in IE doesn't look obnoxious */
+}
+
+div.pbi {
+    height: inherit;
+    overflow: hidden;
+}
+
+.pbititle, .pbidesc, .pbiestimate, .pbidone, .pbikey, .pbiattachment {
+    font-size: 8pt;
+    color: #4d4d4d;
+}
+
+.pbititle, .pbiestimate, .pbikey {
+    font-weight: bold;
+}
+
+.pbititle, .pbidesc {
+    overflow:hidden;
+}
+
+.pbititle, .pbikey, .pbiattachment {
+   cursor: pointer;
+}
+
+.pbikey {
+   float: left;
+}
+
+.pbititle:hover, .pbikey:hover, .pbiattachment:hover {
+   text-decoration:underline;
+}
+
+.pbiestimate, .pbidone {
+   padding-top: 1em;
+}
+
+.pbiestimate {
+    float:left;
+    text-align:left;
+}
+
+.pbidone {
+    float:right;
+    text-align:right;
+}
+
+img.addtask {
+   float:right; 
+   vertical-align:bottom;
+}
+
+div.task, 
+div.taskofuser, 
+div.taskofuser0, 
+div.taskofuser1, 
+div.taskofuser2, 
+div.taskofuser3, 
+div.taskofuser4, 
+div.taskofuser5, 
+div.taskofusernohighlight {
+    width: 168px;
+    height: 39px;
+    margin-top: 4px;
+    font-size: 9pt;
+    position: relative;
+    background-repeat: no-repeat;
+    padding-left: 5px;
+    cursor: move;
+}
+
+
+div.task, div.taskofusernohighlight {
+    background-image:url('images/taskboxes/Task_box.gif');
+}
+
+div.taskofuser0 {
+    background-image: url(images/taskboxes/Task_box_0.gif);
+}
+
+div.taskofuser1 {
+    background-image: url(images/taskboxes/Task_box_1.gif);
+}
+
+div.taskofuser2 {
+    background-image: url(images/taskboxes/Task_box_2.gif);
+}
+
+div.taskofuser3 {
+    background-image: url(images/taskboxes/Task_box_3.gif);
+}
+
+div.taskofuser4 {
+    background-image: url(images/taskboxes/Task_box_4.gif);
+}
+
+div.taskofuser5 {
+    background-image: url(images/taskboxes/Task_box_5.gif);
+}
+
+
+div.tasktitle {
+   padding-top: 3px;
+   position: absolute;
+   cursor: pointer;
+   color: white;
+   white-space: nowrap;
+   word-break: normal;
+   width: 94%;
+   overflow: hidden;
+}
+
+.deleted div.tasktitle {
+   padding-top: 3px;
+   position: absolute;
+   cursor: pointer;
+   color: #ffff33;
+}
+
+
+div.tasktitle:hover {
+    text-decoration:underline;
+}
+
+div.pointperson, div.taskhours, div.taskmenutrap {
+    bottom: 3px;
+    color: #444444;
+    overflow: hidden;
+    position: absolute;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 74px;
+}
+
+div.taskhours {
+   left: 5px;
+}
+
+div.pointperson {
+    right: 1px;
+}
+
+div.taskmenutrap {
+    cursor: pointer;
+    width: 12px;
+    height: 12px;
+    right: 10px; 
+}
+
+/* stays for testing purposes */
+div.draghandle {
+   position: absolute;
+   bottom: 0px;
+   left: 0px;
+   height: 16px;
+   width: 146px;
+}
+
+table#displayPrefs {
+   border: 0px;
+   width: 930px;
+   table-layout: fixed;
+   margin-bottom: 6px;
+}
+
+table#displayPrefs td {
+   border: 0px;
+   white-space: nowrap;
+   vertical-align:middle;
+}
+
+#colorSelector {
+   vertical-align: top;
+   border: 1px solid black;
+   white-space: nowrap;
+   margin-left: 12px;
+   margin-right: 26px;
+   padding: 2px;
+   padding-bottom: 3px;
+   padding-top: 1px;
+}
+
+#colorSelector img {
+   vertical-align:middle;
+}
+
+/* impediments */
+
+#impedimentsTable {
+	border: none;
+	font-size: 9pt;
+	width: 900px;
+}
+
+th.impedimentattribute {
+   font-size: 9pt;
+   color: black;
+   font-weight: bold;
+   text-align: left;
+   border: none;
+   padding-bottom: 12px;
+   padding-left: 8px;
+}
+
+col#entered {
+   width: 100px;
+}
+
+col#lastmodified {
+   width: 100px;
+}
+
+col#title {
+   width: 200px;
+}
+
+col#description {
+   width: 350px;
+}
+
+col#reporter {
+   width: 150px;
+}
+
+#impedimentsTable td {
+   font-size: 8pt;
+   color: #252525;
+   border-bottom: none;
+   border-left: none;
+   border-right: none;
+   border-top: 1px dashed #808080;
+   padding: 8px;
+}
+
+.impedimentCell, .clickableImpedimentCell {
+   vertical-align: top;
+}
+
+.clickableImpedimentCell {
+   cursor: pointer;
+}
+
+.clickableImpedimentCell:hover {
+   text-decoration: underline;
+}
+
+/* task menu */
+
+div.taskmenu {
+   position:absolute;
+   background-color: white;
+   border:1px solid #888;
+   margin:0px;
+   padding:0px;
+}
+
+div.taskmenu ul, div.myTaskColorMenu ul {
+   list-style-type: none;
+   margin:0px;
+   padding:0px;
+}
+
+div ul li.selected { background-color: #cccccc; }
+
+div.taskmenu ul li, div.myTaskColorMenu ul li {
+   list-style-type: none;
+   display:block;
+   margin:0px;
+   padding:2px;
+}
+
+li.menuitem {
+   cursor:pointer;
+}
+
+li.menuitem_disabled {
+   color: #bbbbbb;
+   cursor: default;
+}
+
+div.myTaskColorMenu {
+   position:absolute;
+   border:1px solid #888;
+   background-color: white;
+   margin:0px;
+   padding:0px;
+}
+
+div.colorPicker {
+   border:1px solid black; 
+   padding:1px;
+   line-height: 0pt;
+}
+
+/* Section headers */
+
+div.sectionHeader {
+   width: 930px;
+   font-size: 12pt;
+   color: white;
+   text-align: left;
+   background: transparent;
+   margin-bottom: 12px;
+   line-height: 21px; /* using line-height so that the text is vertically centered. */
+}
+
+div.sectionHeader.nextSection {
+   margin-top: 40px;
+}
+
+div.sectionHeaderText {
+   color: white;
+   margin-left: 5px;
+}
+
+div.modeText {
+   font-size: 9pt;
+   color: white;
+   text-align: right;
+   margin-right: 5px;
+}
+
+span.modeText {
+   font-size: 9pt;
+   font-weight: bold;
+}
+
+.sectionHeader_w {
+	width: 2px;
+	height: 28px;
+	background: transparent url(images/taskboard-header-left.gif) no-repeat 0 0;		
+}
+
+.sectionHeader_n {
+   height: 28px;
+	background: transparent url(images/taskboard-header-slice.gif) repeat-x 0 0;	
+}
+
+.sectionHeader_e {
+	width: 4px;
+	height: 28px;
+	background: transparent url(images/taskboard-header-right.gif) no-repeat 0 0;
+}
+
+.sectionHeader_table { 
+   border-collapse: collapse; 
+   border-spacing: 0; 
+   width: 100%;
+	margin: 0px;
+	padding:0px;
+}
+
+/* End section headers */
+
+/* Display mode bubble */
+
+div#displayMode {
+   width: 930px;
+}
+
+table#displayMode {
+   width: 100%;
+}
+
+table#displayMode label {
+   vertical-align: bottom;
+}
+
+span#displayMode {
+   font-weight: bold;
+   vertical-align: bottom;
+}
+
+div#todaysDate {
+   font-size: 12pt;
+   text-align: right;
+}
+
+/* end Display mode bubble */
+
+/* Rounded corner code from: http://blog.yosle.com/2007/09/20/css-round-corners/ */
+.b1f, .b2f, .b3f, .b4f{font-size:1px; overflow:hidden; display:block;}
+.b1f {height:1px; background:#ddd; margin:0 5px;}
+.b2f {height:1px; background:#ddd; margin:0 3px;}
+.b3f {height:1px; background:#ddd; margin:0 2px;}
+.b4f {height:2px; background:#ddd; margin:0 1px;}
+.contentf {background: #ddd;}
+.contentf div {margin-left: 5px;}

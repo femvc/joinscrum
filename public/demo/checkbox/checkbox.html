@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>TextInput - A common input control</title>
+<link rel="stylesheet" href="../../vm/css/ui-checkbox.css" type="text/css" />
+
+<script type="text/javascript" src="../../src/er/bui.js"></script>
+<script type="text/javascript" src="../../src/er/eventdispatcher.js"></script>
+<script type="text/javascript" src="../../src/er/basemodel.js"></script>
+<script type="text/javascript" src="../../src/er/control.js"></script>
+<script type="text/javascript" src="../../src/erui/checkbox.js"></script>
+<script type="text/javascript">
+<!--
+var haiyang = {controlMap:{}};
+function doit() {
+    bui.Control.init(document.getElementById('aa'),{}/*,haiyang*/);
+}
+
+//-->
+</script>
+</head>
+
+<body><button type="button" onclick="doit()">doit</button>
+<div id="aa">
+<div ui="type:Checkbox;id:places00;name:places;value:0;checked:1;text:所有"></div>
+<label ui="type:Checkbox;id:places01;name:places;value:1;text:小清新"></label>
+<label><input type="checkbox" ui="type:Checkbox;id:places01;name:places;value:1" />小清新</label>
+</div>
+</body>
+
+</html>

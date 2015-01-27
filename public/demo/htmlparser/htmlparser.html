@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>TextInput - A common input control</title>
+<link rel="stylesheet" type="text/css" href="../../vm/css/bootstrap-btn.css" />
+
+<script type="text/javascript" src="../../helper/require.js"></script>
+<script type="text/javascript" src="../../helper/ext_json.js"></script>
+<script type="text/javascript" src="../../helper/bui.js"></script>
+<script type="text/javascript" src="../../helper/bui_htmlparser.js"></script>
+<script type="text/javascript">
+<!--
+function doit() {
+//var opt_str = document.getElementById('content').innerHTML;
+    var opt_str = '<div id="test">This is a test.</div>';
+    /*Step 1: 转换string到DOM*/
+    // 容器为空的判断
+    
+    bui.bocument.documentElement.setInnerHTML(opt_str);
+    
+    alert(bui.bocument.getElementById('test').getInnerHTML());
+    //alert(bui.bocument.documentElement.getInnerHTML());
+    
+}
+
+//-->
+</script>
+</head>
+
+<body>
+var opt_str = '&lt;div id="test"&gt;This is a test.&lt;/div&gt';<br>
+/*转换string到DOM*/<br>
+bui.bocument.documentElement.setInnerHTML(opt_str);<br><br>
+
+<button type="button" onclick="doit()">Click "here" alert [bui.bocument.getElementById('test')]'s innerHTML</button>
+</body>
+
+</html>

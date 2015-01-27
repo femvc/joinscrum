@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Action - A demo for Action Class</title>
+<script type="text/javascript" src="../../helper/require.js"></script>
+<script type="text/javascript" src="../../helper/ext_json.js"></script>
+<script type="text/javascript" src="../../helper/bui.js"></script>
+<script type="text/javascript" src="../../helper/bui_eventdispatcher.js"></script><!--事件模型基类（可拆卸）-->
+<script type="text/javascript" src="../../helper/bui_basemodel.js"></script>
+<script type="text/javascript" src="../../helper/bui_asyque.js"></script><!--异步模型基类（可拆卸）-->
+<script type="text/javascript" src="../../helper/bui_action.js"></script>
+<script type="text/javascript">
+<!--
+
+define('./page301', ['./bui', './bui.Action'], function(){
+
+var page301 = function() {
+    bui.Action.call(this);
+    /**
+     * Action索引ID
+     * 
+     * @comment 主要用于控件中通过onclick="bui.Control.getById('listTable','login');
+     */
+    this.id = 'page301';
+    /**
+     * 初始化数据模型
+     */
+    //使用了getView这里可以不用设置view属性
+    //this.view = 'page301';
+    /**
+     * 初始化数据模型
+     */
+    var baseModel = bui.Action.getExtClass('bui.BaseModel'); 
+    this.model = new baseModel();
+    
+    
+};
+
+page301.prototype = {
+    getView: function(){
+        var str = '<div style="font-size:10pt;line-height:1.2em;"><h3 style="margin:0px;line-height:3em;">The page cannot be found</h3>'
+            +'<p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>'
+            +'<p>Please try the following:</p>'
+            +'<ul><li>If you typed the page address in the Address bar, make sure that it is spelled correctly.<br/></li>'
+            +'<li>Open the <a href="#/">home page</a>, and then look for links to the information you want.</li>'
+            +'<li>Click the <a href="javascript:history.go(-1)">Back</a> button to try another link. </li>'
+            +'</ul><p><br></p>HTTP 404 - File not found<br />Need any help? This service is free.<br /></div>';
+        return str;
+    },
+    initModel: function(callback){
+        var me = this;
+        callback&&callback();
+    },
+    /**
+     * 初始化列表行为
+     *
+     * @param {Object} controlMap 当前主内容区域绘制的控件集合.
+     */
+    initBehavior: function(controlMap) {
+        var me = this;
+        
+    }
+};
+bui.inherits(page301, bui.Action);
+
+bui.window.p404 = new page301();
+
+/* 
+bui.window.p3 = {
+    id: '333',
+    getView: function(){return 'This is singleton.'},
+    render: function(){
+        var me = this;
+        me.getMain().innerHTML += '-rendered.';
+    }
+};
+// 不推荐此做法
+bui.Action.derive(p3);
+*/
+});
+
+function do404() {
+    p404.enterAction();
+    p404.setInnerHTML('This is Action\'s main content.');
+}
+/*function dotest() {
+    p3.enterAction();
+}*/
+//-->
+</script>
+</head>
+
+<body>
+<div id="main">
+</div>
+<button type="button" onclick="do404()">Create Action</button>
+<button type="button" onclick="alert(bui.Action.get() ? 'true' : 'false')">test action</button>
+</body>
+
+</html>

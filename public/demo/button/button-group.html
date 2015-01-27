@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>TextInput - A common input control</title>
+
+<link rel="stylesheet" type="text/css" href="../../vm/css/bootstrap-btn.css" />
+<link rel="stylesheet" type="text/css" href="../../vm/css/bootstrap-btngroup.css" />
+
+<script type="text/javascript" src="../../helper/require.js"></script>
+<script type="text/javascript" src="../../helper/ext_json.js"></script>
+<script type="text/javascript" src="../../helper/bui.js"></script>
+<script type="text/javascript" src="../../helper/bui_eventdispatcher.js"></script>
+<script type="text/javascript" src="../../helper/bui_basemodel.js"></script>
+<script type="text/javascript" src="../../helper/bui_htmlparser.js"></script>
+<script type="text/javascript" src="../../helper/bui_control.js"></script>
+<script type="text/javascript" src="../../helper/ui_buttongroup.js"></script>
+
+<script type="text/javascript">
+<!--
+var haiyang = {controlMap:{}};
+var aa;
+function doit() {
+    aa = bui.bocument.createElement('DIV', {childNodes:[]});
+    aa.setInnerHTML(document.getElementById('aa').innerHTML);
+    // 这一步必不可少，否则无法回溯根节点!!
+    bui.bocument.documentElement.appendChild(aa);
+    
+    bui.Control.init(aa,{}/*,haiyang*/);
+    // 输出到浏览器!!
+    document.getElementById('aa').innerHTML = aa.getOuterHTML();
+}
+
+function doit2() {
+    // 这一步必不可少，否则无法回溯根节点!!
+    
+    bui.Control.init(document.getElementById('aa'),{}/*,haiyang*/);
+    // 输出到浏览器!!
+    // document.getElementById('aa').innerHTML = aa.getOuterHTML();
+}
+//-->
+</script>
+</head>
+
+<body><button type="button" onclick="doit()">Create</button><button type="button" onclick="doit2()">Create2</button>
+<button type="button" onclick="alert(bui.window.controlMap.price.getValue())">Get selected value</button>
+<div id="aa">
+<div ui="type:'ButtonGroup',id:'price',name:'price',value:'50-100',options:['0-50','50-100','100-150','150-200','200+']" class="btn-group"></div>
+</div>
+
+<div id="cc"></div>
+</body>
+
+</html>

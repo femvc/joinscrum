@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Backlog Items</title>
+</head>
+
+<body>
+
+<!-- target: taskboard_table -->
+
+<style type="text/css">
+table.taskboard {border-spacing: 0px; border: 2px solid #cccccc; width: 900px; table-layout: fixed;}
+table.taskboard col.fixedWidth {width: 180px;}
+tr.taskboard-header {background-color: #f2f2f2;}
+tr.taskboard-header th {background-color: #f2f2f2;}
+table.taskboard th {font-size: 9pt; color: black; font-weight: bold;}
+table.taskboard th {text-align: left; vertical-align: top; padding: 5px; border: 2px solid #cccccc; margin: 0px;}
+.taskStatus {float: left;}
+.taskStatusCount {float: right;}
+td.pbiCell {background-color: #e6e6e6; color: #999999; font-size: 1pt; /* so the filler element in IE doesn't look obnoxious */}
+td.taskboardCell {padding-top: 3px; padding-bottom: 5px; padding-left: 4px; padding-right: 4px; font-size: 1px; /* the filler element on the top looks big in IE6 */}
+td.taskboardCell {text-align: left; vertical-align: top; padding: 5px; border: 2px solid #cccccc; margin: 0px;}
+.pbikey {float: left;}
+.pbikey {cursor: pointer;}
+.pbikey {font-weight: bold;}
+.pbikey {font-size: 8pt; color: #4d4d4d;}
+.pbititle {cursor: pointer;}
+.pbititle {overflow: hidden;}
+.pbititle {font-weight: bold;}
+.pbititle {font-size: 8pt; color: #4d4d4d;}
+.pbidesc {overflow: hidden;}
+.pbidesc {font-size: 8pt; color: #4d4d4d;}
+.pbiestimate {float: left; text-align: left;}
+.pbiestimate {padding-top: 1em;}
+.pbiestimate {font-weight: bold;}
+.pbiestimate {font-size: 8pt; color: #4d4d4d;}
+.pbidone {float: right; text-align: right;}
+.pbidone {padding-top: 1em;}
+.pbidone {font-size: 8pt; color: #4d4d4d;}
+input {vertical-align: middle;}
+img.addtask {float: right; vertical-align: bottom;}
+div.task {background-image: url('vm/img/Task_box.gif');}
+div.task {width: 168px; height: 39px; margin-top: 4px; font-size: 9pt; position: relative; background-repeat: no-repeat; padding-left: 5px; cursor: move;}
+div.tasktitle {padding-top: 3px; position: absolute; cursor: pointer; color: white;}
+div.draghandle {position: absolute; bottom: 0px; left: 0px; height: 16px; width: 146px;}
+div.taskhours {left: 5px;}
+div.taskhours {position: absolute; bottom: 3px; color: #444;}
+div.pointperson {right: 1px;}
+div.pointperson {position: absolute; bottom: 3px; color: #444;}
+div.taskmenutrap {cursor: pointer; width: 12px; height: 12px; right: 10px;}
+div.taskmenutrap {
+    bottom: 3px;
+    color: #444444;
+    overflow: hidden;
+    position: absolute;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 74px;
+}
+div.taskofuser0 {background-image: url('vm/img/Task_box_0.gif');}
+div.taskofuser0 {width: 168px; height: 39px; margin-top: 4px; font-size: 9pt; position: relative; background-repeat: no-repeat; padding-left: 5px; cursor: move;}
+td.emptyTaskCell {background-color: #f2f2f2; background-repeat: no-repeat; background-position: center;}
+td.emptyTaskCell {padding-top: 3px; padding-bottom: 5px; padding-left: 4px; padding-right: 4px; font-size: 1px; /* the filler element on the top looks big in IE6 */}
+td.emptyTaskCell {text-align: left; vertical-align: top; padding: 5px; border: 2px solid #cccccc; margin: 0px;}
+</style>
+<table class="taskboard" id="taskboardTable" cellpadding="0" cellspacing="0">
+	<colgroup>
+		<col id="pbiCol" class="fixedWidth" />
+		<col class="fixedWidth" span="4" />
+	</colgroup>
+	<thead>
+		<tr class="taskboard-header">
+			<th>Backlog Items</th>
+			<th colspan="4">Tasks / Status</th>
+		</tr>
+		<tr class="taskstatus">
+			<th>&nbsp;</th>
+			<th>
+			<div class="taskStatus">
+				Not Started</div>
+			<div class="taskStatusCount">
+				<span id="notStartedCount">21</span> Tasks</div>
+			</th>
+			<th>
+			<div class="taskStatus">
+				Impeded</div>
+			<div class="taskStatusCount">
+				<span id="impededCount">6</span> Tasks</div>
+			</th>
+			<th>
+			<div class="taskStatus">
+				In Progress</div>
+			<div class="taskStatusCount">
+				<span id="inProgressCount">8</span> Tasks</div>
+			</th>
+			<th>
+			<div class="taskStatus">
+				Done</div>
+			<div class="taskStatusCount">
+				<span id="doneCount">22</span> Tasks</div>
+			</th>
+		</tr>
+	</thead>
+	<tbody id="taskboard">
+		<tr>
+			<td id="pbi_292643356175263219" class="taskboardCell pbiCell">
+			<div>
+				<span id="pbikey_292643356175263219" class="pbikey">(WEILO-6)</span>&nbsp;
+				<span id="pbititle_292643356175263219" class="pbititle" title="[C-2] 登录与账号">
+				[C-2] 登录与账号</span><br />
+				<br />
+				<br />
+				<div id="pbidesc_292643356175263219" class="pbidesc">
+					吉成,Steven</div>
+			</div>
+			<div style="width: 100%; height: 30px;">
+				<div class="pbiestimate">
+					Estimate: -</div>
+				<div class="pbidone">
+					<input id="markdone_292643356175263219" type="checkbox" /><label for="markdone_292643356175263219">Done</label></div>
+			</div>
+			<img class="addtask" onclick="bui.Action.get().addTask(this)" style="cursor: pointer;" id="addtask_292643356175263219" src="vm/img/add-task-active.gif" title="Add Task" />
+            </td>
+			<td style="position: relative;" id="notStarted_292643356175263219" class="taskboardCell">
+			<div id="task_-589628885603055195" class="task">
+				<div id="tasktitle_-589628885603055195" class="tasktitle" title="[Android]头像照片">
+					[Android]头像照片</div>
+				<div class="draghandle">
+					<div class="taskhours">
+						Hrs: <span id="hours_-589628885603055195">-</span></div>
+					<div id="pp_-589628885603055195" class="pointperson">
+						(unspecified)</div>
+				</div>
+				<div id="menu_-589628885603055195" class="taskmenutrap">
+				</div>
+			</div>
+			
+			</td>
+			<td style="position: relative;" id="impeded_292643356175263219" class="taskboardCell">
+			<div id="task_-734613176933525448" class="task">
+				<div id="tasktitle_-734613176933525448" class="tasktitle" title="[IOS]使用手机号码注册">
+					[IOS]使用手机号码注册</div>
+				<div class="draghandle">
+					<div class="taskhours">
+						Hrs: <span id="hours_-734613176933525448">6</span></div>
+					<div id="pp_-734613176933525448" class="pointperson">
+						Jicheng.li (j...</div>
+				</div>
+				<div id="menu_-734613176933525448" class="taskmenutrap">
+				</div>
+			</div>
+			
+			</td>
+			<td style="position: relative;" id="inProgress_292643356175263219" class="taskboardCell">
+			<div id="task_-623669601731752673" class="task">
+				<div id="tasktitle_-623669601731752673" class="tasktitle" title="[IOS]登录首页">
+					[IOS]登录首页</div>
+				<div class="draghandle">
+					<div class="taskhours">
+						Hrs: <span id="hours_-623669601731752673">6</span></div>
+					<div id="pp_-623669601731752673" class="pointperson">
+						Jicheng.li (j...</div>
+				</div>
+				<div id="menu_-623669601731752673" class="taskmenutrap">
+				</div>
+			</div>
+			
+			</td>
+			<td style="position: relative;" id="done_292643356175263219" class="taskboardCell">
+			<div id="task_675156175138771724" class="taskofuser0">
+				<div id="tasktitle_675156175138771724" class="tasktitle" title="[RD] 新浪微博登入 -- 调用微博SDK">
+					[RD] 新浪微博登入 -- 调用微博SDK</div>
+				<div class="draghandle">
+					<div class="taskhours">
+						Hrs: <span id="hours_675156175138771724">-</span></div>
+					<div id="pp_675156175138771724" class="pointperson">
+						Steven.cheng ...</div>
+				</div>
+				<div id="menu_675156175138771724" class="taskmenutrap">
+				</div>
+			</div>
+			</td>
+		</tr>
+    </tbody>
+</table>
+
+<!-- target: blank -->
+
+</body>
+
+</html>

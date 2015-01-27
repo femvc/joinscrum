@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Dialog - A simple Dialog control</title>
+<link rel="stylesheet" type="text/css" href="../../vm/css/ui-modal.css" />
+<link rel="stylesheet" type="text/css" href="../../vm/css/ui-mask.css" />
+<link rel="stylesheet" type="text/css" href="../../vm/css/bootstrap-modal.css" />
+
+<script type="text/javascript" src="../../helper/require.js"></script>
+<script type="text/javascript" src="../../helper/ext_json.js"></script>
+<script type="text/javascript" src="../../helper/bui.js"></script>
+<script type="text/javascript" src="../../helper/bui_eventdispatcher.js"></script>
+<script type="text/javascript" src="../../helper/bui_control.js"></script>
+<script type="text/javascript" src="../../helper/bui_template.js"></script>
+<script type="text/javascript" src="../../helper/ui_mask.js"></script>
+<script type="text/javascript" src="../../helper/ui_modal.js"></script>
+<script type="text/javascript">
+<!--
+var haiyang = {id:'haiyang',controlMap:{},type:'action'};
+var ymy = {id:'ymy',controlMap:{},type:'action'};
+function doit() {
+    // bui.Template.parseTemplate('<!-- target:modalBody -->Hello ${name} ');
+    // bui.Template.parseTemplate('<!-- target:modalFoot -->foot ${name} ');
+    
+    
+    // bui.Control.init(bui.bocument.getElementById('aa'));
+    
+    //bui.Control.init(bui.bocument.getElementById('aa'),{},haiyang);
+    var nc = bui.Control.create('Modal', {id:'ff',title:'This is dialog.', size: {width: '600px',height: '300px'}});
+    nc.setBodyContentHtml('This is body.');
+    bui.window.controlMap['ff'] = nc;
+    
+    //nc.appendSelfTo(haiyang);
+    //bui.window.controlMap['haiyang'] = haiyang;
+    //bui.window.controlMap['ymy'] = ymy;
+    //bui.window.controlMap.bb.appendSelfTo(nc);
+}
+
+//-->
+</script>
+</head>
+
+<body>
+注：暂不支持IE9以下版本（需要稍做优化）
+<button type="button" onclick="doit()">doit</button>
+<div id="aa">
+    <!--div ui="type:'Modal',id:'tt',title:'there is a \' \' yep.',win:'close|max|min',contentView:'modalBody',footView:'modalFoot'" id="ff">
+    </div-->
+    
+    <!--div ui="type:'Modal',id:'kk',title:'there is '" id="ff">
+        <div class="ui-modal-header">
+            <!--button type="button" class="modal-action">×</button>
+            <button type="button" class="modal-action">D</button>
+            <h3 class="ui-modal-title">This is a Modal Heading</h3->
+        </div>
+        <div class="ui-modal-body">
+            <h4>Text in a modal</h4>
+            <p>You can add some text here.</p>
+        </div>
+        <div class="ui-modal-footer">
+            <a class="btn btn-success" href="#">Call to action</a>
+            <a class="btn" href="#">Close</a> 
+        </div>
+    </div-->
+</div>
+</body>
+
+</html>

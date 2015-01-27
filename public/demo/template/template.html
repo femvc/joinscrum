@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>template - A simple Template Parser</title>
+<script type="text/javascript" src="../../helper/require.js"></script>
+<script type="text/javascript" src="../../helper/ext_json.js"></script>
+<script type="text/javascript" src="../../helper/bui.js"></script>
+<script type="text/javascript" src="../../helper/bui_template.js"></script>
+<script type="text/javascript">
+<!--
+function doit() {
+    bui.Template.parseTemplate('<!-- target:hello -->Hello ${name} ');
+    bui.Template.parseTemplate('<!-- target:parent -->[I can say: "<!-- import:hello -->"]');
+
+    alert(bui.Template.targetContainer['parent']); //[I can say: "Hello ${name}"] 
+
+    bui.Template.parseTemplate('<!-- target:hello -->[Hi <!-- import:parent -->]');
+    bui.Template.parseTemplate('<!-- target:parent -->(father)');
+    bui.Template.parseTemplate('<!-- target:lound -->{Lound say: <!-- import:hello-->}');
+
+    alert(bui.Template.targetContainer['lound']); //{Lound say: [Hi (father)]} 
+
+    bui.Template.parseTemplate('<!-- target:tom -->[ <!-- import:cat --> are bad.]');
+    bui.Template.parseTemplate('<!-- target:cat -->( <!-- import:tom --> is wrong.)');
+
+    alert(bui.Template.targetContainer['tom']); //[ ( <!-- import:tom --> is wrong. ) are bad.]
+    alert(bui.Template.targetContainer['cat']); //( [ <!-- import:cat --> are bad.] is wrong. )');
+
+}
+
+//-->
+</script>
+</head>
+
+<body><button type="button" onclick="doit()">doit</button>
+
+</body>
+
+</html>

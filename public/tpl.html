@@ -1,0 +1,211 @@
+﻿<!--target:loadingDiv-->
+    <div class="loading_div">
+        <div class="waitDiv">
+            <div class="waitDiv_content">
+
+                <div class="loading-inner">
+                    <img src="vm/img/loading.gif" width="32" height="32">
+                    <div class="loading-text">Loading...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- target:login -->
+
+        <div class="desktop-container" id="desk-1" style="width111: 100%; height111: 100%; left: 20px; top: 20px;">
+            <div style="top:0px;left:0px" id="xy0xy0" class="appbtn">
+                <div><img alt="日历" title="日历" src="vm/img/shortcut/default/calendar.png"></div><span>日历</span>
+            </div>
+            <div style="top:0px;left:120px" id="xy1xy0" class="appbtn add"><i class="addicon"></i><span>添加应用</span></div>
+            <div style="top:0px;left:240px;display:none;" id="holder" class="appbtn holder">&nbsp;</div>
+        </div>
+<!-- target:Page01 -->
+    <nav class="nav">
+        <button onclick="bui.Action.get().renderApplist(this)" class="icon selected">1</button>
+        <button onclick="bui.Action.get().renderApplist(this)" class="icon">2</button>
+        <button onclick="bui.Action.get().renderApplist(this)" class="icon">3</button>
+        <button onclick="bui.Action.get().renderApplist(this)" class="icon">4</button>
+        <button onclick="bui.Action.get().renderApplist(this)" class="icon">5</button>
+    </nav>
+    <div id="desk" class="desk">
+        <div class="desktop-container" id="desk-1">
+            <div dragble="true" style="left: 0px; top: 0px; position: absolute;" id="xy0xy0" appid="100001" class="appbtn"><div><img alt="日历1" title="日历1" src="vm/img/shortcut/default/calendar.png"></div><span>日历1</span></div>
+            <div dragble="true" style="left: 360px; top: 0px; position: absolute;" id="xy3xy0" appid="1" class="appbtn add"><i class="addicon"></i><span>添加应用</span></div>
+            <div dragble="true" style="display: none; position: absolute;" id="holder" class="appbtn holder">&nbsp;</div>
+        </div>
+    </div>
+    <div id="task">
+        <div ui="type:TaskFrame;id:taskFrame"></div>
+        <div id="task-window">
+            <!--div ui11="type:Dialog;id:dd01;title:'This is a test.'">this is a test <div ui11="type:Button;id:ww">dfdfdf</div></div>
+            <!---->
+        </div>
+        <div ui="type:TaskBar;id:taskBar"></div>
+        <!--div id="task-bar" style="left: 0px; right: 0px;" class="task-bar">
+            <div id="task-next" style="display: none;">
+                <a hidefocus="true" id="task-next-btn" href="javascript:;"></a>
+            </div>
+            <div id="task-content" style="width: 100%;">
+                <div id="task-content-inner" style="margin-left: 0px; margin-right: 0px; width: 114px;">
+                    <a class="task-item" type="app" appid="3042" id="t_3042">
+                        <div class="task-item-icon">
+                            <img src="vm/img/shortcut/default/calendar.png">
+                        </div>
+                        <div class="task-item-txt">日历</div>
+                    </a>
+                    <a class="task-item" type="app" appid="3042" id="t_3042">
+                        <div class="task-item-icon">
+                            <img src="vm/img/shortcut/default/calendar.png">
+                        </div>
+                        <div class="task-item-txt">日历</div>
+                    </a>
+                </div>
+            </div>
+            <div id="task-pre" style="display: none;">
+                <a hidefocus="true" id="task-pre-btn" href="javascript:;"></a>
+            </div>
+        </div-->
+    
+    </div>
+    
+<!-- target:Page02 -->
+
+        <div class="desktop-container" id="desk-1" style="width111: 100%; height111: 100%; left: 20px; top: 20px;">
+            <div style="top:0px;left:0px" id="xy1xy0" class="appbtn add"><i class="addicon"></i><span>添加应用</span></div>
+            <div style="top:0px;left:240px;display:none;" id="holder" class="appbtn holder">&nbsp;</div>
+        </div>
+
+<!-- target:blank -->
+blank
+
+<!-- target:Page03 -->
+
+        <div class="desktop-container" id="desk-1" style="width111: 100%; height111: 100%; left: 20px; top: 20px;">
+            <div style="top:0px;left:0px" id="xy0xy0" class="appbtn">
+                <div><img alt="日历" title="日历" src="vm/img/shortcut/default/calendar.png"></div><span>日历</span>
+            </div>
+            <div style="top:0px;left:120px" id="xy1xy0" class="appbtn add"><i class="addicon"></i><span>添加应用</span></div>
+            <div style="top:0px;left:240px;display:none;" id="holder" class="appbtn holder">&nbsp;</div>
+        </div>      
+
+<div ismax="0" style="width: 400px; height: 720px; top: 0px; left: 0px; z-index: 22;" class="window-container window-current" state="hide" type="app" realappid="14" appid="3042" id="w_3042">
+	<div style="height: 100%">
+		<div class="title-bar">
+			<img src="vm/img/shortcut/default/calendar.png" class="icon"><span class="title">HTML5游戏</span>
+		</div>
+		<div class="title-handle">
+			<a title="最小化" href="javascript:;" btn="hide" class="ha-hide">
+			<b class="hide-b"></b></a>
+			<a title="最大化" href="javascript:;" btn="max" class="ha-max">
+			<b class="max-b"></b></a>
+			<a style="display: none" title="还原" href="javascript:;" btn="revert" class="ha-revert">
+			<b class="revert-b"></b><b class="revert-t"></b></a>
+			<a title="全屏" href="javascript:;" btn="fullscreen" class="ha-fullscreen">
+			+</a> <a title="关闭" href="javascript:;" btn="close" class="ha-close">
+			×</a> </div>
+		<div class="window-frame">
+			<div class="window-mask window-mask-noflash" style="display: none;">
+			</div>
+			<div class="window-loading" style="display: none;">
+			</div>
+			<iframe frameborder="0" src="app/ztype/ztype.html" id="w_ztype_iframe" style="margin-top: -60px;">
+			</iframe></div>
+		<div class="set-bar">
+			<div class="fr">
+				<a class="btn star"><i class="icon icon177"></i>
+				<span class="btn-con">评分</span> </a><a class="btn help">
+				<i class="icon icon105"></i><span class="btn-con">帮助</span> </a>
+				<a class="btn refresh"><i class="icon icon158"></i>
+				<span class="btn-con">刷新</span> </a></div>
+		</div>
+	</div>
+	<div resize="t" class="window-resize window-resize-t">
+	</div>
+	<div resize="r" class="window-resize window-resize-r">
+	</div>
+	<div resize="b" class="window-resize window-resize-b">
+	</div>
+	<div resize="l" class="window-resize window-resize-l">
+	</div>
+	<div resize="rt" class="window-resize window-resize-rt">
+	</div>
+	<div resize="rb" class="window-resize window-resize-rb">
+	</div>
+	<div resize="lt" class="window-resize window-resize-lt">
+	</div>
+	<div resize="lb" class="window-resize window-resize-lb">
+	</div>
+</div>
+
+
+<!-- target:Page04 -->
+
+        <div class="desktop-container" id="desk-1" style="width111: 100%; height111: 100%; left: 20px; top: 20px;">
+            <div style="top:0px;left:0px" id="xy0xy0" class="appbtn">
+                <div><img alt="日历" title="日历" src="vm/img/shortcut/default/calendar.png"></div><span>日历</span>
+            </div>
+            <div style="top:0px;left:120px" id="xy1xy0" class="appbtn add"><i class="addicon"></i><span>添加应用</span></div>
+            <div style="top:0px;left:240px;display:none;" id="holder" class="appbtn holder">&nbsp;</div>
+        </div>      
+
+<div ismax="0" style="width: 340px; height: 720px; top: 0px; left: 0px; z-index: 22;" class="window-container window-current" state="hide" type="app" realappid="14" appid="3042" id="w_3042">
+	<div style="height: 100%">
+		<div class="title-bar">
+			<img src="vm/img/shortcut/default/calendar.png" class="icon"><span class="title">HTML5在线书店</span>
+		</div>
+		<div class="title-handle">
+			<a title="最小化" href="javascript:;" btn="hide" class="ha-hide">
+			<b class="hide-b"></b></a>
+			<a title="最大化" href="javascript:;" btn="max" class="ha-max">
+			<b class="max-b"></b></a>
+			<a style="display: none" title="还原" href="javascript:;" btn="revert" class="ha-revert">
+			<b class="revert-b"></b><b class="revert-t"></b></a>
+			<a title="全屏" href="javascript:;" btn="fullscreen" class="ha-fullscreen">
+			+</a> <a title="关闭" href="javascript:;" btn="close" class="ha-close">
+			×</a> </div>
+		<div class="window-frame">
+			<div class="window-mask window-mask-noflash" style="display: none;">
+			</div>
+			<div class="window-loading" style="display: none;">
+			</div>
+			<iframe frameborder="0" src="http://femvc.com/app/bookstore/index.html" id="w_ztype_iframe">
+			</iframe></div>
+		<div class="set-bar">
+			<div class="fr">
+				<a class="btn star"><i class="icon icon177"></i>
+				<span class="btn-con">评分</span> </a><a class="btn help">
+				<i class="icon icon105"></i><span class="btn-con">帮助</span> </a>
+				<a class="btn refresh"><i class="icon icon158"></i>
+				<span class="btn-con">刷新</span> </a></div>
+		</div>
+	</div>
+	<div resize="t" class="window-resize window-resize-t">
+	</div>
+	<div resize="r" class="window-resize window-resize-r">
+	</div>
+	<div resize="b" class="window-resize window-resize-b">
+	</div>
+	<div resize="l" class="window-resize window-resize-l">
+	</div>
+	<div resize="rt" class="window-resize window-resize-rt">
+	</div>
+	<div resize="rb" class="window-resize window-resize-rb">
+	</div>
+	<div resize="lt" class="window-resize window-resize-lt">
+	</div>
+	<div resize="lb" class="window-resize window-resize-lb">
+	</div>
+</div>
+
+
+<!-- target:Desktop -->
+
+        <div class="desktop-container" id="desk-1">
+            <div style="top:0px;left:0px" id="xy0xy0" class="appbtn">
+                <div><img alt="日历" title="日历" src="vm/img/shortcut/default/calendar.png"></div><span>日历</span>
+            </div>
+            <div style="top:0px;left:120px" id="xy1xy0" class="appbtn add"><i class="addicon"></i><span>添加应用</span></div>
+            <div style="top:0px;left:240px;display:none;" id="holder" class="appbtn holder">&nbsp;</div>
+        </div>      
+
