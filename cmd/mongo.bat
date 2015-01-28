@@ -1,27 +1,26 @@
 cd .
 @echo off
-echo             .==========. 
-echo        ."==^            ^==". 
-echo    "==^                      ^==". 
-echo   "            MongoDB            "  
-echo  "\.                             ./" 
-echo  "  ^===.                   .===^  " 
-echo  "       ^=================^       " 
-echo  "                                 " 
-echo  "                                 " 
-echo  "\.                             ./" 
-echo  "  ^===.                   .===^  " 
-echo  "       ^=================^       " 
-echo  "                                 " 
-echo  "                                 " 
-echo  "\.                             ./" 
-echo  "  ^===.                   .===^  " 
-echo  "       ^=================^       " 
-echo  "                                 " 
-echo  "                                 " 
-echo  "\.                             ./" 
-echo     ^===.                   .===^    
-echo          ^=================^         
+echo             ___________
+echo       ____.^^           ^^._____
+echo   .--`                        '-._
+echo  (            MongoDB             )
+echo  ^|`--.____                ____.--'^|
+echo  ^|        `-.__________.-'        ^|
+echo  ^|                                ^|
+echo  ^|                                ^|
+echo  ^|                                ^|
+echo  ^|`--.____                ____.--'^|
+echo  ^|        `-.__________.-'        ^|
+echo  ^|                                ^|
+echo  ^|                                ^|
+echo  ^|                                ^|
+echo  ^|`--.____                ____.--'^|
+echo  ^|        `-.__________.-'        ^|
+echo  ^|                                ^|
+echo  ^|                                ^|
+echo  ^(                                )
+echo  ^ `--.____                ____.--'
+echo  ^         `-.__________.-'        
 echo on  
 @echo off
 cd C:\
