@@ -68,7 +68,15 @@ function getUser (req, res, filter, next) {
 }
 
 exports.detail = function (req, res, next) {
-    return getUser(req, res, {uid: req.paramlist.uid});
+    var user = {};
+    if (req.paramlist.uid) {
+        user.uid = req.paramlist.uid;
+    }
+    if (req.paramlist.username) {
+        user.username = req.paramlist.username;
+    }
+    
+    return getUser(req, res, user);
 };
 
 exports.save = function (req, res, next) {
