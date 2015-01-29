@@ -1,1337 +1,814 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Ebbinghaus Intelligent Remember [v1.0]</title>
-<link rel="stylesheet" type="text/css" href="main3.css">
-<style>
-</style>
-<script type="text/javascript">
-'use strict';
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Ebbinghaus Intelligent Remember [v1.0]</title>
+    <style>
+    </style>
+    <script type="text/javascript">
+        'use strict';
 
-window.onload = function () {
-    Requester.get('/ue_api/account/get_uid?rand=' + Math.random(), {
-        onsuccess: function (result) {
-            if (result && !result[0] && result[1]) {
-                hui.g('uid').innerHTML = String(result[1]);
-                hui.cc('link').style.display = 'block';
-            }
-        }
-    });
-    
-    window.test_id = hui.util.getCookie('test_id');
-    
-    initPageIndex();
-    initPageHistory();
-    initPageIndustry();
-    initPageLesson();
-    initPageAbout();
-    
-    initPageTest();
-    initPageResult();
-    initPageCandidate();
-    initPageReport();
-    initPageDetail();
-    initPageSendSMS();
-    
-    hui.Action.start();
-};
+        window.onload = function () {
+            // Requester.get('/ue_api/account/get_uid?rand=' + Math.random(), {
+            //     onsuccess: function (result) {
+            //         if (result && !result[0] && result[1]) {
+            //             hui.g('uid').innerHTML = String(result[1]);
+            //             hui.cc('link').style.display = 'block';
+            //         }
+            //     }
+            // });
 
-function showTab(tab) {
-    hui.util.removeClass(hui.g('menu_index'), 'item_selected');
-    hui.util.removeClass(hui.g('menu_industry'), 'item_selected');
-    hui.util.removeClass(hui.g('menu_lesson'), 'item_selected');
-    hui.util.removeClass(hui.g('menu_history'), 'item_selected');
-    hui.util.removeClass(hui.g('menu_about'), 'item_selected');
-    
-    hui.util.addClass(hui.g('menu_' + tab), 'item_selected');
+            // window.test_id = hui.util.getCookie('test_id');
 
-    hui.g('index'    ).style.display = 'none';
-    hui.g('industry' ).style.display = 'none';
-    hui.g('lesson'   ).style.display = 'none';
-    hui.g('history'  ).style.display = 'none';
-    hui.g('about'    ).style.display = 'none';
+            initPageLogin();
+            initPageIndex();
+            initPageAddTask();
+            initPageComment();
 
-    hui.g('test'     ).style.display = 'none';
-    hui.g('result'   ).style.display = 'none';
-    hui.g('candidate').style.display = 'none';
-    hui.g('report'   ).style.display = 'none';
-    hui.g('detail'   ).style.display = 'none';
-    hui.g('send_sms' ).style.display = 'none';
+            hui.Action.start();
+        };
 
-    hui.g(tab).style.display = 'block';
-}
-//-->
-</script>
+        //-->
+    </script>
 </head>
+
 <body style="" onload123="initForTest()">
-<!--.page>.page_head>.logo^+.page_banner>h1.test_title{你想知道自己前端技术实力排名吗？}+.test_desc{2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，想知道你自己技术实力的排名吗}+.test_btn{立即测试}^+.page_foot{2014-10-17}-->
-<div class="page">
-    <div class="page_head">
-        <div class="page_container">
-            <div class="sign" style="display:none;"><a class="sign_in">登录</a><a class="sign_up">注册</a> </div>
-            <div class="logo"><img src="img/logo.png" alt=""></div>
-            <div class="menu">
-                <ul class="menu_list">
-                    <li class="menu_item item_selected" id="menu_index" onclick1="showTab(this,'menu_index')" ><a href="#/">首 页</a></li>
-                    <li class="menu_item" id="menu_industry" onclick1="showTab(this,'menu_industry')"><a href="#/industry">行业现状</a></li>
-                    <li class="menu_item" id="menu_lesson" onclick1="showTab(this,'menu_lesson')"><a href="#/lesson">课程介绍</a></li>
-                    <li class="menu_item" id="menu_history" onclick1="showTab(this,'menu_history')"><a href="#/history">测评历史</a></li>
-                    <li class="menu_item" id="menu_about" onclick1="showTab(this,'menu_about')"><a href="#/about">关于我们</a></li>
-                </ul>
-            </div>
-            <div class="link" style="text-align:right;display:none;">
-                用户名: <span id="uid" class="uid"></span>
-            </div>
-            
-        </div>
-    </div>
-    <div id="main" style="background-color: #222;min-height: 750px;">
-        <div class="page_body" id="index" style="display123: none;">
-            <div class="page_banner">
-                <div class="page_container">
-                    <div class="page_banner_padding">&nbsp;</div>
-                    <h1 class="test_title"><span>你想知道自己的前端技术实力排名吗</span><img alt="你想知道自己前端技术实力排名吗？" src="img/title_bg.png" width="55%"></h1>
-                    <div class="test_desc">2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，<br>你想知道自己技术实力的排名吗</div>
-                    <div class="resume_btn" id="btn_report" onclick="hui.Control.getByFormName('form').hide();showTestScore()" style="display:none;">查看报告</div>
-                    <div class="resume_btn" id="resume_btn" onclick="hui.Control.getByFormName('form').show();hui.Control.getByFormName('form').initSubject();" style="display:none;">继续测试</div>
-                    <div class="test_btn" onclick="hui.Control.getByFormName('form').show();hui.Control.getByFormName('form').initSubject('newone');" onclick12="var send_sms=hui.Control.getByFormName('send_sms');send_sms.hideError();send_sms.show()" style123="display:none;">立即测试</div> 
-                    <a class="test_btn" href="#/test~tid=100001">立即测试</a>
-                </div> 
-            </div>
-            <div class="page_middle">
-                <div class="page_container">
-                    <div class="contact">
-                        <h3 class="contact_title">试听&amp;咨询</h3>
-                        <ul class="test_list">
-                            <li class="item_row">
-                                <h4 class="sub_title">微信咨询</h4>
-                                <div class="sub_list">
-                                <b onmouseover="var list=this.getElementsByTagName('i');for(var i=list.length-1;i>-1;i--){list[i].parentNode&&list[i].parentNode.removeChild(list[i])}">fe_<i style="display:none;">8</i>camps<i style="display:none;">8</i>（8:00-22:00）</b></div>
-                            </li>
-                            <li class="item_row">
-                                <h4 class="sub_title">电话咨询</h4>
-                                <div class="sub_list"><b onmouseover="var list=this.getElementsByTagName('i');for(var i=list.length-1;i>-1;i--){list[i].parentNode&&list[i].parentNode.removeChild(list[i])}">189<i style="display:none;">8</i>64<i style="display:none;">8</i>80<i style="display:none;">8</i>06<i style="display:none;">8</i>60（8:00-22:00）</b></div>
-                            </li>
-                            <li class="item_row">
-                                <h4 class="sub_title">QQ咨询</h4>
-                                <div class="sub_list"><b onmouseover="var list=this.getElementsByTagName('i');for(var i=list.length-1;i>-1;i--){list[i].parentNode&&list[i].parentNode.removeChild(list[i])}">290<i style="display:none;">8</i>016<i style="display:none;">8</i>82<i style="display:none;">8</i>46（8:00-22:00）</b></div>
-                            </li>
-                        </ul>
+    <!--.page>.page_head>.logo^+.page_banner>h1.test_title{你想知道自己前端技术实力排名吗？}+.test_desc{2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，想知道你自己技术实力的排名吗}+.test_btn{立即测试}^+.page_foot{2014-10-17}-->
+    <div class="page">
+        <div id="main" style="min-height: 750px;">
+            <div class="page_body" id="login">
+                <!-- target: login -->
+                <style type="text/css">
+                    div.loginboxtitle { font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; border: 1px solid #c0c0c0; margin-left: 70px; margin-right: 70px; padding-left: 11px; padding-right: 11px; width: 830px; }
+                    div.loginboxtitle { background: #c0c0c0; font-size: 10pt; font-weight: bold; line-height: 21px; margin-top: 30px; margin-bottom: 0px; }
+                    div.loginbox { font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; border: 1px solid #c0c0c0; margin-left: 70px; margin-right: 70px; padding-left: 11px; padding-right: 11px; width: 830px; }
+                    div.loginbox { margin-top: 0px; font-size: 8pt; padding-top: 20px; color: #808080; }
+                    div.logintable { margin-top: 20px; }
+                    input { vertical-align: middle; }
+                    table.center { display: inline; text-align: center; }
+                    td.loginprompt { font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; text-align: right; color: #808080; font-size: 8pt; vertical-align: top; }
+                    input.loginprompt { font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; color: #252525; font-size: 10pt; border: 1px solid; margin-bottom: 11px; }
+                    .header { width: 970px; height: 61px; font-size: 8pt; display: block; background-image: url('vm/img/webclient-header.gif'); background-repeat: no-repeat; position: relative; top: 0px; left: 0px; color: white; margin-bottom: 12px; }
+                    .header .headertext { position: absolute; bottom: 12px; left: 21px; color: white; }
+                    .header a { text-decoration: underline; color: white; }
+                </style>
+                <div class="header">
+                    <div class="headertext">
+                        <a href="#">ScrumWorks Pro Home</a> | <a href="#!/help" target="_blank">Help</a>
                     </div>
-                    <div class="description">
-                        <h3 class="sub_title">前端训练营FECamps </h3>
-                        <div class="desc_content">
-                        <img src="img/qrcode.png" alt="" class="qrcode">
-                        前端训练营致力于WEB前端高端人才培养，引领前端行业未来发展方向，帮助学员提升自身技术实力，实现职业目标。同时助力移动互联网企业高级软件技术人才培养，提升企业整体竞争力。</div>
-                    </div>
-                    
-                    <div class="test_history">
-                        <h3 class="history_title">最新评测结果</h3>
-                        <ul class="test_list" id="test_list">
-                            <li class="item_row">
-                                <span class="t_user">tomcat</span>
-                                <span class="t_time">76 m</span>
-                                <span class="t_score">36</span>
-                                <span class="t_date">2014-12-01 16:35</span>
-                            </li>
-                            <li class="item_row">
-                                <span class="t_user">tomcat</span>
-                                <span class="t_time">76 m</span>
-                                <span class="t_score">36</span>
-                                <span class="t_date">2014-12-01 16:35</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <hr class="clearfix" />
                 </div>
-            </div>
-        </div>
-        <script>
-        function initPageIndex() {
-            // pageIndex
-            var pageIndex;
-            pageIndex = function () {
-                hui.Action.call(this);
-                this.id = 'pageIndex';
-                this.main = 'index';
-            };
-            pageIndex.prototype = {
-                initBehavior: function () {
-                    var me = this;
-                    
-                    me.showTestHistory();
-                    me.showTestButton();
-                },
-                finish: function () {
-                    var me = this;
-                    showTab('index');
-                },
-                showTestHistory: function() {
-                    hui.Mockup.setRule('/ue_api/internal/get_test_history', [
-                        null,
-                        [
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'}
-                        ]
-                    ]);
-                    Requester.get('/ue_api/internal/get_test_history?rand=' + Math.random(), {
-                        onsuccess: function (result) {
-                            if (result && !result[0] && result[1]) {
-                                var tpl = [
-                                    '<li class="item_row">',
-                                    '    <span class="t_user">#{user}</span>',
-                                    '    <span class="t_time">#{time}</span>',
-                                    '    <span class="t_score">#{score}</span>',
-                                    '    <span class="t_date">#{date}</span>',
-                                    '</li>'
-                                ].join('');
-                                
-                                var list = result[1];
-                                var html = '';
-                                for (var i=0,len=list.length; i<len && i<4; i++) {
-                                    html += hui.util.format(tpl, list[i]);
-                                }
-                                hui.g('test_list').innerHTML = html;
-                            }
-                        }
-                    });
-                },
-                showTestButton: function() {
-                    var test_id = window.test_id;
-                    $('#resume_btn').hide();
-                    $('#btn_report').hide();
-                    if (test_id && hui.util.getCookie('testid_' + test_id) === 'finish') {
-                        $('#btn_report').show();
-                    }
-                    else if (test_id && String(test_id).length > 20) {
-                        $('#resume_btn').show();
-                    }
-                    
-                    $('.test_btn').show();
-                }
-            };
-
-            hui.inherits(pageIndex, hui.Action);
-            hui.Router.setRule('/', 'pageIndex');
-            hui.window.pageIndex = pageIndex;
-        }
-        </script>
-        <div class="page_body" id="history" style="background-color: white;display: none;">
-            <div class="page_container">
-                <div class="test_history">
-                    <h3 class="history_title">评测历史列表</h3>
-                    <ul class="test_list" id="history_list">
-                        <li class="item_row">
-                            <span class="t_user">tomcat</span>
-                            <span class="t_time">76 m</span>
-                            <span class="t_score">36</span>
-                            <span class="t_date">2014-12-01 16:35</span>
-                        </li>
-                        <li class="item_row">
-                            <span class="t_user">tomcat</span>
-                            <span class="t_time">76 m</span>
-                            <span class="t_score">36</span>
-                            <span class="t_date">2014-12-01 16:35</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <script>
-        function initPageHistory() {
-            // pageHistory
-            var pageHistory;
-            pageHistory = function () {
-                hui.Action.call(this);
-                this.id = 'pageHistory';
-                this.main = 'history';
-            };
-            pageHistory.prototype = {
-                initBehavior: function () {
-                    var me = this;
-                    me.showTestHistory();
-                },
-                finish: function () {
-                    var me = this;
-                    showTab('history');
-                },
-                showTestHistory: function() {
-                    hui.Mockup.setRule('/ue_api/internal/get_test_history', [
-                        null,
-                        [
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'}
-                        ]
-                    ]);
-                    Requester.get('/ue_api/internal/get_test_history?rand=' + Math.random(), {
-                        onsuccess: function (result) {
-                            if (result && !result[0] && result[1]) {
-                                var tpl = [
-                                    '<li class="item_row">',
-                                    '    <span class="t_user">#{user}</span>',
-                                    '    <span class="t_time">#{time}</span>',
-                                    '    <span class="t_score">#{score}</span>',
-                                    '    <span class="t_date">#{date}</span>',
-                                    '</li>'
-                                ].join('');
-                                
-                                var list = result[1];
-                                var html = '';
-                                for (var i=0,len=list.length; i<len; i++) {
-                                    html += hui.util.format(tpl, list[i]);
-                                }
-                                hui.g('history_list').innerHTML = html;
-                            }
-                        }
-                    });
-                },
-                
-            };
-
-            hui.inherits(pageHistory, hui.Action);
-            hui.Router.setRule('/history', 'pageHistory');
-            hui.window.pageHistory = pageHistory;
-        }
-        </script>
-        <div class="page_body" id="industry" style="background-color: white;display: none;">
-            <div class="page_container">
-                <center>
-                <img src="img/1232435.png" />
-                <img src="img/1232436.png" />
-                </center>
-            </div>
-        </div>
-        <script>
-        function initPageIndustry() {
-            // pageIndustry
-            var pageIndustry;
-            pageIndustry = function () {
-                hui.Action.call(this);
-                this.id = 'pageIndustry';
-                this.main = 'industry';
-            };
-            pageIndustry.prototype = {
-                initBehavior: function () {
-                    var me = this;
-                },
-                finish: function () {
-                    var me = this;
-                    showTab('industry');
-                }
-                
-            };
-
-            hui.inherits(pageIndustry, hui.Action);
-            hui.Router.setRule('/industry', 'pageIndustry');
-            hui.window.pageIndustry = pageIndustry;
-        }
-        </script>
-        <div class="page_body" id="lesson" style="background-color: white;display: none;">
-            <div class="page_container">
-                <center>
-                    <h2 class="kcTit">前端架构师 — 课程大纲</h2>
-                    <p class="xxCon">本课程适合想成为专业前端架构师的你，我们做的是培养业界专家.^_^</p>
-                    <img src="img/fe_architect.png" alt="fe architect" />
-                    <br/><br/>
-                </center>
-                
-            </div>
-        </div>
-        <script>
-        function initPageLesson() {
-            // pageLesson
-            var pageLesson;
-            pageLesson = function () {
-                hui.Action.call(this);
-                this.id = 'pageLesson';
-                this.main = 'lesson';
-            };
-            pageLesson.prototype = {
-                initBehavior: function () {
-                    var me = this;
-                },
-                finish: function () {
-                    var me = this;
-                    showTab('lesson');
-                }
-            };
-
-            hui.inherits(pageLesson, hui.Action);
-            hui.Router.setRule('/lesson', 'pageLesson');
-            hui.window.pageLesson = pageLesson;
-        }
-        </script>
-        <div class="page_body" id="about" style="background-color: white;display: none;">
-            <div class="page_container" style="text-align:center">
-                <img src="img/about_us.png" />
-            </div>
-        </div>
-        <script>
-        function initPageAbout() {
-            // pageAbout
-            var pageAbout;
-            pageAbout = function () {
-                hui.Action.call(this);
-                this.id = 'pageAbout';
-                this.main = 'about';
-            };
-            pageAbout.prototype = {
-                initBehavior: function () {
-                    var me = this;
-                },
-                finish: function () {
-                    var me = this;
-                    showTab('about');
-                }
-            };
-
-            hui.inherits(pageAbout, hui.Action);
-            hui.Router.setRule('/about', 'pageAbout');
-            hui.window.pageAbout = pageAbout;
-        }
-        </script>
-        <div class="page_body subject_test" id="test" style="background-color: white;display: none;">
-            <div class="page_container" style="text-align:center">
-                <div class="subject_box" ui="type:'Panel',formName:'form',size:{width:'980px'}" style="display123:none">
-                    <div class="subject_action">
-                        <input type="hidden" ui="type:'TextInput',formName:'atcid'" />
-                        <input type="hidden" ui="type:'TextInput',formName:'title'" />
-                        <input type="hidden" ui="type:'TextInput',formName:'index'" />
-                        <a href="javascript:" class="subject_end" onclick="hui.Control.getByFormName('form').hide();showTestScore()" ui1="type:'Button',formName:'subject_end'">结束测试</a>
-                        <a style="display:none;" href="javascript:" class="subject_pre" ui="type:'Button',formName:'subject_pre'">上一题</a>
-                    </div>
-                    <h3 class="form_title"> 第 <span id="subject_index" ui="type:'Label',formName:'index1'">1</span> 题 <span class="sub">（共 <span id="subject_sum" ui="type:'Label',formName:'sum'">100</span> 题）</span></h3>
-                    <div class="form_content">
-                        <!--div class="form_mask"><img src="img/loading.gif" /></div-->
-                        <div class="subject_title">
-                            <span ui="type:'Label',formName:'index2'">1</span>、<pre ui="type:'Label',formName:'title1'"></pre>
+                <div>
+                    <h3 class="loginboxtitle">Web Client Login</h3>
+                    <div class="loginbox">
+                        <div>
+                            The ScrumWorks Pro Web Client provides a personalized view and limited updating of ScrumWorks Pro data such as your task status and remaining hours.
                         </div>
-                        <ol class="subject_option" ui="type:'Panel',formName:'content',isFormItem: true">
-                        </ol>
-                        <div style="text-align: right;"><button class="subject_nxt" ui="type:'Button',formName:'subject_nxt2'" tabindex="100">提 交</button><a href="javascript:" class="subject_skip" ui="type:'Button',formName:'subject_skip'">跳 过</a></div>
+                        <div class="logintable" style="line-height: 30px;">
+                            <form method="post" action="/">
+                                <!-- 搞笑，FF下table设置align="left" 居然有bug -->
+                                <table cellspadding="5">
+                                    <tr>
+                                        <td valign="top">Username:</td>
+                                        <td>
+                                            <input type="text" value="" style="width: 120px;" ui="type:'TextInput',formName:'username',rule:'required'">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">Password:</td>
+                                        <td>
+                                            <input type="password" value="" style="width: 120px;" ui="type:'TextInput',formName:'password',rule:'required'">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td>
+                                            <button class="button" type="button" ui="type:'Button',formName:'login_submit'">Login</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br />
+                                <br />
+                            </form>
+                        </div>
                     </div>
                 </div>
+                <div style="color: #AAAAAA; margin: 20px; text-align: center; width: 970px;">
+                    Copyright © 2010 CollabNet, Inc. All rights reserved.</div>
+
             </div>
-        </div>
-        <script>
-        function initPageTest() {
-            // pageTest
-            var pageTest;
-            pageTest = function () {
-                hui.Action.call(this);
-                this.id = 'pageTest';
-                this.main = 'test';
-            };
-            pageTest.prototype = {
-                initBehavior: function () {
-                    var me = this; 
+            <script>
+                function initPageLogin() {
+                    // pageLogin
+                    var pageLogin;
+                    pageLogin = function () {
+                        hui.Action.call(this);
+                        this.id = 'pageLogin';
+                        this.main = 'login';
+                    };
+                    pageLogin.prototype = {
+                        initBehavior: function () {
+                            var me = this;
 
-                    me.getByFormName('subject_nxt2').onclick = function () {
-                        var data = hui.Control.getByFormName('form').getParamMap();
-                        data.content = window.encodeURIComponent(JSON.stringify(data.content));
-                        if (data.content.indexOf('yes') !== -1) {
-                            hui.Control.getByFormName('subject_skip').onclick();
-                        }
-                        else if (window.confirm('友情提示：您尚未选择任何答案，确定跳过该题目吗')) {
-                            hui.Control.getByFormName('subject_skip').onclick();
-                        }
-                    };
-                    
-                    me.getByFormName('subject_skip').onclick = function () {
-                        var me = hui.Control.getById('pageTest');
-                        var form = me.getByFormName('form');
-                        var data = form.getParamMap();
-                        data.content = window.encodeURIComponent(JSON.stringify(data.content));
-                        data.test_id = window.test_id;
-                        saveTestScore(data);
-                        $('.subject_nxt').attr('disabled','disabled');
-                        $('.form_content').animate({opacity:0}, 500);
-                        // $('.form_mask').show();
-                    };
-                    
-
-                    hui.Control.getByFormName('form').initSubject = function (newstart) {
-                        Requester.get('/ue_api/internal/get_next_question', {
-                            data: {
-                                newstart: !!newstart ? 'newone' : '', 
-                                rand: Math.random()
-                            },
-                            onsuccess: function (result) {
-                                if (result && !result[0] && result[1]) {
-                                    var data = result[1];
-                                    if (data.atcid) {
-                                        data.title = hui.util.encodehtml(data.title);
-                                        data.atcid = data.atcid;
-                                        data.index2 = data.index1 = data.index;
-                                        data.title1 = data.title;
-                                        if (data.test_id) {
-                                            hui.util.setCookie('test_id', data.test_id);
-                                            // showTestHistory();
-                                        }
-                                        hui.Control.getByFormName('form').setValueByTree(data);
-                                        hui.Control.getByFormName('form').getByFormName('content').disposeChild();
-                                        //var content = hui.Control.getByFormName('form').getByFormName('content').getMain();
-                                        var list = data.options;
-                                        for (var i in list) {
-                                            list[i].index = i;
-                                            list[i].single = data.single;
-                                            hui.Control.getByFormName('form').addOption(list[i]);
-                                        }
-                                        $('.subject_nxt').removeAttr('disabled');
-                                        $('.form_content').animate({opacity:1}, 400);
-                                        //$('.form_mask').hide();
-                                        hui.Control.getByFormName('form').hideWaiting();
-                                    }
-                                }
-                            }
-                        });
-                    };
-                    hui.Control.getByFormName('form').showWaiting();
-                    hui.Control.getByFormName('form').addOption = function (obj) {
-                        var content = hui.Control.getByFormName('form').getByFormName('content').getMain(),
-                            list,
-                            index;
-                        obj = obj || {};
-                        if (!obj.index) {
-                            var list = hui.c('td_index');
-                            obj.index = 1;
-                            for (var i = 0, len = list.length; i < len; i++) {
-                                index = parseInt(list[i].innerHTML);
-                                if (index >= obj.index) {
-                                    obj.index = index + 1;
-                                }
-                            }
-                        }
-                        obj.single = obj.single ? 'Radiobox' : 'Checkbox';
-                        // obj.content = hui.util.encodehtml(obj.content);
-                        var tpl =
-                            '<li class="tr_row" id="content#{index}" ui="type:\'Panel\',formName:\'#{index}\',isFormItem: true">' +
-                            '    <div ui="type:\'Label\',id:\'content#{index}\'">#{hui.util.encodehtml(hui.util.decode(content))}</div>' +
-                            '    <span class="td_index">#{index}</span>' +
-                            '    <div ui="type:\'#{single}\',targetForm:\'content\',formName:\'correct\',id:\'correct#{index}\',value:\'yes\',checked:\'#{correct}\'"></div>' +
-                            '</li>';
-                        hui.util.appendHTML(content, hui.format(tpl, obj));
-                        hui.Control.create(hui.g('content' + obj.index));
-                    };
-                    hui.Control.getByFormName('form').removeOption = function (index) {
-                        var content = hui.Control.getByFormName('form').getByFormName('content');
-                        content.getByFormName(index).dispose();
-                    };
-                    hui.Control.getByFormName('form').removeAllOption = function () {
-                        var content = hui.Control.getByFormName('form').getByFormName('content'),
-                            option,
-                            main = content.getMain();
-                        var list = hui.c('td_index');
-                        for (var i = 0, len = list.length; i < len; i++) {
-                            index = parseInt(list[i].innerHTML);
-                            option = content.getByFormName(i);
-                            if (option) {
-                                option.dispose();
-                            }
-                        }
-                        main.index = 0;
-                    };
-
-                    
-
-                    function saveTestScore(data) {
-                        Requester.get('/ue_api/internal/save_next_question', {
-                            data: data,
-                            onsuccess: function (result) {
-                                // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
-                                if (result && result[1] && result[1].finish) {
-                                    hui.Control.getByFormName('form').hide();
-                                    showTestScore();
-                                    hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'finish');
-                                }
-                                else {
-                                    hui.Control.getByFormName('form').initSubject();
-                                    hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'unfinish');
-                                }
-                                //}
-                                //else {
-                                    //hui.Control.getByFormName('form').hide();
-                                    //showTestScore();
-                                    //hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'finish');
-                                //}
-                            }
-                        });
-                    }
-                },
-                finish: function () {
-                    var me = this;
-                    showTab('test');
-                }
-            };
-
-            hui.inherits(pageTest, hui.Action);
-            hui.Router.setRule('/test', 'pageTest');
-            hui.window.pageTest = pageTest;
-        }
-        </script>
-        <div class="page_body" id="result" style="background-color: white;display: none;">
-            <div class="page_container" style="text-align:center">
-                <div class="result_box" ui="type:'Panel',formName:'result',size:{width:'640px'}" style="display123:none">
-                    <div class="box_content">
-                        <div class="result_score">成绩 <b class="score" ui="type:'Label',formName:'score'">84</b> <span class="score_unit">分</span></div>
-                        <div class="result_correct">答对 <b class="correct" ui="type:'Label',formName:'correct'">40</b> 题 （共 <b class="correct" ui="type:'Label',formName:'question_count'">40</b> 题） </div>
-                        
-                        <div class="result_time">耗时 <b class="time" ui="type:'Label',formName:'time'">40</b> 分钟</div>
-                        <div class="result_chart_bg"><div class="result_chart" id="result_chart">&nbsp;</div></div>
-                        <div class="result_rate">您打败了<b class="rate"><span ui="type:'Label',formName:'rate'">64</span>%</b>的挑战者!</div>
-                        <div class="result_tip">点击“下一步”继续进行评估。</div>
-                        <button class="result_nxt" ui="type:'Button',formName:'result_nxt'" tabindex="100">下一步</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <script>
-        function initPageResult() {
-            // pageResult
-            var pageResult;
-            pageResult = function () {
-                hui.Action.call(this);
-                this.id = 'pageResult';
-                this.main = 'result';
-            };
-            pageResult.prototype = {
-                initBehavior: function () {
-                    var me = this;
-                    me.showTestScore();
-                    me.getByFormName('result_nxt').onclick = function () {
-                        // hui.Control.getByFormName('result').hide();
-                        // hui.Control.getByFormName('candidate').show();
-                        // showEvaluateReport();
-                        window.location.href = '#/report';
-                    };
-                },
-            	showTestScore: function() {
-                    Requester.get('/ue_api/internal/get_rank', {
-                        data: {
-                            test_id: window.test_id
                         },
-                        onsuccess: function (result) {
-                            // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
-                            if (result && result[1]) {
-                                var data = result[1];
-                                if (data.question) {
-                                    hui.g('subject_index').innerHTML = '1';
-                                    data.rate = Math.round(100 * data.index / (data.sum + 0.001));
-                                    data.time = Math.ceil((hui.util.parseDate(data.time_end).getTime() - hui.util.parseDate(data.time_start).getTime()) / 60000);
-                                    data.question_count = data.question.length;
-                                    hui.g('result_chart').style.width = data.rate * 4 + 'px';
-                                    hui.Control.getByFormName('result').setValueByTree(data).show();
-                                }
-                                else {
-                                    console.log('Warning: Test not finish')
-                                    // showPaperDetail();
-                                }
-                            }
+                        finish: function () {
+                            var me = this;alert(123);
+                            // showTab('index');
                         }
-                    });
-                },
-                finish: function () {
-                    var me = this;
-                    showTab('result');
-                }
-            };
+                    };
 
-            hui.inherits(pageResult, hui.Action);
-            hui.Router.setRule('/result', 'pageResult');
-            hui.window.pageResult = pageResult;
-        }
-        </script>
-        <div class="page_body" id="candidate" style="background-color: white;display: none;">
-            <div class="page_container" style="text-align:center">
-                <div class="candidate_box" ui="type:'Panel',formName:'candidate',size:{width:'640px',height: '400px'}" style="display123:none">
-                    <div class="box_content">
-                        <div class="row_item row_career">
-                            <div class="title">工作经验（年）：<span class="validate_text" id="career_msg"></span></div>
-                            <div ui="type:'Slider',formName:'career',labels:false,ticks:true,tickStep:1,minValue:0,maxValue:10,width:320,smallChange:0.1,value:0"></div>
+                    hui.inherits(pageLogin, hui.Action);
+                    hui.Router.setRule('/login', 'pageLogin');
+                    hui.window.pageLogin = pageLogin;
+                }
+            </script>
+            <div class="page_body" id="index" style="display: none;">
+                <!-- target: taskboard_layout -->
+                <style type="text/css">
+                    .content { margin-left: 20px; margin-right: 20px; }
+                    #needsUpdate { cursor: pointer; /* see: http://www.mandarindesign.com/opacity.html */; opacity: .85; filter: alpha(opacity=85); position: absolute; left: 57px; /* centered in the taskboard table: left margin + half of the diff between the table width and the image width */; z-index: 9999; }
+                    .error { font-size: 8pt; font-weight: bold; color: black; padding-left: 8px; margin-bottom: 12px; }
+                    .sectionHeader.nextSection { margin-top: 40px; }
+                    .sectionHeader { width: 930px; font-size: 12pt; color: white; text-align: left; background: transparent; margin-bottom: 12px; line-height: 21px; /* using line-height so that the text is vertically centered. */ }
+                    .sectionHeader_table { border-collapse: collapse; border-spacing: 0; width: 100%; margin: 0px; padding: 0px; }
+                    .sectionHeader_w { width: 2px; height: 28px; background: url('vm/img/taskboard-header-left.gif') no-repeat 0 0; }
+                    .sectionHeader_n { height: 28px; background: url('vm/img/taskboard-header-slice.gif') repeat-x 0 0; }
+                    .sectionHeaderText { color: white; margin-left: 5px; }
+                    .sectionHeader_e { width: 4px; height: 28px; background: url('vm/img/taskboard-header-right.gif') no-repeat 0 0; }
+                    .burndownChart { margin-top: 20px; }
+                    #burndownImg { border-width: 0px; padding-left: 8px; height: 480px; }
+                    #newImpediment { margin-bottom: 10px; }
+                    #impedimentsTable { border: none; font-size: 9pt; width: 900px; }
+                    col#entered { width: 100px; }
+                    col#lastmodified { width: 100px; }
+                    col#title { width: 200px; }
+                    col#description { width: 350px; }
+                    col#reporter { width: 150px; }
+                    th.impedimentattribute { font-size: 9pt; color: black; font-weight: bold; text-align: left; border: none; padding-bottom: 12px; padding-left: 8px; }
+                    .header { width: 970px; height: 61px; font-size: 8pt; display: block; background-image: url('vm/img/webclient-header.gif'); background-repeat: no-repeat; position: relative; top: 0px; left: 0px; color: white; margin-bottom: 12px; }
+                    .header .headertext { position: absolute; bottom: 12px; left: 21px; color: white; }
+                    .header a { text-decoration: underline; color: white; }
+                </style>
+
+                <div class="header">
+                    <div class="headertext">
+                        Welcome: <span id="welcome_user">andy.wang</span>
+                        <span style="padding-left: 20px; font-size: 8pt;">
+                            <a href="#!/login~logout=true">Log out</a> |
+                            <a href="#">ScrumWorks Pro Home</a> |
+                            <a href="#!/help" target="_blank">Help</a>
+                        </span>
+                    </div>
+                </div>
+                <div class="content">
+                    <div id="needsUpdate" style="display: none;">
+                        <img src="vm/img/refresh_alert_final.gif" alt="Changes have been made to this page by another User. Click this message to update display." onclick="bui.Locator.reload();" />
+                    </div>
+                    <div class="error" id="noSprints" style="display: none">
+                        There are no sprints in the selected product.
+                    </div>
+                    <div class="error" id="noPbis" style="display: none">
+                        There are no backlog items in this sprint.
+                    </div>
+                    <div class="error" id="noTaskAccess" style="display: none">
+                        You don&#39;t have access to view any tasks for this product.
+                    </div>
+
+                    <style type="text/css">
+                        div#displayMode { width: 930px; }
+                        .contentf { background: #ddd; }
+                        table#displayMode { width: 100%; }
+                        span#displayMode { font-weight: bold; vertical-align: bottom; }
+                        input { vertical-align: middle; }
+                        table#displayMode label { vertical-align: bottom; }
+                        div#todaysDate { font-size: 12pt; text-align: right; }
+                        .contentf div { margin-left: 5px; }
+                    </style>
+                    <div id="displayMode">
+                        <b class="b1f"></b><b class="b2f"></b><b class="b3f"></b><b class="b4f"> </b>
+                        <div style="padding: 10px;" class="contentf">
+                            <table id="displayMode" width="100%">
+                                <tbody>
+                                    <tr>
+                                        <td><span id="displayMode">Taskboard View:</span>
+                                            <input type="radio" checked="true" class="displaymode" value="teamview" name="displaymode" id="teamview">
+                                            <label for="teamview">All Tasks</label>
+                                            <input type="radio" class="displaymode" value="mytasksview" name="displaymode" id="mytasksview">
+                                            <label for="mytasksview">My Tasks</label>
+                                        </td>
+                                        <td>
+                                            <div id="todaysDate">
+                                                Today's Date: <span id="today">11/26/13</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <hr class="clearfix" />
-                        <div class="row_item row_package">
-                            <div class="title">目前年薪档位（万）：<span class="validate_text" id="annual_msg"></span></div>
-                            <div ui="type:'Slider',formName:'annual',labels:false,ticks:true,tickStep:5,minValue:0,maxValue:40,width:320,smallChange:1,value:0"></div>
-                        </div>
-                        <hr class="clearfix" />
-                        <div class="candidate_tip">点击“下一步”会根据您目前的 &nbsp;<b>工作经验</b> 、&nbsp; <b>年薪档位</b> &nbsp;及&nbsp; <b>测试结果</b> &nbsp;准确计算出您的 <b class="strong">薪资收入</b> 提升空间!</div>
-                        <button class="candidate_nxt" ui="type:'Button',formName:'candidate_nxt',disabled:false" tabindex="100">下一步</button>
+                        <b class="b4f"></b><b class="b3f"></b><b class="b2f"></b><b class="b1f">  </b>
+                    </div>
+
+                    <style type="text/css">
+                        #selectors { margin-top: 20px; margin-bottom: 20px; }
+                        #productSelector { width: 250px; }
+                        #sprintSelector { width: 250px; }
+                        #filterSprints { margin-left: 30px; }
+                        input { vertical-align: middle; }
+                    </style>
+                    <div id="selectors">
+                        <table class="selectors">
+                            <tr>
+                                <td>
+                                    <span>View Product:</span>
+                                    <button class="link" style="margin-left: 0px;" onclick="bui.Action.get().addProduct()">add</button><i>/</i>
+                                    <button class="link" style="margin-left:0px;" onclick="bui.Action.get().editProduct()">edit</button>
+                                </td>
+                                <td>
+                                    <span>View Sprint:</span>
+                                    <button class="link" style="" onclick="bui.Action.get().addSprint()">add</button><i>/</i>
+                                    <button class="link" style="margin-left:0px;" onclick="bui.Action.get().editSprint()">edit</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <select ui="type:'Select',formName:'product_list',data_value:'product_id',data_text:'product_name'" style="width:150px;"></select>
+                                </td>
+                                <td>
+                                    <select ui="type:'Select',formName:'sprint_list',data_value:'sprint_id',data_text:'sprint_name'" style="width:450px;"></select>
+                                </td>
+                                <td>
+                                    <input id="filterSprints" name="filterSprints" type="checkbox" />
+                                    <label for="filterSprints">Show Sprints only for Teams to which I belong</label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+
+                    <div class="sectionHeader" id="taskboardSectionHeader">
+                        <table class="sectionHeader_table">
+                            <tbody>
+                                <tr>
+                                    <td class="sectionHeader_w"></td>
+                                    <td class="sectionHeader_n">
+                                        <div class="sectionHeaderText">
+                                            Taskboard: All Tasks</div>
+                                    </td>
+                                    <td class="sectionHeader_e"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <style type="text/css">
+                    table#displayPrefs { border: 0px; width: 930px; table-layout: fixed; margin-bottom: 6px; }
+                    table#displayPrefs td { border: 0px; white-space: nowrap; vertical-align: middle; }
+                    input { vertical-align: middle; }
+                    #colorSelector { vertical-align: top; border: 1px solid black; white-space: nowrap; margin-left: 12px; margin-right: 26px; padding: 2px; padding-bottom: 3px; padding-top: 1px; }
+                    #colorSelector img { vertical-align: middle; }
+                    </style>
+                    <style type="text/css">
+                    div.myTaskColorMenu { position: absolute; z-index: 1000; border: 1px solid #888; background-color: white; margin: 0px 0px 0px 34px; padding: 0px; }
+                    div.myTaskColorMenu ul { list-style-type: none; margin: 0px; padding: 0px; }
+                    div.myTaskColorMenu ul li { list-style-type: none; display: block; margin: 0px; padding: 2px; }
+                    </style>
+                    <table id="displayPrefs">
+                        <tr>
+                            <td width="55%">
+                                <input id="include_deleted" name="include_deleted" type="checkbox" onclick="bui.Action.get().switchSprint()" />
+                                <label for="include_deleted">Show deleted task</label>
+                            </td>
+                            <td>
+                                <label>Highlight Tasks</label>
+                                <select ui="type:'Select',formName:'user_list',data_value:'user_id',data_text:'user_label'" style="width:230px;">
+                                    <!--option value="Aaron.lu (aaron.lu)">Aaron.lu (aaron.lu)</option-->
+                                </select>
+                            </td>
+                            <td width="100">
+                                <div id="colorSelector">
+                                    <img class="swatch" src="vm/img/Color_0.png" />
+                                    <img class="myTaskColor" src="vm/img/Dropdown_Arrow_button.gif" width="14" height="14" />
+                                </div>
+                                <div class="myTaskColorMenu" id="myTaskColorMenu" style="display:none;">
+                                    <ul>
+                                        <li id="li_color_0">
+                                            <img id="color_0" src="vm/img/Color_0.png" />
+                                        </li>
+                                        <li id="li_color_1">
+                                            <img id="color_1" src="vm/img/Color_1.png" />
+                                        </li>
+                                        <li id="li_color_2">
+                                            <img id="color_2" src="vm/img/Color_2.png" />
+                                        </li>
+                                        <li id="li_color_3">
+                                            <img id="color_3" src="vm/img/Color_3.png" />
+                                        </li>
+                                        <li id="li_color_4">
+                                            <img id="color_4" src="vm/img/Color_4.png" />
+                                        </li>
+                                        <li id="li_color_5">
+                                            <img id="color_5" src="vm/img/Color_5.png" />
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <div ui="type:'Taskboard',formName:'taskboard'"></div>
+
+
+                    <div class="sectionHeader nextSection">
+                        <table class="sectionHeader_table">
+                            <tr>
+                                <td class="sectionHeader_w"></td>
+                                <td class="sectionHeader_n">
+                                    <div class="sectionHeaderText">
+                                        Sprint Burndown</div>
+                                </td>
+                                <td class="sectionHeader_e"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="burndownChart">
+                        <!--img src="vm/img/-270223436412208026.png" id="burndownImg" alt="Sprint Burndown" /-->
+                    </div>
+
+                    <div class="sectionHeader nextSection">
+                        <table class="sectionHeader_table">
+                            <tr>
+                                <td class="sectionHeader_w"></td>
+                                <td class="sectionHeader_n">
+                                    <div class="sectionHeaderText">
+                                        Team Member Loeded</div>
+                                </td>
+                                <td class="sectionHeader_e"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <!--img src="vm/img/-270223436412208026.png" id="burndownImg" alt="Sprint Burndown" /-->
+                        <canvas id="chartBurden" height="450" width="800"></canvas>
+                    </div>
+
+
+                    <div class="error" id="noBurndown" style="display: none">
+                        You either do not have permission to view tasks or there are no sprints for this product.
+                    </div>
+                    <div class="sectionHeader nextSection" id="impedimentsSectionHeader">
+                        <table class="sectionHeader_table">
+                            <tr>
+                                <td class="sectionHeader_w"></td>
+                                <td class="sectionHeader_n">
+                                    <div class="sectionHeaderText">
+                                        Impediments</div>
+                                </td>
+                                <td class="sectionHeader_e"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <img class="newImpediment" style="cursor: pointer;" id="newImpediment" src="vm/img/new-impediment.gif" alt="New Impediment" />
+                    <table id="impedimentsTable" style="display: none">
+                        <colgroup>
+                            <col id="entered" />
+                            <col id="lastmodified" />
+                            <col id="title" />
+                            <col id="description" />
+                            <col id="reporter" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th class="impedimentattribute">Entered</th>
+                                <th class="impedimentattribute">Last Modified</th>
+                                <th class="impedimentattribute">Title</th>
+                                <th class="impedimentattribute">Description</th>
+                                <th class="impedimentattribute">Reporter</th>
+                            </tr>
+                        </thead>
+                        <tbody id="impediments">
+                    </table>
+                    <div class="error" id="noImpedimentsAccess" style="display: none; padding-bottom: 12px;">
+                        You don&#39;t have access to view impediments.
+                    </div>
+                    <div class="error" id="noImpedimentsTeam" style="display: none; padding-bottom: 12px;">
+                        A sprint must be selected to view impediments.
+                    </div>
+                    <div class="error" id="noImpediments" style="padding-bottom: 12px;">
+                        There are no impediments for this team.
                     </div>
                 </div>
+                <div style="    color: #AAAAAA;margin: 20px;text-align: center;width: 970px;">Copyright &copy; 2010 CollabNet, Inc. All rights reserved.</div>
             </div>
-        </div>
-        <script>
-        function initPageCandidate() {
-            
-            // hui.Control.getByFormName('report').show();
-            hui.Validator.setRule('career', {
-                'validate': function (text) {
-                    if (text === null || text === undefined || text === '') {
-                        return 1;
-                    }
-                    return 0;
-                },
-                'noticeText': {
-                    1: '不能为空'
-                }
-            }, 'force');
-            hui.Validator.setRule('annual', {
-                'validate': function (text) {
-                    if (text === null || text === undefined || text === '') {
-                        return 1;
-                    }
-                    return 0;
-                },
-                'noticeText': {
-                    1: '不能为空'
-                }
-            }, 'force'); //*/
+            <script>
+                function initPageIndex() {
+                    // pageIndex
+                    var pageIndex;
+                    pageIndex = function () {
+                        hui.Action.call(this);
+                        this.id = 'pageIndex';
+                        this.main = 'index';
+                    };
+                    pageIndex.prototype = {
+                        initBehavior: function () {
+                            var me = this;
 
-            // pageCandidate
-            var pageCandidate;
-            pageCandidate = function () {
-                hui.Action.call(this);
-                this.id = 'pageCandidate';
-                this.main = 'candidate';
-            };
-            pageCandidate.prototype = {
-                initBehavior: function () {
-                    var me = this;
-                    var candidate = hui.Control.getByFormName('candidate');
-                    candidate.getByFormName('candidate_nxt').onclick = function () {
-                        var data = candidate.getParamMap();
-                        if (data.annual !== '0' && data.career !== '0') {
-                            data.test_id = window.test_id;
-                            Requester.get('/ue_api/internal/update_rank', {
-                                data: data,
+                        },
+                        finish: function () {
+                            var me = this;
+                            // showTab('index');
+                        }
+                    };
+
+                    hui.inherits(pageIndex, hui.Action);
+                    hui.Router.setRule('/', 'pageIndex');
+                    hui.window.pageIndex = pageIndex;
+                }
+            </script>
+            <div class="page_body" id="history" style="background-color: white;display: none;">
+                <table>
+                    <tr>
+                        <td align="right" valign="top">Sprint Name:</td>
+                        <td>
+                            <input type="hidden" ui="type:'TextInput',formName:'product_id'" />
+                            <input type="hidden" ui="type:'TextInput',formName:'sprint_id'" />
+                            <input type="text" size="30" ui="type:'TextInput',formName:'sprint_name',rule:'required'" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="inputLabel" style="vertical-align: top;">Description:</td>
+                        <td style="vertical-align: top;">
+                            <textarea ui="type:'TextInput',formName:'sprint_desc'" cols="40" rows="9"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="inputLabel" style="vertical-align: top;">Index:</td>
+                        <td style="vertical-align: top;">
+                            <input type="text" size="16" ui="type:'TextInput',formName:'sprint_index'" />
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- target: taskboard_addproduct -->
+                <table>
+                    <tr>
+                        <td align="right" valign="top">Name:</td>
+                        <td>
+                            <input type="hidden" ui="type:'TextInput',formName:'product_id'" />
+                            <input type="text" size="30" ui="type:'TextInput',formName:'product_name',rule:'required'" />
+                        </td>
+                        <td rowspan="6" style="vertical-align: top; padding-left:20px;">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="inputLabel" style="vertical-align: top;">Description:</td>
+                        <td style="vertical-align: top;">
+                            <textarea ui="type:'TextInput',formName:'product_desc'" cols="40" rows="9"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Keyword :</td>
+                        <td>
+                            <input type="text" size="13" ui="type:'TextInput',formName:'product_key',rule:'required'" /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Index:
+                            <input type="text" size="13" ui="type:'TextInput',formName:'product_index'" />
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- target: taskboard_addbacklog -->
+                <table>
+                    <tr>
+                        <td align="right" valign="top">Title:</td>
+                        <td>
+                            <input type="hidden" ui="type:'TextInput',formName:'sprint_id'" />
+                            <input type="hidden" ui="type:'TextInput',formName:'backlog_id'" />
+                            <input type="text" size="30" ui="type:'TextInput',formName:'backlog_name',rule:'required'" />
+                        </td>
+                        <td rowspan="6" style="vertical-align: top; padding-left:20px;">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="inputLabel" style="vertical-align: top;">Description:</td>
+                        <td style="vertical-align: top;">
+                            <textarea ui="type:'TextInput',formName:'backlog_desc'" cols="40" rows="9"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="inputLabel" style="vertical-align: top;">Index:</td>
+                        <td style="vertical-align: top;">
+                            <input type="text" size="16" ui="type:'TextInput',formName:'backlog_index'" />
+                        </td>
+                    </tr>
+                </table>
+
+
+                <!-- target: taskboard_addtask -->
+
+
+                <div id="addTaskModal">
+                    <table id="addTaskTable">
+                        <tr>
+                            <td align="right" valign="top">Title:</td>
+                            <td>
+                                <input type="hidden" ui="type:'TextInput',formName:'task_deleted',value:''" />
+                                <input type="hidden" ui="type:'TextInput',formName:'product_id'" />
+                                <input type="hidden" ui="type:'TextInput',formName:'sprint_id'" />
+                                <input type="hidden" ui="type:'TextInput',formName:'backlog_id'" />
+                                <input type="hidden" ui="type:'TextInput',formName:'task_id'" />
+                                <input type="text" ui="type:'TextInput',formName:'task_name',rule:'required'" style="width: 267px;" />
+                            </td>
+                            <td rowspan="6" style="vertical-align: top; padding-left:20px;">
+                                <table cellspacing="0px">
+                                    <tr>
+                                        <td style="padding-top: 0px;">
+                                            <textarea ui="type:'TextInput',formName:'new_comment',isForm:'false'" style="border: 1px solid #A9A9A9; color: #000000; height: 68px; padding: 2px; width: 260px; text-align: left;margin-bottom: 5px;" rows="1" cols="20"></textarea>
+                                            <div style="width: 264px; text-align: right;">
+                                                <img ui="type:'Button',formName:'btn_addcomment'" src="vm/img/comment-button.gif" title="Post Comment" style="cursor: pointer;" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="commentsLabel">Comments:</td>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="3">
+                                            <textarea ui="type:'TextInput',formName:'task_comments'" style="color: black; height: 220px; overflow: scroll; padding-bottom: 2px; padding-top: 2px; vertical-align: top; width: 264px; border: 1px solid #A9A9A9;"></textarea>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="inputLabel" style="vertical-align: top;">Description:</td>
+                            <td style="vertical-align: top;">
+                                <textarea ui="type:'TextInput',formName:'task_desc'" cols="40" rows="9" style="width: 288px;"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="inputLabel">Point Person:</td>
+                            <td>
+                                <select ui="type:'Select',formName:'task_person',data_value:'user_id',data_text:'user_label'" style="width: 288px;"></select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="inputLabel">Status:</td>
+                            <td>
+                                <select ui="type:'Select',formName:'task_status'">
+                                    <option value="notstarted">Not Started</option>
+                                    <option value="impeded">Impeded</option>
+                                    <option value="inprogress">In Progress</option>
+                                    <option value="done">Done</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="vertical-align: top">
+                                <table>
+                                    <tr>
+                                        <td class="inputLabel">Team hours remaining:</td>
+                                        <td>
+                                            <input ui="type:'TextInput',formName:'task_remaining'" size="7" type="text" value="4" />
+                                        </td>
+                                        <td class="inputLabel" style="padding-left:35px;">Original Estimate:</td>
+                                        <td>
+                                            <input ui="type:'TextInput',formName:'task_estimate'" size="9" value="4">
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr style="height: 30px;">
+                            <td colspan="2">&nbsp;</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <script>
+                function initPageAddTask() {
+                    // pageHistory
+                    var pageHistory;
+                    pageHistory = function () {
+                        hui.Action.call(this);
+                        this.id = 'pageHistory';
+                        this.main = 'history';
+                    };
+                    pageHistory.prototype = {
+                        initBehavior: function () {
+                            var me = this;
+                            me.showTestHistory();
+                        },
+                        finish: function () {
+                            var me = this;
+                            // showTab('history');
+                        },
+                        showTestHistory: function () {
+                            hui.Mockup.setRule('/ue_api/internal/get_test_history', [
+                                null, [{
+                                    user: 'a001',
+                                    time: '30 m',
+                                    score: '35',
+                                    date: '2015-01-05 16:40'
+                                }, {
+                                    user: 'a001',
+                                    time: '30 m',
+                                    score: '35',
+                                    date: '2015-01-05 16:40'
+                                }, {
+                                    user: 'a001',
+                                    time: '30 m',
+                                    score: '35',
+                                    date: '2015-01-05 16:40'
+                                }, {
+                                    user: 'a001',
+                                    time: '30 m',
+                                    score: '35',
+                                    date: '2015-01-05 16:40'
+                                }, {
+                                    user: 'a001',
+                                    time: '30 m',
+                                    score: '35',
+                                    date: '2015-01-05 16:40'
+                                }, {
+                                    user: 'a001',
+                                    time: '30 m',
+                                    score: '35',
+                                    date: '2015-01-05 16:40'
+                                }]
+                            ]);
+                            Requester.get('/ue_api/internal/get_test_history?rand=' + Math.random(), {
                                 onsuccess: function (result) {
-                                    // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
-                                    if (result && !result[0]) {
-                                        showEvaluateReport();
-                                    }
-                                }
-                            });
-                        }
-                        else {
-                            if (data.annual === '0') {
-                                hui.g('annual_msg').innerHTML = '请选择！';
-                            }
-                            if (data.career === '0') {
-                                hui.g('career_msg').innerHTML = '请选择！';
-                            }
-                        }
-                    };
-                    candidate.getByFormName('career').onmove = function () {
-                        hui.g('career_msg').innerHTML = '';
-                        // if (candidate.getByFormName('career').getValue() !== '0' &&
-                        //     candidate.getByFormName('annual').getValue() !== '0') {
-                        //     candidate.getByFormName('candidate_nxt').setDisabled(false);
-                        // }
-                        // else {
-                        //     candidate.getByFormName('candidate_nxt').setDisabled();
-                        // }
-                    };
-                    candidate.getByFormName('annual').onmove = function () {
-                        hui.g('annual_msg').innerHTML = '';
-                        // if (candidate.getByFormName('career').getValue() !== '0' &&
-                        //     candidate.getByFormName('annual').getValue() !== '0') {
-                        //     candidate.getByFormName('candidate_nxt').setDisabled(false);
-                        // }
-                        // else {
-                        //     candidate.getByFormName('candidate_nxt').setDisabled();
-                        // }
-                    };
-                },
-                finish: function () {
-                    var me = this;
-                    showTab('candidate');
-                }
-            };
-
-            hui.inherits(pageCandidate, hui.Action);
-            hui.Router.setRule('/candidate', 'pageCandidate');
-            hui.window.pageCandidate = pageCandidate;
-        }
-        </script>
-        <div class="page_body" id="report" style="background-color: white;display: none;">
-            <div class="page_container" style="text-align:center">
-                <div class="report_box" ui="type:'Panel',formName:'report',size:{width:'800px'}" style="display123:none"> 
-                    <div class="box_content">
-                        <div class="fe_level" style="display:none;">
-                        初级前端工程师 0-33    5~10W   1000人 <br/>
-                        中级前端工程师 34-55   8~20W   200 <br/>
-                        高级前端工程师 50-70  18~26W   300 <br/>
-                        前端架构师     65-85  22~36W   10 <br/>
-                        前端专家       80-100 34~99W   1  <br/>  
-                        </div>                  
-                        <div class="result_level">目前级别 <b class="strong" ui="type:'Label',formName:'cur'">高级前端工程师</b> <span style="display:none"><b class="b">&nbsp;</b>平均年薪 <b class="b"><span ui="type:'Label',formName:'annual'">20</span>万</b></span></div>
-                        <div style="display:none" class="effect" onmousedown="hui.c('spam', this).remove()">预计经过 <b class="b">前端训练营</b> 的 <b class="strong"><span ui="type:'Label',formName:'nxt'">前端架构师</span>特训</b>，您的能力<br/>能够达到 <b class="strong" ui="type:'Label',formName:'nxt2'">前端架构师</b> 级别，薪资可以提高 <b class="b" ui="type:'Label',formName:'increase'">6~12</b>万，达到 <b class="b" ui="type:'Label',formName:'target'">26~34</b>万/年以上。 </div>
-                        <div style="display:none" class="effect">咨询预约：<b class="tel">189<span class="spam" style="display:none;">8</span>18<span class="spam" style="display:none;">8</span>12<span class="spam" style="display:none;">8</span>64<span class="spam" style="display:none;">8</span>28</b> <b class="b">&nbsp;</b>微信：<b class="tel">fe<span class="spam" style="display:none;">8</span>camps</b></div>
-          
-                        <div class="result_title"> 测评报告 &nbsp;&nbsp;<a onclick="showPaperDetail()" style="cursor:pointer;"><small>(查看详情)</small></a></div>
-                        <div class="result_detail">
-                            <div id="skill_chart" style="min-width: 310px; max-width: 310px; height: 300px; position: absolute;z-index:9999;margin-left: 420px;"></div>
-                            <div ui="type:'Table',formName:'skill_list',fields:'&listTable',datasource:'&listData',sortable:true,size:{width:390}"></div>
-                        </div>    
-                    </div>
-                </div>
-            </div>
-        </div>
-        <script>
-        function initPageReport() {
-            // pageReport
-            var pageReport;
-            pageReport = function () {
-                hui.Action.call(this);
-                this.id = 'pageReport';
-                this.main = 'report';
-            };
-            pageReport.prototype = {
-                initBehavior: function () {
-                    var me = this;
-                },
-                finish: function () {
-                    var me = this;
-                    showTab('report');
-                }
-            };
-
-            hui.inherits(pageReport, hui.Action);
-            hui.Router.setRule('/report', 'pageReport');
-            hui.window.pageReport = pageReport;
-        }
-        
-
-        function showEvaluateReport() {
-            Requester.get('/ue_api/internal/get_rank', {
-                data: {
-                    test_id: window.test_id
-                },
-                onsuccess: function (result) {
-                    // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
-                    if (result && result[1]) {
-                        var data = result[1];
-                        if (data.question) {
-                            var grade = [{level:'前端零基础   ', score:0,  annual:2,  min:2, max:4},
-                                        {level:'初级前端工程师', score:10, annual:6,  min:4, max:8},
-                                        {level:'中级前端工程师', score:34, annual:11, min:6, max:12},
-                                        {level:'高级前端工程师', score:55, annual:18, min:6, max:12},
-                                        {level:'前端架构师    ', score:70, annual:26, min:6, max:12},
-                                        {level:'前端专家      ', score:85, annual:35, min:1, max:10},
-                                        {level:'前端专家      ', score:101,annual:45, min:10, max:99}];
-                            var level = 0;
-                            for (var i=0,len=grade.length; i<len; i++) {
-                                if (data.score > grade[i].score) {
-                                    level = i;
-                                }
-                            }
-                            data.cur  = grade[level].level;
-                            data.nxt  = grade[level+1].level.replace('工程师', '');
-                            data.nxt2 = grade[level+1].level;
-                            
-                            data.annual = grade[level].annual;
-                            data.increase = grade[level].min + '~' + grade[level].max;
-                            
-                            data.target = (data.annual + grade[level].min)  + '~' + (data.annual + grade[level].max);
-                            
-                            hui.Control.getByFormName('report').setValueByTree(data).show();
-                            
-                            var datasource = [
-                                {index: 1, 'skill': 'HTML',      'correct': 22,'score': 22},
-                                {index: 2, 'skill': 'CSS',       'correct': 22,'score': 22},
-                                {index: 3, 'skill': 'JS',        'correct': 22,'score': 22},
-                                {index: 4, 'skill': 'DOM',       'correct': 22,'score': 22},
-                                {index: 5, 'skill': 'HTML5/CSS3','correct': 22,'score': 22},
-                                {index: 8, 'skill': 'Backend',   'correct': 22,'score': 22},
-                                {index: 6, 'skill': 'jQuery',    'correct': 22,'score': 22},
-                                {index: 7, 'skill': 'PS',        'correct': 22,'score': 22}
-                            ];
-                            parseTestResult(function(datasource){
-                                var score = [];
-                                for (var i=0,len=datasource.length; i<len; i++) {
-                                    score.push(datasource[i].score);
-                                }
-                                showResultChart(score);
-                                var skill_list = hui.Control.getByFormName('skill_list');
-                                skill_list.datasource = datasource;
-                                skill_list.renderBody();
-                            });
-                        }
-                        else {
-                            console.log('Warning: Test not finish')
-                        }
-                    }
-                }
-            });
-        }
-        function parseTestResult(cb) {
-            Requester.get('/ue_api/internal/get_result?test_id=' + window.test_id, {
-                onsuccess: function(result){
-                    if (result && !result[0] && result[1]) {
-                        var data = result[1];
-                        var referenceMap = {};
-                        var list, atcid, item, key;
-                        
-                        list = data.reference_answer;
-                        for (var i=0,len=list.length; i<len; i++) {
-                            atcid = list[i].atcid;
-                            referenceMap[atcid] = list[i];
-                        }
-                        
-                        list = data.your_answer;
-                        for (var i=0,len=list.length; i<len; i++) {
-                            atcid = list[i].atcid;
-                            if (referenceMap[atcid]) {
-                                referenceMap[atcid].answer = list[i].content;
-                            }
-                        }
-                        list = data.paper;
-                        for (var i=0,len=list.length; i<len; i++) {
-                            item = referenceMap[list[i]];
-                            if (item.answer) {
-                                for (var j in item.options) {
-                                    item.options[j].answer = item.answer[j].correct === 'yes' ? 'your' : '';
-                                }
-                            }
-                        }
-                        var category = {};
-                        var correct;
-                        
-                        for (var j=0,len2=list.length; j<len2; j++) {
-                            item = referenceMap[list[j]];
-                            if (!item.answer) continue;
-                            correct = true;
-                            for (var i in item.options) {
-                                if ((item.options[i].correct === 'yes' && item.options[i].answer == 'your') ||
-                                    (item.options[i].correct === '' && item.options[i].answer == '')){
-                                    continue;
-                                }
-                                else {
-                                    correct = false;
-                                    break;
-                                }
-                            }
-                            for (var i in item.label) {
-                                var key = item.label[i];
-                                category[key] = category[key] || {};
-                                category[key].sum = category[key].sum || 0;
-                                category[key].sum += 1;
-                                category[key].right = category[key].right || 0;
-                                category[key].right += correct ? 1 : 0;
-                            }
-                        }
-                        console.log(category);
-                        var datasource = [
-                            {index: 1, 'skill': 'HTML',      'correct': 22,'score': 22},
-                            {index: 2, 'skill': 'CSS',       'correct': 22,'score': 22},
-                            {index: 3, 'skill': 'Javascript','correct': 22,'score': 22},
-                            {index: 4, 'skill': 'DOM',       'correct': 22,'score': 22},
-                            {index: 5, 'skill': 'HTML5CSS3', 'correct': 22,'score': 22},
-                            {index: 8, 'skill': 'Server',    'correct': 22,'score': 22},
-                            {index: 6, 'skill': 'jQuery',    'correct': 22,'score': 22},
-                            {index: 7, 'skill': 'PS',        'correct': 22,'score': 22}
-                        ];
-                        for (var i=0,len=datasource.length; i<len; i++) {
-                            if (datasource[i] && category[datasource[i].skill]) {
-                                item = datasource[i];
-                                key = category[item.skill];
-                                item.correct = key.right;
-                                item.score = Math.floor(key.right*100/key.sum);
-                            }
-                        }
-                        cb && cb(datasource);
-                    }
-                }
-            });
-        }
-        function showResultChart(data){
-            $('#skill_chart').highcharts({
-                chart: {
-                    polar: true,
-                    type: 'line'
-                },
-                title: {
-                    text: '',
-                    y: -80
-                },
-                pane: {
-                    size: '78%',
-                    center: ['62%', '50%']
-                },
-                xAxis: {
-                    categories: ['HTML', 'CSS', 'JS', 'DOM', 'HTML5/CSS3', 'Backend', 'jQuery', 'PS'],
-                    tickmarkPlacement: 'on',
-                    lineWidth: 0
-                },
-                yAxis: {
-                    gridLineInterpolation: 'polygon',
-                    lineWidth: 0,
-                    min: 0,
-                    endOnTick: false,
-                    max: 108
-                },
-                tooltip: {
-                    shared: true,
-                    pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>'
-                },
-                legend: {
-                    align: 'right',
-                    verticalAlign: 'top',
-                    y: 0,
-                    x: 0,
-                    layout: 'vertical'
-                },
-                series: [{
-                    name: '中级水平',
-                    data: [70, 70, 60, 65, 40, 20, 60, 60],
-                    pointPlacement: 'off',
-                    color: 'gray'
-                }, {
-                    name: '高级水平',
-                    data: [80, 80, 75, 80, 65, 50, 70, 75],
-                    pointPlacement: 'off',
-                    color: '#f90'
-                }, {
-                    name: '架构师　',
-                    data: [95, 95, 95, 95, 80, 80, 85, 80],
-                    pointPlacement: 'off',
-                    color: '#f60'
-                }, {
-                    name: '目前级别',
-                    data: data ? data : [43, 19, 60, 35, 17, 10, 10, 17],
-                    pointPlacement: 'off',
-                    color: '#090'
-                }]
-            });
-        }
-        window.listTable = [
-            {
-                width: 100,
-                title: '技能',
-                sortable: true,
-                field: 'index',
-                content: function (item) {
-                    return item['skill'];
-                }
-            }, {
-                width: 40,
-                title: '答对',
-                sortable: true,
-                field: 'correct',
-                content: function (item) {
-                    return item['correct'];
-                }
-            }, {
-                width: 40,
-                title: '得分',
-                sortable: true,
-                field: 'score',
-                content: function (item) {
-                    return item['score'];
-                }
-            }
-        ];
-        window.listData = [
-            // {
-            //     'skill': 'html',
-            //     'correct': 2,
-            //     'score': 40
-            // }, {
-            //     'skill': 'css',
-            //     'correct': 2,
-            //     'score': 40
-            // }
-        ];
-        </script>
-        <div class="page_body" id="detail" style="background-color: white;display: none;">
-            <div class="page_container" style="text-align:center">
-                <div class="report_box" ui="type:'Panel',formName:'detail',size:{width:'800px'}" style="display123:none"> 
-                    <div class="box_content detail_container" id="detail_container" style="height:540px;overflow:auto;">
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-        <script>
-        function initPageDetail() {
-            // pageDetail
-            var pageDetail;
-            pageDetail = function () {
-                hui.Action.call(this);
-                this.id = 'pageDetail';
-                this.main = 'detail';
-            };
-            pageDetail.prototype = {
-                initBehavior: function () {
-                    var me = this;
-                },
-                showPaperDetail: function () {
-                    Requester.get('/ue_api/internal/get_result?test_id=' + window.test_id, {
-                        onsuccess: function(result){
-                            if (result && !result[0] && result[1]) {
-                                var data = result[1];
-                                var referenceMap = {};
-                                var list, atcid, item;
-                                
-                                list = data.reference_answer;
-                                for (var i=0,len=list.length; i<len; i++) {
-                                    atcid = list[i].atcid;
-                                    referenceMap[atcid] = list[i];
-                                }
-                                
-                                list = data.your_answer;
-                                for (var i=0,len=list.length; i<len; i++) {
-                                    atcid = list[i].atcid;
-                                    if (referenceMap[atcid]) {
-                                        referenceMap[atcid].answer = list[i].content;
-                                    }
-                                }
-                                list = data.paper;
-                                for (var i=0,len=list.length; i<len; i++) {
-                                    item = referenceMap[list[i]];
-                                    if (item.answer) {
-                                        for (var j in item.options) {
-                                            item.options[j].answer = item.answer[j].correct === 'yes' ? 'your' : '';
-                                        }
-                                    }
-                                }
-                                var html = '<h4 class="title">格式说明</h4><ul class="option_list"><li class="your" style="list-style-type: circle;"><div class="txt">您选的答案</div></li><li class="yes"><div class="txt">参考答案</div></li></ul>',
-                                    tpl = '<li class="#{correct} #{answer}"><div class="txt">#{hui.util.encodehtml(hui.util.decode(content))} </div></li>';
-                                var finish = hui.util.getCookie('testid_' + window.test_id) === 'finish';
-                                for (var j=0,len2=list.length; j<len2; j++) {
-                                    item = referenceMap[list[j]];
-                                    if (!item.answer && !finish) continue;
-                                    html += '<h4 class="title">' + (j + 1) + '、' + hui.util.encodehtml(hui.util.decode(item.title)) + '[' + item.label.join(',') + ']</h4>\n';
-                                    html += '<ul class="option_list">';
-                                    for (var i in item.options) {
-                                        item.options[i].index = i;
-                                        html += hui.format(tpl, item.options[i]);
-                                    }
-                                    html += '</ul>\n';
-                                }
-                                hui.g('detail_container').innerHTML = html;
-                                
-                                // console.log(html);
-                            }
-                        }
-                    });
-                },
-                finish: function () {
-                    var me = this;
-                    showTab('detail');
-                }
-            };
-
-            hui.inherits(pageDetail, hui.Action);
-            hui.Router.setRule('/detail', 'pageDetail');
-            hui.window.pageDetail = pageDetail;
-        }
-        </script>
-        <div class="page_body" id="send_sms" style="background-color: white;display: none;">
-            <div class="page_container" style="text-align:center">
-                <div class="sms_box" ui="type:'Panel',formName:'send_sms',size:{width:'410px'}" style="display123:none">
-                    <div class="box_content">
-                        <h3 class="sms_title">请输入短信验证码</h3>
-                        <label class="sms_item">
-                            <div class="item_title">手机号: </div>
-                            <div class="item_content">
-                                <input type="text" maxlength="11" ui="type:'TextInput',formName:'mobile',rule:'not_empty&&mobile',autoValidate:true,autoHideError:true,hideBlankError:true" />
-                                <a class="send_code" id="send_code" href="javascript:">获取验证码</a>
-                            </div>
-                        </label>
-                        <label class="sms_item">
-                            <div class="item_title">验证码: </div>
-                            <div class="item_content">
-                                <input type="text" ui="type:'TextInput',formName:'randcode',rule:'not_empty',autoValidate:true,autoHideError:true,hideBlankError:true" />
-                            </div>
-                        </label>
-                        <button class="candidate_nxt" ui="type:'Button',formName:'send',disabled:false">提 交</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <script>
-        function initPageSendSMS() {
-            hui.Validator.setRule('mobile', {
-                'validate': function (text) {
-                    var len = text.length;
-                    text = text.replace(/[^0-9]/ig, '');
-                    text = text.replace(/^86/ig, '');
-                    var f = /^(13\d|15\d|18\d|14\d|170)\d{8}$/.test(text);
-                    if (len === 0) {
-                        return 1;
-                    }
-                    else if (len !== 11) {
-                        return 2;
-                    }
-                    else if (!f) {
-                        return 3;
-                    }
-                    var me = this;
-                    if (me.existValue == text && me.isExist == 'exist') {
-                        return 4;
-                    }
-                    return 0;
-                },
-                'noticeText': {
-                    1: '手机号码不能为空',
-                    2: '手机号码由11位数字组成',
-                    3: '目前只支持13*、15*、18*、14*、170号段',
-                    4: '手机号已存在'
-                }
-            }, 'force');
-            
-            // pageSendSMS
-            var pageSendSMS;
-            pageSendSMS = function () {
-                hui.Action.call(this);
-                this.id = 'pageSendSMS';
-                this.main = 'send_sms';
-            };
-            pageSendSMS.prototype = {
-                initBehavior: function () {
-                    var me = this;
-
-                    me.initSendSMS();
-                    smsTimerCount();
-                },
-                initSendSMS: function () {
-                    var send_sms = hui.Control.getByFormName('send_sms');
-                    var submit = send_sms.getByFormName('send');
-                    submit.onclick = function () {
-                        var send_sms = hui.Control.getByFormName('send_sms');
-                        if (send_sms.validate()) {
-                            var data = hui.Control.getByFormName('send_sms').getParamMap();
-                            Requester.get('/ue_api/account/sms_auth', {
-                                data: data,
-                                onsuccess: function (result) {
-                                    // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
                                     if (result && !result[0] && result[1]) {
-                                        send_sms.hide();
-                                        hui.Control.getByFormName('form').show();hui.Control.getByFormName('form').initSubject('newone');
-                                    }
-                                    else if (result && result[0]) {
-                                        send_sms.showErrorByTree(result[0]);
-                                    }
-                                    else {
-                                        submit.showError('Send fail.');
+                                        var tpl = [
+                                            '<li class="item_row">',
+                                            '    <span class="t_user">#{user}</span>',
+                                            '    <span class="t_time">#{time}</span>',
+                                            '    <span class="t_score">#{score}</span>',
+                                            '    <span class="t_date">#{date}</span>',
+                                            '</li>'
+                                        ].join('');
+
+                                        var list = result[1];
+                                        var html = '';
+                                        for (var i = 0, len = list.length; i < len; i++) {
+                                            html += hui.util.format(tpl, list[i]);
+                                        }
+                                        hui.g('history_list').innerHTML = html;
                                     }
                                 }
                             });
-                        }
-                    };
-                    hui.g('send_code').onclick = function(){
-                        var mobile = hui.Control.getByFormName('send_sms').getByFormName('mobile');
-                        if (mobile.validate() && !hui.util.getCookie('smsTimer')) {
-                            hui.util.setCookie('smsTimer', 90);
-                            hui.g('send_code').className = 'send_code_disabled';
-                            smsTimerCount();
-                            Requester.get('/ue_api/account/send_sms', {
-                                data: {mobile: mobile.getValue(),randcode:6868},
-                                onsuccess: function (result) {
-                                    // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
-                                    if (result && result[1]) {
-                                        submit.showError('Send success.');
-                                    }
-                                    else if (result && result.err_msg) {
-                                        submit.showError(result.err_msg);
-                                    }
-                                    else {
-                                        submit.showError('Send fail.');
-                                    }
-                                }
-                            });
-                        }
-                    };
-                    var mobile = send_sms.getByFormName('mobile');
-                    mobile.onchange = function(){
-                        // if (this.validate() && !hui.util.getCookie('smsTimer')) {
-                        //     hui.g('send_code').className = 'send_code';
-                        // }
-                        // else {
-                        //     hui.g('send_code').className = 'send_code_disabled';
-                        // }
-                    }
-                },
-                finish: function () {
-                    var me = this;
-                    showTab('send_sms');
-                }
-            };
+                        },
 
-            hui.inherits(pageSendSMS, hui.Action);
-            hui.Router.setRule('/sendsms', 'pageSendSMS');
-            hui.window.pageSendSMS = pageSendSMS;
+                    };
 
-            window.smsTimerCount = function(){
-                var leftSec = hui.util.getCookie('smsTimer');
-                if (leftSec>0) {
-                    hui.g('send_code').className = 'send_code_disabled';
-                    hui.g('send_code').innerHTML = '(' + leftSec + ')秒后重新获取';
-                    hui.util.setCookie('smsTimer', --leftSec);
-                    window.setTimeout(smsTimerCount, 1000);
+                    hui.inherits(pageHistory, hui.Action);
+                    hui.Router.setRule('/history', 'pageHistory');
+                    hui.window.pageHistory = pageHistory;
                 }
-                else {
-                    hui.util.setCookie('smsTimer', '');
-                    hui.g('send_code').className = 'send_code';
-                    hui.g('send_code').innerHTML = '获取验证码';
-                    hui.Control.getByFormName('send_sms').getByFormName('mobile').onchange();
+            </script>
+            <div class="page_body" id="industry" style="background-color: white;display: none;">
+                <!-- target: taskboard_impediment -->
+                <style type="text/css">
+                #editImpedimentTable { margin: 5px; }
+                #editImpedimentDiv td { padding-bottom: 2px; padding-right: 2px; }
+                .inputLabel { width: 100px; text-align: right; font-size: 9pt; color: black; }
+                #impediment_Title { width: 250px; }
+                input { vertical-align: middle; }
+                #impediment_Description { width: 250px; }
+                textarea { font-size: 10pt; font-family: Arial, Helvetica, sans-serif; }
+                #impediment_Reporter { width: 150px; }
+                </style>
+                <div id="editImpedimentDiv">
+                    <table id="editImpedimentTable">
+                        <tr>
+                            <td class="inputLabel">Title:</td>
+                            <td>
+                                <input id="impediment_Title" type="text" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="inputLabel" style="vertical-align: top;">Description:</td>
+                            <td>
+                                <textarea id="impediment_Description" cols="40" rows="6" name="S1"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="inputLabel">Reporter:</td>
+                            <td>
+                                <select id="impediment_Reporter" name="D1">
+                                    <option value="">(unspecified)</option>
+                                    <option value="Aaron.lu (aaron.lu)">Aaron.lu (aaron.lu)</option>
+                                    <option value="Ada.yang (ada.yang)">Ada.yang (ada.yang)</option>
+                                    <option value="Andy.wang (andy.wang)">Andy.wang (andy.wang)</option>
+                                    <option value="Blanche.xu (blanche.xu)">Blanche.xu (blanche.xu)
+                                    </option>
+                                    <option value="Chloe.yang (chloe.yang)">Chloe.yang (chloe.yang)
+                                    </option>
+                                    <option value="Cindy.liu (cindy.liu)">Cindy.liu (cindy.liu)</option>
+                                    <option value="Colin.zhang (colin.zhang)">Colin.zhang (colin.zhang)
+                                    </option>
+                                    <option value="Daini.xu (daini.xu)">Daini.xu (daini.xu)</option>
+                                    <option value="David (david)">David (david)</option>
+                                    <option value="Ethan (ethan)">Ethan (ethan)</option>
+                                    <option value="Harrison.lin (harrison.lin)">Harrison.lin (harrison.lin)
+                                    </option>
+                                    <option value="Jason (jason)">Jason (jason)</option>
+                                    <option value="Jicheng.li (jicheng.li)">Jicheng.li (jicheng.li)
+                                    </option>
+                                    <option value="Richard.xu (richard.xu)">Richard.xu (richard.xu)
+                                    </option>
+                                    <option value="Steven.cheng (steven.cheng)">Steven.cheng (steven.cheng)
+                                    </option>
+                                    <option value="Tiennan.lin (tiennan.lin)">Tiennan.lin (tiennan.lin)
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="inputLabel">Resolved:</td>
+                            <td>
+                                <input id="impediment_Resolved" name="impediment_Resolved" type="checkbox" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td style="text-align: right;">
+                                <input class="impediment_OK" style="cursor: pointer;" id="impediment_OK" src="vm/img/ok-button-active.gif" title="OK" type="image" />
+                                <input class="impediment_Cancel" style="cursor: pointer;" id="impediment_Cancel" src="vm/img/cancel-button-active.gif" title="Cancel" type="image" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <script>
+                function initPageComment() {
+                    // pageIndustry
+                    var pageIndustry;
+                    pageIndustry = function () {
+                        hui.Action.call(this);
+                        this.id = 'pageIndustry';
+                        this.main = 'industry';
+                    };
+                    pageIndustry.prototype = {
+                        initBehavior: function () {
+                            var me = this;
+                        },
+                        finish: function () {
+                            var me = this;
+                            // showTab('industry');
+                        }
+
+                    };
+
+                    hui.inherits(pageIndustry, hui.Action);
+                    hui.Router.setRule('/industry', 'pageIndustry');
+                    hui.window.pageIndustry = pageIndustry;
                 }
-            };
-        }
-        </script>
-    </div>
-    <div class="page_foot">
-        <div class="page_container">
-        沪ICP备15001838号 上海轩禄商务咨询有限公司 ©2015 版权所有
+            </script>
+
+        </div>
+        <div class="page_foot">
+            <div class="page_container">
+                沪ICP备15001838号 上海轩禄商务咨询有限公司 ©2015 版权所有
+            </div>
         </div>
     </div>
-</div>  
 
     <div id="subject_add" class="subject_test">
-                
-                
-                
-                
-                
-        
+
+
+
+
+
     </div>
 
-<!-- script type="text/javascript" src="http://bpmjs.org/bpm_api/combo??hui_requester@0.0.1,hui_action@0.0.1,hui_panel@0.0.1,hui_table@0.0.1,hui_checkbox@0.0.1,hui_textinput@0.0.1,hui_button@0.0.1,hui_template@0.0.1,hui_checklabel@0.0.1,hui_boxpanel@0.0.1,hui_label@0.0.1,hui_slider@0.0.1,hui_radiobox@0.0.1,hui_dropdown@0.0.1,hui_validator@0.0.1?debug=true"></script -->
-<!-- script type="text/javascript" src="http://bpmjs.org/js/??hui@0.0.1/hui.js,hui_validator@0.0.1/hui_validator.js,hui_util@0.0.1/hui_util.js,hui_dropdown@0.0.1/hui_dropdown.js,hui_control@0.0.1/hui_control.js,hui_radiobox@0.0.1/hui_radiobox.js,hui_checkbox@0.0.1/hui_checkbox.js,hui_slider@0.0.1/hui_slider.js,hui_draggable@0.0.1/hui_draggable.js,hui_label@0.0.1/hui_label.js,hui_boxpanel@0.0.1/hui_boxpanel.js,hui_checklabel@0.0.1/hui_checklabel.js,hui_template@0.0.1/hui_template.js,hui_button@0.0.1/hui_button.js,hui_textinput@0.0.1/hui_textinput.js,hui_table@0.0.1/hui_table.js,hui_panel@0.0.1/hui_panel.js,hui_action@0.0.1/hui_action.js,hui_requester@0.0.1/hui_requester.js?debug=true"></script -->
-<script type="text/javascript" src="src/hui@0.0.1/hui.js"></script>
-<script type="text/javascript" src="src/hui_validator@0.0.1/hui_validator.js"></script>
-<script type="text/javascript" src="src/hui_util@0.0.1/hui_util.js"></script>
-<script type="text/javascript" src="src/hui_dropdown@0.0.1/hui_dropdown.js"></script>
-<script type="text/javascript" src="src/hui_control@0.0.1/hui_control.js"></script>
-<script type="text/javascript" src="src/hui_radiobox@0.0.1/hui_radiobox.js"></script>
-<script type="text/javascript" src="src/hui_checkbox@0.0.1/hui_checkbox.js"></script>
-<script type="text/javascript" src="src/hui_slider@0.0.1/hui_slider.js"></script>
-<script type="text/javascript" src="src/hui_draggable@0.0.1/hui_draggable.js"></script>
-<script type="text/javascript" src="src/hui_label@0.0.1/hui_label.js"></script>
-<script type="text/javascript" src="src/hui_boxpanel@0.0.1/hui_boxpanel.js"></script>
-<script type="text/javascript" src="src/hui_mask@0.0.1/hui_mask.js"></script>
-<script type="text/javascript" src="src/hui_checklabel@0.0.1/hui_checklabel.js"></script>
-<script type="text/javascript" src="src/hui_template@0.0.1/hui_template.js"></script>
-<script type="text/javascript" src="src/hui_button@0.0.1/hui_button.js"></script>
-<script type="text/javascript" src="src/hui_textinput@0.0.1/hui_textinput.js"></script>
-<script type="text/javascript" src="src/hui_table@0.0.1/hui_table.js"></script>
-<script type="text/javascript" src="src/hui_panel@0.0.1/hui_panel.js"></script>
-<script type="text/javascript" src="src/hui_action@0.0.1/hui_action.js"></script>
-<script type="text/javascript" src="src/hui_requester@0.0.1/hui_requester.js"></script>
-<!-- Only for highrchart!!  -->
-<script type="text/javascript" src="src/jquery1.9.1.js         "></script>
-<script type="text/javascript" src="src/highcharts.js          "></script>
-<script type="text/javascript" src="src/highcharts-more.js     "></script>
+    <!-- script type="text/javascript" src="http://bpmjs.org/bpm_api/combo??hui_requester@0.0.1,hui_action@0.0.1,hui_panel@0.0.1,hui_table@0.0.1,hui_checkbox@0.0.1,hui_textinput@0.0.1,hui_button@0.0.1,hui_template@0.0.1,hui_checklabel@0.0.1,hui_boxpanel@0.0.1,hui_label@0.0.1,hui_slider@0.0.1,hui_radiobox@0.0.1,hui_dropdown@0.0.1,hui_validator@0.0.1?debug=true"></script -->
+    <!-- script type="text/javascript" src="http://bpmjs.org/js/??hui@0.0.1/hui.js,hui_validator@0.0.1/hui_validator.js,hui_util@0.0.1/hui_util.js,hui_dropdown@0.0.1/hui_dropdown.js,hui_control@0.0.1/hui_control.js,hui_radiobox@0.0.1/hui_radiobox.js,hui_checkbox@0.0.1/hui_checkbox.js,hui_slider@0.0.1/hui_slider.js,hui_draggable@0.0.1/hui_draggable.js,hui_label@0.0.1/hui_label.js,hui_boxpanel@0.0.1/hui_boxpanel.js,hui_checklabel@0.0.1/hui_checklabel.js,hui_template@0.0.1/hui_template.js,hui_button@0.0.1/hui_button.js,hui_textinput@0.0.1/hui_textinput.js,hui_table@0.0.1/hui_table.js,hui_panel@0.0.1/hui_panel.js,hui_action@0.0.1/hui_action.js,hui_requester@0.0.1/hui_requester.js?debug=true"></script -->
+    <script type="text/javascript" src="src/hui@0.0.1/hui.js"></script>
+    <script type="text/javascript" src="src/hui_validator@0.0.1/hui_validator.js"></script>
+    <script type="text/javascript" src="src/hui_util@0.0.1/hui_util.js"></script>
+    <script type="text/javascript" src="src/hui_dropdown@0.0.1/hui_dropdown.js"></script>
+    <script type="text/javascript" src="src/hui_control@0.0.1/hui_control.js"></script>
+    <script type="text/javascript" src="src/hui_radiobox@0.0.1/hui_radiobox.js"></script>
+    <script type="text/javascript" src="src/hui_checkbox@0.0.1/hui_checkbox.js"></script>
+    <script type="text/javascript" src="src/hui_slider@0.0.1/hui_slider.js"></script>
+    <script type="text/javascript" src="src/hui_draggable@0.0.1/hui_draggable.js"></script>
+    <script type="text/javascript" src="src/hui_label@0.0.1/hui_label.js"></script>
+    <script type="text/javascript" src="src/hui_boxpanel@0.0.1/hui_boxpanel.js"></script>
+    <script type="text/javascript" src="src/hui_mask@0.0.1/hui_mask.js"></script>
+    <script type="text/javascript" src="src/hui_checklabel@0.0.1/hui_checklabel.js"></script>
+    <script type="text/javascript" src="src/hui_template@0.0.1/hui_template.js"></script>
+    <script type="text/javascript" src="src/hui_button@0.0.1/hui_button.js"></script>
+    <script type="text/javascript" src="src/hui_select@0.0.1/hui_select.js"></script>
+    <script type="text/javascript" src="src/hui_textinput@0.0.1/hui_textinput.js"></script>
+    <script type="text/javascript" src="src/hui_table@0.0.1/hui_table.js"></script>
+    <script type="text/javascript" src="src/hui_panel@0.0.1/hui_panel.js"></script>
+    <script type="text/javascript" src="src/hui_action@0.0.1/hui_action.js"></script>
+    <script type="text/javascript" src="src/hui_requester@0.0.1/hui_requester.js"></script>
+    <script type="text/javascript" src="src/hui_taskboard@0.0.1/hui_taskboard.js"></script>
+    <!-- Only for highrchart!!  -->
+    <script type="text/javascript" src="src/jquery1.9.1.js         "></script>
+    <script type="text/javascript" src="src/highcharts.js          "></script>
+    <script type="text/javascript" src="src/highcharts-more.js     "></script>
 </body>
+
 </html>

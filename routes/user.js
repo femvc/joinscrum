@@ -38,7 +38,7 @@ exports.list = function (req, res, next) {
     });
 };
 
-function getUser (req, res, filter, next) {
+function get_user (req, res, filter, next) {
     if (!filter.uid && !filter.username) {
         if (!filter.uid) {
             return response.err(req, res, 'MISSING_PARAMETERS', 'uid');
@@ -76,7 +76,7 @@ exports.detail = function (req, res, next) {
         user.username = req.paramlist.username;
     }
     
-    return getUser(req, res, user);
+    return get_user(req, res, user);
 };
 
 exports.save = function (req, res, next) {
@@ -122,13 +122,13 @@ exports.save = function (req, res, next) {
                 callback(err, doc);
             }
             else {
-                return getUser(req, res, {uid: req.paramlist.uid});
+                return get_user(req, res, {uid: req.paramlist.uid});
             }
         });
     }
     // Add
     else {
-        getUser(req, res, {username: req.paramlist.username}, function (doc) {
+        get_user(req, res, {username: req.paramlist.username}, function (doc) {
             if (doc) {
                 response.err(req, res, 'USER_ALREADY_EXIST');
             }

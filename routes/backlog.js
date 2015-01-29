@@ -1,89 +1,23 @@
 'use strict'; // utf-8编码
 var backlogModel = require('../models/backlog').createNew();
 
-exports.getbacklog = function (req, res, next) {
-    var atcid = req.paramlist.atcid;
-    if (!atcid) {
-        return response.err(req, res, 'MISSING_PARAMETERS', 'atcid');
-    }
-    backlogModel.getItem({
-        atcid: atcid
-    }, function (err, doc) {
-        if (err) {
-            response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
-        }
-        if (req.paramlist.answer != 'yes' && doc && doc.options) {
-            var list = doc.options;
-            for (var i in list) {
-                delete list[i].correct;
-            }
-        }
-        response.ok(req, res, doc);
-    });
-};
+// backlog_api
+// app.get('/ue_api/internal/backlog_list',     account.auth, backlog.list);
+// app.get('/ue_api/internal/backlog_detail',   account.auth, backlog.detail);
+// app.get('/ue_api/internal/backlog_save',     account.auth, backlog.save);
 
-exports.savebacklog = function (req, res, next) {
-    var atcid = req.paramlist.atcid,
-        backlog = {},
-        callback, date;
+var arr = [
+    // 'backlog_id',
+    // 'backlog_name',
+    // 'backlog_desc',
+    'backlog_index',
+    'sprint_id',
+    'backlog_deleted',
+    'user_id',
+    'edit_time'];
 
-    if (!req.paramlist.title) {
-        return response.err(req, res, 'MISSING_PARAMETERS', 'title');
-    }
-    if (!req.paramlist.options) {
-        return response.err(req, res, 'MISSING_PARAMETERS', 'options');
-    }
-
-    backlog.major = JSON.parse(req.paramlist.major);
-    backlog.title = req.paramlist.title;
-    backlog.level = JSON.parse(req.paramlist.level);
-    backlog.label = JSON.parse(req.paramlist.label);
-    backlog.options = JSON.parse(req.paramlist.options);
-
-    callback = function (err, doc) {
-        if (err) {
-            response.send(req, res, 'INTERNAL_DB_OPT_FAIL');
-        }
-        response.ok(req, res, doc);
-    };
-
-    var now = new Date();
-    date = global.common.formatDate(now, 'yyyy-MM-dd HH:mm:ss');
-    if (atcid) {
-        backlog.update_time = date;
-        backlog.atcid = atcid;
-        backlogModel.update({
-            atcid: atcid
-        }, {
-            $set: backlog
-        }, {
-            upsert: true,
-            multi: false
-        }, callback);
-    }
-    else {
-        backlog.update_time = date;
-        backlog.atcid = global.common.formatDate(now, 'yyyyMMddHHmmss') + '_' + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 16);
-        backlogModel.insert(backlog, callback);
-    }
-};
-
-exports.removebacklog = function (req, res, next) {
-    var atcid = req.paramlist.atcid;
-    if (!atcid) {
-        return response.err(req, res, 'MISSING_PARAMETERS', 'atcid');
-    }
-    backlogModel.remove({
-        atcid: atcid
-    }, function (err) {
-        if (err) {
-            response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
-        }
-        response.ok(req, res, null);
-    });
-};
-
-exports.getbacklogs = function (req, res, next) {
+exports.list = function (req, res, next) {
+    // res.end('aaaaaaaaaa');
     var params = req.paramlist,
         current = params.current || 1,
         count = params.count || 1000,
@@ -93,27 +27,122 @@ exports.getbacklogs = function (req, res, next) {
         },
         filter = {};
 
-    if (params.title)
-        filter.title = global.common.likeWith(params.title);
-    if (params.author)
-        filter.author = params.author;
+    for (var i=0,len=arr.length; i<len; i++) {
+        if (params[arr[i]]) {
+            filter[i] = params[arr[i]];
+        }
+    }
+    if (params.backlog_name)
+        filter.backlog_name = global.common.likeWith(params.backlog_name);
+    if (params.backlog_desc)
+        filter.backlog_desc = global.common.likeWith(params.backlog_desc);
 
     backlogModel.getItems(filter, sort, current, count, function (err, doc) {
         if (err) {
             response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
         }
 
-        if (req.paramlist.answer != 'yes') {
-            for (var j in doc) {
-                var list = doc[j].options;
-                for (var i in list) {
-                    delete list[i].correct;
-                }
-            }
-        }
-
         response.ok(req, res, {
             items: doc
         });
     });
+};
+
+function get_backlog (req, res, filter, next) {
+    if (!filter.backlog_id && !filter.backlog_name) {
+        return response.err(req, res, 'MISSING_PARAMETERS', 'backlog_id');
+    }
+    backlogModel.getItem(filter, function (err, doc) {
+        if (err) {
+            response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
+        }
+        // Output backlog_detail
+        if (!next) {
+            if (!doc) {
+                response.err(req, res, 'USER_USERNAME_NOT_EXIST');
+            }
+            else {
+                response.ok(req, res, doc);
+            }
+        }
+        else {
+            next(doc);
+        }
+        
+    });
+}
+
+exports.detail = function (req, res, next) {
+    var backlog = {};
+    if (req.paramlist.backlog_id) {
+        backlog.backlog_id = req.paramlist.backlog_id;
+    }
+    
+    return get_backlog(req, res, backlog);
+};
+
+exports.save = function (req, res, next) {
+    var backlog_id = req.paramlist.backlog_id,
+        backlog = {},
+        callback;
+
+    if (!req.paramlist.backlog_name) {
+        return response.err(req, res, 'MISSING_PARAMETERS', 'backlog_name');
+    }
+    if (!req.paramlist.sprint_id) {
+        return response.err(req, res, 'MISSING_PARAMETERS', 'sprint_id');
+    }
+
+    backlog.backlog_name = req.paramlist.backlog_name;
+    backlog.backlog_desc = req.paramlist.backlog_desc;
+    for (var i=0,len=arr.length; i<len; i++) {
+        if (req.paramlist[arr[i]]) {
+            backlog[arr[i]] = req.paramlist[arr[i]];
+        }
+    }
+
+    callback = function (err, doc) {
+        if (err) {
+            response.send(req, res, 'INTERNAL_DB_OPT_FAIL');
+        }
+        response.ok(req, res, doc);
+    };
+
+    var now = new Date();
+    var date = global.common.formatDate(now, 'yyyy-MM-dd HH:mm:ss');
+    // Update
+    if (backlog_id) {
+        backlog.update_time = date;
+        backlog.backlog_id = backlog_id;
+        backlogModel.update({
+            backlog_id: backlog_id
+        }, {
+            $set: backlog
+        }, {
+            upsert: false,
+            multi: false
+        }, function (err, doc) {
+            if (err) {
+                callback(err, doc);
+            }
+            else {
+                return get_backlog(req, res, {backlog_id: req.paramlist.backlog_id});
+            }
+        });
+    }
+    // Add
+    else {
+        get_backlog(req, res, {backlog_name: req.paramlist.backlog_name}, function (doc) {
+            if (doc) {
+                response.err(req, res, 'ALREADY_EXIST', 'backlog');
+            }
+            else {
+                backlog.update_time = date;
+                backlog.backlog_id = 'backlog' + global.common.formatDate(now, 'yyyyMMddHHmmss') + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 16);
+
+                backlogModel.insert(backlog, callback);
+            }
+        });
+    }
+
 };
