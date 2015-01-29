@@ -1,6 +1,6 @@
 module.exports = {
     service: {
-        name: 'campus_api',
+        name: 'joinscrum_api',
         version: '0.0.1',
         ip: '127.0.0.1',
         port: 3000
@@ -21,7 +21,7 @@ module.exports = {
       host_opts: {
         auto_reconnect: true
       },
-      dbname: 'campus_api'
+      dbname: 'joinscrum_api'
     },
     redis: {
         host: '127.0.0.1',
