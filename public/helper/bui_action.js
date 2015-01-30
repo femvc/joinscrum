@@ -318,12 +318,12 @@ bui.Action.prototype = {
         return bui.Action.getExtClass('bui.Control').prototype.validateAndSubmit.call(this);
     },
     /**
-     * @name 根据控件formName找到对应控件
+     * @name 根据控件formname找到对应控件
      * @static
-     * @param {String} 控件formName
+     * @param {String} 控件formname
      */
-    getByFormName: function(formName){
-        return bui.Control.getByFormName(formName, this);
+    getByFormname: function(formname){
+        return bui.Control.getByFormname(formname, this);
     },
     /**
      * @name 提交完成的事件处理函数,提示完成
@@ -519,8 +519,8 @@ bui.Action.getByActionName = function(actionName){/*接收参数:'字符串'|'Ac
  */
 bui.Action.makeGUID = (function(){
     var guid = 1;
-    return function(formName){
-        return '_' + (formName ? formName : 'inner') + '_' + ( guid++ );
+    return function(formname){
+        return '_' + (formname ? formname : 'inner') + '_' + ( guid++ );
     };
 })();
 

@@ -581,7 +581,7 @@ Requester.backendError = function (xhr, data) {
             action = bui.Action.get(); 
         // Todo: 应该封装成可以手动调用
         for (key in errorMap) { 
-            input = action.getByFormName(key); 
+            input = action.getByFormname(key); 
             if (input) { 
                 if (bui.Validator) {
                     input.hideError(); 

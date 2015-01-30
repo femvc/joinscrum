@@ -14,21 +14,21 @@
     <tr>
         <td align="right" valign="top">Sprint Name:</td>
         <td>
-            <input type="hidden" ui="type:'TextInput',formName:'product_id'" />
-            <input type="hidden" ui="type:'TextInput',formName:'sprint_id'" />
-            <input type="text" size="30"   ui="type:'TextInput',formName:'sprint_name',rule:'required'" />
+            <input type="hidden" ui="type:'TextInput',formname:'product_id'" />
+            <input type="hidden" ui="type:'TextInput',formname:'sprint_id'" />
+            <input type="text" size="30"   ui="type:'TextInput',formname:'sprint_name',rule:'required'" />
         </td>
     </tr>
     <tr>
         <td  class="inputLabel" style="vertical-align: top;">Description:</td>
         <td style="vertical-align: top;">
-            <textarea ui="type:'TextInput',formName:'sprint_desc'" cols="40" rows="9"></textarea>
+            <textarea ui="type:'TextInput',formname:'sprint_desc'" cols="40" rows="9"></textarea>
         </td>
     </tr>
     <tr>
         <td  class="inputLabel" style="vertical-align: top;">Index:</td>
         <td style="vertical-align: top;">
-            <input type="text" size="16"   ui="type:'TextInput',formName:'sprint_index'" />
+            <input type="text" size="16"   ui="type:'TextInput',formname:'sprint_index'" />
         </td>
     </tr>
 </table>
@@ -38,8 +38,8 @@
     <tr>
         <td align="right" valign="top">Name:</td>
         <td>
-            <input type="hidden" ui="type:'TextInput',formName:'product_id'" />
-            <input type="text" size="30"   ui="type:'TextInput',formName:'product_name',rule:'required'" />
+            <input type="hidden" ui="type:'TextInput',formname:'product_id'" />
+            <input type="text" size="30"   ui="type:'TextInput',formname:'product_name',rule:'required'" />
         </td>
         <td rowspan="6" style="vertical-align: top; padding-left:20px;">
         
@@ -48,15 +48,15 @@
     <tr>
         <td  class="inputLabel" style="vertical-align: top;">Description:</td>
         <td style="vertical-align: top;">
-            <textarea ui="type:'TextInput',formName:'product_desc'" cols="40" rows="9"></textarea>
+            <textarea ui="type:'TextInput',formname:'product_desc'" cols="40" rows="9"></textarea>
         </td>
     </tr>
     <tr>
         <td align="right" valign="top">Keyword :</td>
         <td>
-            <input type="text" size="13"   ui="type:'TextInput',formName:'product_key',rule:'required'" />
+            <input type="text" size="13"   ui="type:'TextInput',formname:'product_key',rule:'required'" />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Index:
-            <input type="text" size="13"   ui="type:'TextInput',formName:'product_index'" />
+            <input type="text" size="13"   ui="type:'TextInput',formname:'product_index'" />
         </td>
     </tr>
 </table>
@@ -66,9 +66,9 @@
     <tr>
         <td align="right" valign="top">Title:</td>
         <td>
-            <input type="hidden" ui="type:'TextInput',formName:'sprint_id'" />
-            <input type="hidden" ui="type:'TextInput',formName:'backlog_id'" />
-            <input type="text" size="30"   ui="type:'TextInput',formName:'backlog_name',rule:'required'" />
+            <input type="hidden" ui="type:'TextInput',formname:'sprint_id'" />
+            <input type="hidden" ui="type:'TextInput',formname:'backlog_id'" />
+            <input type="text" size="30"   ui="type:'TextInput',formname:'backlog_name',rule:'required'" />
         </td>
         <td rowspan="6" style="vertical-align: top; padding-left:20px;">
         
@@ -77,13 +77,13 @@
     <tr>
         <td  class="inputLabel" style="vertical-align: top;">Description:</td>
         <td style="vertical-align: top;">
-            <textarea ui="type:'TextInput',formName:'backlog_desc'" cols="40" rows="9"></textarea>
+            <textarea ui="type:'TextInput',formname:'backlog_desc'" cols="40" rows="9"></textarea>
         </td>
     </tr>
     <tr>
         <td  class="inputLabel" style="vertical-align: top;">Index:</td>
         <td style="vertical-align: top;">
-            <input type="text" size="16"   ui="type:'TextInput',formName:'backlog_index'" />
+            <input type="text" size="16"   ui="type:'TextInput',formname:'backlog_index'" />
         </td>
     </tr>
 </table>
@@ -97,20 +97,20 @@
 		<tr>
 			<td align="right" valign="top">Title:</td>
 			<td>
-                <input type="hidden" ui="type:'TextInput',formName:'task_deleted',value:''" />
-                <input type="hidden" ui="type:'TextInput',formName:'product_id'" />
-                <input type="hidden" ui="type:'TextInput',formName:'sprint_id'" />
-                <input type="hidden" ui="type:'TextInput',formName:'backlog_id'" />
-                <input type="hidden" ui="type:'TextInput',formName:'task_id'" />
-                <input type="text"   ui="type:'TextInput',formName:'task_name',rule:'required'" style="width: 267px;" />
+                <input type="hidden" ui="type:'TextInput',formname:'task_deleted',value:''" />
+                <input type="hidden" ui="type:'TextInput',formname:'product_id'" />
+                <input type="hidden" ui="type:'TextInput',formname:'sprint_id'" />
+                <input type="hidden" ui="type:'TextInput',formname:'backlog_id'" />
+                <input type="hidden" ui="type:'TextInput',formname:'task_id'" />
+                <input type="text"   ui="type:'TextInput',formname:'task_name',rule:'required'" style="width: 267px;" />
             </td>
 			<td rowspan="6" style="vertical-align: top; padding-left:20px;">
 			<table cellspacing="0px">
 				<tr>
 					<td style="padding-top: 0px;">
-					<textarea ui="type:'TextInput',formName:'new_comment',isForm:'false'" style="border: 1px solid #A9A9A9; color: #000000; height: 68px; padding: 2px; width: 260px; text-align: left;margin-bottom: 5px;" rows="1" cols="20"></textarea>
+					<textarea ui="type:'TextInput',formname:'new_comment',isForm:'false'" style="border: 1px solid #A9A9A9; color: #000000; height: 68px; padding: 2px; width: 260px; text-align: left;margin-bottom: 5px;" rows="1" cols="20"></textarea>
 					<div style="width: 264px; text-align: right;">
-                    <img ui="type:'Button',formName:'btn_addcomment'" src="vm/img/comment-button.gif" title="Post Comment" style="cursor: pointer;" /></div>
+                    <img ui="type:'Button',formname:'btn_addcomment'" src="vm/img/comment-button.gif" title="Post Comment" style="cursor: pointer;" /></div>
 					</td>
 				</tr>
 				<tr>
@@ -118,7 +118,7 @@
 				</tr>
 				<tr>
 					<td rowspan="3">
-					<textarea ui="type:'TextInput',formName:'task_comments'" style="color: black; height: 220px; overflow: scroll; padding-bottom: 2px; padding-top: 2px; vertical-align: top; width: 264px; border: 1px solid #A9A9A9;"></textarea>
+					<textarea ui="type:'TextInput',formname:'task_comments'" style="color: black; height: 220px; overflow: scroll; padding-bottom: 2px; padding-top: 2px; vertical-align: top; width: 264px; border: 1px solid #A9A9A9;"></textarea>
 					</td>
 				</tr>
 			</table>
@@ -127,15 +127,15 @@
 		<tr>
 			<td  class="inputLabel" style="vertical-align: top;">Description:</td>
 			<td style="vertical-align: top;">
-			<textarea ui="type:'TextInput',formName:'task_desc'" cols="40" rows="9" style="width: 288px;"></textarea></td>
+			<textarea ui="type:'TextInput',formname:'task_desc'" cols="40" rows="9" style="width: 288px;"></textarea></td>
 		</tr>
 		<tr>
 			<td class="inputLabel">Point Person:</td>
-			<td><select ui="type:'Select',formName:'task_person',data_value:'user_id',data_text:'user_label'" style="width: 288px;"></select></td>
+			<td><select ui="type:'Select',formname:'task_person',data_value:'user_id',data_text:'user_label'" style="width: 288px;"></select></td>
 		</tr>
 		<tr>
 			<td class="inputLabel">Status:</td>
-			<td><select ui="type:'Select',formName:'task_status'">
+			<td><select ui="type:'Select',formname:'task_status'">
 			<option value="notstarted">Not Started</option>
 			<option value="impeded">Impeded</option>
 			<option value="inprogress">In Progress</option>
@@ -147,9 +147,9 @@
 			<table>
 				<tr>
 					<td class="inputLabel">Team hours remaining:</td>
-					<td><input ui="type:'TextInput',formName:'task_remaining'" size="7" type="text" value="4" /></td>
+					<td><input ui="type:'TextInput',formname:'task_remaining'" size="7" type="text" value="4" /></td>
 					<td class="inputLabel" style="padding-left:35px;">Original Estimate:</td>
-					<td><input ui="type:'TextInput',formName:'task_estimate'" size="9" value="4"></span></td>
+					<td><input ui="type:'TextInput',formname:'task_estimate'" size="9" value="4"></span></td>
 				</tr>
 			</table>
 			</td>

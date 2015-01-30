@@ -26,7 +26,7 @@ bui.Control = function (options, pending) {
     this.initOptions( options );
     // 生成控件id
     if ( !this.id ) {
-        this.id = bui.Control.makeGUID(this.formName);
+        this.id = bui.Control.makeGUID(this.formname);
     }
     
     // 注释掉的原因：在bui.Control.create前会设置me.main
@@ -245,7 +245,7 @@ bui.Control.prototype = {
             control;
         if (me.controlMap && v) {
             for (var i in v) {
-                control = me.controlMap[i] || me.getByFormName(i);
+                control = me.controlMap[i] || me.getByFormname(i);
                 if (!control) {continue;}
                 if (control.showError){
                     control.showError(v[i]);
@@ -269,7 +269,7 @@ bui.Control.prototype = {
             control;
         if (me.controlMap && v) {
             for (var i in v) {
-                control = me.controlMap[i] || me.getByFormName(i);
+                control = me.controlMap[i] || me.getByFormname(i);
                 if (!control) {continue;}
                 if (control.constructor && 
                     control.constructor.prototype && 
@@ -293,19 +293,19 @@ bui.Control.prototype = {
         var me = this,
             paramMap = {},
             childControl,
-            formName;
+            formname;
         // 如果有子控件建议递归调用子控件的getValue!!
         if (me.controlMap) {
             for (var i in me.controlMap) {
                 if (me.controlMap[i]) {
                     childControl = me.controlMap[i];
-                    formName = childControl.getFormName();
+                    formname = childControl.getFormname();
                     
                     if (childControl.getValue && String(childControl.isForm) !== 'false') {
-                        paramMap[formName] = childControl.getValue();
+                        paramMap[formname] = childControl.getValue();
                     }
                     else if (childControl.controlMap){
-                        paramMap[formName] = childControl.getParamMap();
+                        paramMap[formname] = childControl.getParamMap();
                     }
                 }
             }
@@ -338,13 +338,13 @@ bui.Control.prototype = {
         return paramString.join('&');
     },
     /**
-     * @name 通过formName访问子控件
+     * @name 通过formname访问子控件
      * @public
-     * @param {String} formName 子控件的formName
+     * @param {String} formname 子控件的formname
      */
-    getByFormName: function (formName) {
+    getByFormname: function (formname) {
         var me = this;
-        return bui.Control.getByFormName(formName, me);
+        return bui.Control.getByFormname(formname, me);
     },
     /**
      * @name 显示控件
@@ -476,10 +476,10 @@ bui.Control.prototype = {
      * @public
      * @param {Object} control
      */
-    getFormName: function() {
+    getFormname: function() {
         var me = this,
             elem = me.getMain();
-        var itemName = me.formName || me['name'] || 
+        var itemName = me.formname || me['name'] || 
             (elem ? elem.getAttribute('name') : null) || me.getId();
         return itemName;
     },
@@ -701,8 +701,8 @@ bui.inherits(bui.Control, bui.EventDispatcher);
  */
 bui.Control.makeGUID = (function(){
     var guid = 1;
-    return function(formName){
-        return '_' + (formName ? formName : 'inner') + '_' + ( guid++ );
+    return function(formname){
+        return '_' + (formname ? formname : 'inner') + '_' + ( guid++ );
     };
 })();
  
@@ -713,7 +713,7 @@ bui.Control.makeGUID = (function(){
  */
 bui.Control.makeElemGUID = (function(){
     var guid = 1;
-    return function(formName){
+    return function(formname){
         return '_' + bui.formatDate(new Date(), 'yyyyMMdd_HHmm') + '_' + ( guid++ );
     };
 })();
@@ -790,7 +790,7 @@ bui.Control.init = function ( opt_wrap, opt_propMap, parentControl ) {
             // 创建并渲染控件
             objId = attrs[ 'id' ];
             if ( !objId ) {
-                objId = bui.Control.makeGUID(attrs['formName']);
+                objId = bui.Control.makeGUID(attrs['formname']);
                 attrs[ 'id' ] = objId;
             }           
             /*extraAttrMap = opt_propMap[ objId ];
@@ -1002,11 +1002,11 @@ bui.Control.getById = function(id, parentControl){
     return result;
 };
 /**
- * @name 根据控件formName找到对应控件
+ * @name 根据控件formname找到对应控件
  * @static
- * @param {String} 控件formName
+ * @param {String} 控件formname
  */
-bui.Control.getByFormNameAll = function(formName, parentNode){
+bui.Control.getByFormnameAll = function(formname, parentNode){
     var me = this,
         list = [],
         childNodes,
@@ -1014,20 +1014,20 @@ bui.Control.getByFormNameAll = function(formName, parentNode){
         /* 强制确认parentControl: 如果传入是parentControl的id，则找出其对应的Control */
         parentControl = bui.Control.getById(undefined, parentNode);
     
-    if (formName) {
-        formName = String(formName);
+    if (formname) {
+        formname = String(formname);
         
         // 先查找自身
         childNodes = parentControl && parentControl.controlMap ? parentControl.controlMap : {};
         //childNodes.unshift(parentControl);
-        if (parentControl.getFormName && parentControl.getFormName() === formName) {
+        if (parentControl.getFormname && parentControl.getFormname() === formname) {
             list.push(parentControl);
         }
         
         // 再遍历控件树
         childNodes = parentControl && parentControl.controlMap ? bui.Control.findAllControl(parentControl) : {};
         for (var i in childNodes) {
-            if (childNodes[i].getFormName() === formName) {
+            if (childNodes[i].getFormname() === formname) {
                 list.push(childNodes[i]);
             }
         }  
@@ -1036,14 +1036,14 @@ bui.Control.getByFormNameAll = function(formName, parentNode){
     return list;
 };
 /**
- * @name 根据控件formName找到对应控件
+ * @name 根据控件formname找到对应控件
  * @static
- * @param {String} 控件formName
+ * @param {String} 控件formname
  */
-bui.Control.getByFormName = function(formName, parentNode){
+bui.Control.getByFormname = function(formname, parentNode){
     var me = this,
         result = null,
-        list = bui.Control.getByFormNameAll(formName, parentNode);
+        list = bui.Control.getByFormnameAll(formname, parentNode);
     if (parentNode && parentNode.parentNode && parentNode.childNodes) {
         for (var i=0,len=list.length; i<len; i++) {
             if (bui.Control.checkParentNode(list[i], parentNode)) {

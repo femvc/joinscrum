@@ -39,27 +39,27 @@ home.prototype = {
     },
     render: function(){
         var me = this;
-        // 注：还未执行bui.Control.init(),无法访问到me.getByFormName('home')!!!
-        //me.getByFormName('home').addBacklogRow(me.model.get('backlog_list')[0]);
+        // 注：还未执行bui.Control.init(),无法访问到me.getByFormname('home')!!!
+        //me.getByFormname('home').addBacklogRow(me.model.get('backlog_list')[0]);
     },
     initBehavior: function(controlMap) {
         var me = this;
         
         // bui.Action.get().controlMap.vModal2.show();
         // me.controlMap.submit.onclick = bui.fn(me.onSubmit, me);
-        var productList = me.getByFormName('product_list');
-        var sprintList  = me.getByFormName('sprint_list' );
-        var userList    = me.getByFormName('user_list' );
+        var productList = me.getByFormname('product_list');
+        var sprintList  = me.getByFormname('sprint_list' );
+        var userList    = me.getByFormname('user_list' );
         productList.onchange = bui.fn(me.switchProduct, me);
         sprintList.onchange  = bui.fn(me.switchSprint, me);
         userList.onchange    = bui.fn(me.switchUser, me);
         
         me.getSprintData(function(){
-            me.getByFormName('product_list').setOptions(me.model.get('product_list'));
-            me.getByFormName('sprint_list' ).setOptions(me.model.get('sprint_list'));
-            me.getByFormName('user_list'   ).setOptions(me.getUserList());
+            me.getByFormname('product_list').setOptions(me.model.get('product_list'));
+            me.getByFormname('sprint_list' ).setOptions(me.model.get('sprint_list'));
+            me.getByFormname('user_list'   ).setOptions(me.getUserList());
             
-            me.getByFormName('user_list'   ).setValue(bui.getCookie('mid'));
+            me.getByFormname('user_list'   ).setValue(bui.getCookie('mid'));
             
             bui.g('welcome_user').innerHTML = me.getUserItem(bui.getCookie('mid')).user_name;
             
@@ -95,7 +95,7 @@ home.prototype = {
     saveTaskCallback: function (err, data) {
         var me = this;
         if (data.success == 'true') {
-            var home = me.getByFormName('home'),
+            var home = me.getByFormname('home'),
                 list = me.model.get('task_list'),
                 isAdd = true,
                 taskValue = data.result[0];
@@ -143,7 +143,7 @@ home.prototype = {
             str = backlogItem.id.split('_'),
             task_status = str[0],
             backlog_id = str[1],
-            sprint_id = me.getByFormName('sprint_list').getValue(),
+            sprint_id = me.getByFormname('sprint_list').getValue(),
             list = backlogItem.childNodes,
             taskindex = [];
         for (var i=0,len=list.length; i<len; i++) {
@@ -165,7 +165,7 @@ home.prototype = {
     },
     highlightTask: function () {
         var me = this,
-            user_id = me.getByFormName('user_list').getValue(),
+            user_id = me.getByFormname('user_list').getValue(),
             list = bui.c('task'),
             task_person;
         for (var i=0,len=list.length; i<len; i++) {

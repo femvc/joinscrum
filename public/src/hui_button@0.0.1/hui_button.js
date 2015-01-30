@@ -71,17 +71,15 @@ hui.define('hui_button', ['hui_util', 'hui_control'], function () {
             if (!me.content && innerDiv && innerDiv.tagName != 'DIV') {
                 me.content = me.getInnerHTML();
             }
-
             me.setInnerHTML(me, me.getMainHtml());
-
             // 初始化状态事件
             main.onclick = me.getHandlerClick();
-
             // 设定宽度
             me.width && (main.style.width = me.width + 'px');
-
             // 设置disabled
             me.setDisabled(!!me.disabled);
+            // 设置_rendered
+            main.setAttribute('_rendered', 'true');
         },
 
         /**
@@ -120,5 +118,8 @@ hui.define('hui_button', ['hui_util', 'hui_control'], function () {
     /* hui.Button 继承了 hui.Control */
     hui.inherits(hui.Button, hui.Control);
 
+    hui.util.importCssString(
+        '.hui_button { font-family: "microsoft yahei"; background-color: #00aaef; border: 0px; color: white; padding: 6px 30px; border-radius: 30px; font-size: 18px; cursor: pointer; }'
+    );
 
 });

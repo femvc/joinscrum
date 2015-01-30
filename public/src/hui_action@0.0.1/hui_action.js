@@ -227,7 +227,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
             me.active = true;
 
             // 保存通过URL传过来的参数
-            me.queryString = args;
+            me.querystring = args;
             // 判断model是否存在，不存在则新建一个
             if (!me.model) {
                 var baseModel = hui.Action.getExtClass('hui.BaseModel');
@@ -245,6 +245,8 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                 main = me.getMain(),
                 data = me.model && me.model.getData && typeof me.model.getData === 'function' ? me.model.getData() : {};
             hui.Control.init(main, data, me);
+            // 设置_rendered
+            main.setAttribute('_rendered', 'true');
         },
         /**
          * @name 初始化数据模型
@@ -1243,7 +1245,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
 
     page404.prototype = {
         getView: function () {
-            var str = hui.Control.format('<div style="font-size:10pt;line-height:1.2em; line-height: 1.2em;padding: 15px;text-align: left;background-color: #f1f1f1;"><h3 style="margin:0px;line-height:3em;">The page cannot be found</h3>' + '<p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>' + '<p>Please try the following:</p>' + '<ul><li>If you typed the page address in the Address bar, make sure that it is spelled correctly.<br/></li>' + '<li>Open the <a href="#/">home page</a>, and then look for links to the information you want.</li>' + '<li>Click the <a href="javascript:history.go(-1)">Back</a> button to try another link. </li>' + '</ul><p><br></p>HTTP 404 - File not found<br />Need any help? Please contact the Monsieur #{name}.<br /></div>', this.queryString);
+            var str = hui.Control.format('<div style="font-size:10pt;line-height:1.2em; line-height: 1.2em;padding: 15px;text-align: left;background-color: #f1f1f1;"><h3 style="margin:0px;line-height:3em;">The page cannot be found</h3>' + '<p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>' + '<p>Please try the following:</p>' + '<ul><li>If you typed the page address in the Address bar, make sure that it is spelled correctly.<br/></li>' + '<li>Open the <a href="#/">home page</a>, and then look for links to the information you want.</li>' + '<li>Click the <a href="javascript:history.go(-1)">Back</a> button to try another link. </li>' + '</ul><p><br></p>HTTP 404 - File not found<br />Need any help? Please contact the Monsieur #{name}.<br /></div>', this.querystring);
             return str;
         },
         initModel: function (callback) {
@@ -1260,6 +1262,8 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
             /*Requester.get('/mockup/user.json', {onsuccess:function(err, data){
                 me.setInnerHTML(me, hui.Control.format(me.getInnerHTML(), {name: data.result}));
             }});*/
+            // 设置_rendered
+            main.setAttribute('_rendered', 'true');
         },
         /**
          * @name 初始化列表行为
@@ -1279,7 +1283,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
     hui.Router.setRule('/404', {
         model: new hui.BaseModel(),
         getView: function () {
-            var str = hui.Control.format('<div style="font-size:10pt;line-height:1.2em; line-height: 1.2em;padding: 15px;text-align: left;background-color: #f1f1f1;"><button style="display:none" ui="type:\'Button\'">ddd</button><h3 style="margin:0px;line-height:3em;">The page cannot be found</h3>' + '<p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>' + '<p>Please try the following:</p>' + '<ul><li>If you typed the page address in the Address bar, make sure that it is spelled correctly.<br/></li>' + '<li>Open the <a href="#/">home page</a>, and then look for links to the information you want.</li>' + '<li>Click the <a href="javascript:history.go(-1)">Back</a> button to try another link. </li>' + '</ul><p><br></p>HTTP 404 - File not found<br />Need any help? Please contact the Monsieur #{name}.<br /></div>', this.queryString);
+            var str = hui.Control.format('<div style="font-size:10pt;line-height:1.2em; line-height: 1.2em;padding: 15px;text-align: left;background-color: #f1f1f1;"><button style="display:none" ui="type:\'Button\'">ddd</button><h3 style="margin:0px;line-height:3em;">The page cannot be found</h3>' + '<p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>' + '<p>Please try the following:</p>' + '<ul><li>If you typed the page address in the Address bar, make sure that it is spelled correctly.<br/></li>' + '<li>Open the <a href="#/">home page</a>, and then look for links to the information you want.</li>' + '<li>Click the <a href="javascript:history.go(-1)">Back</a> button to try another link. </li>' + '</ul><p><br></p>HTTP 404 - File not found<br />Need any help? Please contact the Monsieur #{name}.<br /></div>', this.querystring);
             return str;
         },
         getViewAsync: function (callback) {

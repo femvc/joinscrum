@@ -42,9 +42,9 @@ login.prototype = {
 
         }
         
-        var username = me.getByFormName('username');
-        var password = me.getByFormName('password');
-        var login_submit = me.getByFormName('login_submit');
+        var username = me.getByFormname('username');
+        var password = me.getByFormname('password');
+        var login_submit = me.getByFormname('login_submit');
 
         if (username.getValue() == '' && bui.getCookie('mid')) {
              username.setValue(bui.getCookie('mid'));
@@ -60,8 +60,8 @@ login.prototype = {
     onSubmit: function(){
         if (this.validate()) {
             var me = this,
-                username = me.getByFormName('username').getValue(),
-                password = me.getByFormName('password').getValue();
+                username = me.getByFormname('username').getValue(),
+                password = me.getByFormname('password').getValue();
             
             Requester.get('/scrum_api/user_login', {
                 data: { 
@@ -74,7 +74,7 @@ login.prototype = {
     },
     loginCallback: function(err, data){
         var me = this,
-            result = data.result;
+            result = data ? data[1] : [];
         if (String(data.success) == 'true' && result.mid && result.token) {
             
             bui.context.set('mid', result['mid']);

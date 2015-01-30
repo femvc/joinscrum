@@ -16,7 +16,7 @@
  * @date 2014-11-14 23:32
  * @param {Object} options 控件初始化参数.
  * @example 
- <div ui="type:'Table',formName:'skill_list',fields:'&listTable',datasource:'&listData',sortable:true,size:{width:200}"></div>
+ <div ui="type:'Table',formname:'skill_list',fields:'&listTable',datasource:'&listData',sortable:true,size:{width:200}"></div>
 
      window.listTable = [{
         width: 100,
@@ -57,7 +57,7 @@ hui.define('hui_table', ['hui_util', 'hui_control'], function () {
     hui.Table = function (options, pending) {
         this.isFormItem = false; // 注：getParamMap时不需要处理table
         hui.Table.superClass.call(this, options, 'pending');
-        
+
         this.noDataHtml = this.noDataHtml || '';
         this.setFields(this.fields);
 
@@ -108,18 +108,17 @@ hui.define('hui_table', ['hui_util', 'hui_control'], function () {
                 return;
             }
             // me.setInnerHTML(me, me.getMainHtml());
-            me.setSize();
             // 如果未绘制过，初始化main元素
-            if (!me.isRendered) {
-                me._width = me.getWidth();
-                me.initColsWidth();
-                main.style.width = me._width + 'px';
 
-                me.renderHead(); // 绘制表格头
-                me.renderBody(); // 绘制列表
-            }
+            me._width = me.getWidth();
+            me.initColsWidth();
+            main.style.width = me._width + 'px';
 
-            me.isRendered = true;
+            me.renderHead(); // 绘制表格头
+            me.renderBody(); // 绘制列表
+
+            // 设置_rendered
+            main.setAttribute('_rendered', 'true');
         },
 
         /**
@@ -455,7 +454,7 @@ hui.define('hui_table', ['hui_util', 'hui_control'], function () {
                 thTextClass = me.getClass('thtext'),
                 sortClass = me.getClass('thsort'),
                 selClass = me.getClass('thsel'),
-                contentTpl = '<div class="#{0}">#{1}</div>#{2}',
+                contentTpl = '<div class="#{0}">#{!1}</div>#{!2}',
                 contentHtml,
                 orderClass,
                 sortIconHtml,
@@ -499,7 +498,7 @@ hui.define('hui_table', ['hui_util', 'hui_control'], function () {
                     contentHtml,
                     sortIconHtml);
                 html.push(
-                    hui.Control.format('<th id="#{0}" index="#{1}" #{2} style="width:#{3}px"><div class="#{4}">#{5} #{6}</div></th>',
+                hui.Control.format('<th id="#{0}" index="#{1}" #{2} style="width:#{3}px"><div class="#{4}">#{!5} #{!6}</div></th>',
                         this.getTitleCellId(i),
                         i,
                         sortAction(field, i),

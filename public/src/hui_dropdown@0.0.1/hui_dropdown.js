@@ -7,10 +7,10 @@
  * @date 2014-11-16 23:12
  * @param {Object} options 控件初始化参数.
  * @example
- <div ui="type:'Dropdown',formName:'city',placeholder:'- 请选择 -',rule:'not_empty',
+ <div ui="type:'Dropdown',formname:'city',placeholder:'- 请选择 -',rule:'not_empty',
  options:[{value:110000,text:'北京市'},{value:310000,text:'上海市'},{value:120000,text:'天津市'}],
  size:{width:280}"></div>
- <div ui="type:'Dropdown',formName:'mm',placeholder:'- 月 -',value:'',
+ <div ui="type:'Dropdown',formname:'mm',placeholder:'- 月 -',value:'',
  optionStart:1,optionEnd:12,optionStep:1,
  size:{width:86}"></div>
  */
@@ -78,11 +78,12 @@ hui.define('hui_dropdown', ['hui_util', 'hui_control'], function () {
             hui.Dropdown.superClass.prototype.render.call(this);
             var me = this;
             // 绘制宽度和高度
-            me.setSize();
             if (me.placeholder && !me.value) {
                 hui.setInnerText(me.getTitle(), me.placeholder);
             }
             me.renderOptions();
+            // 设置_rendered
+            main.setAttribute('_rendered', 'true');
         },
         initBehavior: function () {
             var me = this,

@@ -16,8 +16,8 @@
  * @date 2014-11-16 20:22
  * @param {Object} options 控件初始化参数.
  * @example 
-<label ui="type:'Checkbox',formName:'book',value:'icdn0001',checked:'',label:'基督山'"></label>
-<label ui="type:'Checkbox',formName:'book',value:'icdn0002',checked:''">呼啸山</label>
+<label ui="type:'Checkbox',formname:'book',value:'icdn0001',checked:'',label:'基督山'"></label>
+<label ui="type:'Checkbox',formname:'book',value:'icdn0002',checked:''">呼啸山</label>
  */
 hui.define('hui_checkbox', ['hui_util', 'hui_control'], function () {
 
@@ -77,7 +77,6 @@ hui.define('hui_checkbox', ['hui_util', 'hui_control'], function () {
             var me = this,
                 main = me.getMain();
             // 绘制宽度和高度
-            me.setSize();
 
             var tpl = me.getTpl();
             hui.appendHTML(main, hui.Control.format(tpl,
@@ -85,6 +84,8 @@ hui.define('hui_checkbox', ['hui_util', 'hui_control'], function () {
                 me.getClass('icon')
             ));
             me.renderLabel();
+            // 设置_rendered
+            main.setAttribute('_rendered', 'true');
         },
         initBehavior: function () {
             var me = this,

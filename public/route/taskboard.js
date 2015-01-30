@@ -54,27 +54,27 @@ taskboard.prototype = {
     },
     render: function(){
         var me = this;
-        // 注：还未执行bui.Control.init(),无法访问到me.getByFormName('taskboard')!!!
-        //me.getByFormName('taskboard').addBacklogRow(me.model.get('backlog_list')[0]);
+        // 注：还未执行bui.Control.init(),无法访问到me.getByFormname('taskboard')!!!
+        //me.getByFormname('taskboard').addBacklogRow(me.model.get('backlog_list')[0]);
     },
     initBehavior: function(controlMap) {
         var me = this;
         
         // bui.Action.get().controlMap.vModal2.show();
         // me.controlMap.submit.onclick = bui.fn(me.onSubmit, me);
-        var productList = me.getByFormName('product_list');
-        var sprintList  = me.getByFormName('sprint_list' );
-        var userList    = me.getByFormName('user_list' );
+        var productList = me.getByFormname('product_list');
+        var sprintList  = me.getByFormname('sprint_list' );
+        var userList    = me.getByFormname('user_list' );
         productList.onchange = bui.fn(me.switchProduct, me);
         sprintList.onchange  = bui.fn(me.switchSprint, me);
         userList.onchange    = bui.fn(me.switchUser, me);
         
         me.getSprintData(function(){
-            me.getByFormName('product_list').setOptions(me.model.get('product_list'));
-            me.getByFormName('user_list'   ).setOptions(me.getUserList());
+            me.getByFormname('product_list').setOptions(me.model.get('product_list'));
+            me.getByFormname('user_list'   ).setOptions(me.getUserList());
             
-            me.getByFormName('product_list').setValue(bui.getCookie('taskboard_product'));
-            me.getByFormName('user_list'   ).setValue(bui.getCookie('taskboard_user'));
+            me.getByFormname('product_list').setValue(bui.getCookie('taskboard_product'));
+            me.getByFormname('user_list'   ).setValue(bui.getCookie('taskboard_user'));
             
             bui.g('welcome_user').innerHTML = me.getUserItem(bui.getCookie('mid')).user_name;
             
@@ -93,21 +93,21 @@ taskboard.prototype = {
         var me = this,
             sprint_all = me.model.get('sprint_list'),
             sprint_list = [],
-            product_id = me.getByFormName('product_list').getValue();
+            product_id = me.getByFormname('product_list').getValue();
         for (var i=0,len=sprint_all.length; i<len; i++) {
             if (sprint_all[i].product_id == product_id) {
                 sprint_list.push(sprint_all[i]);
             }
         }
-        me.getByFormName('sprint_list').setOptions(sprint_list);
-        me.getByFormName('sprint_list').setValue(bui.getCookie('selected_sprint'));
+        me.getByFormname('sprint_list').setOptions(sprint_list);
+        me.getByFormname('sprint_list').setValue(bui.getCookie('selected_sprint'));
         
         bui.setCookie('taskboard_product', product_id)
         me.switchSprint();
     },
     switchSprint: function () {
         var me = this,
-            sprint_id = me.getByFormName('sprint_list').getValue() || -1;
+            sprint_id = me.getByFormname('sprint_list').getValue() || -1;
         
         bui.setCookie('selected_sprint', sprint_id);
         
@@ -149,7 +149,7 @@ taskboard.prototype = {
     },
     switchSprintCallback: function () {
         var me = this,
-            taskboard = me.getByFormName('taskboard');
+            taskboard = me.getByFormname('taskboard');
         if (me.model.get('backlog_list') && me.model.get('task_list') && me.model.get('taskindex_list') && 
             me.model.get('burden')) {
             taskboard.taskList = me.sortTask();
@@ -262,7 +262,7 @@ taskboard.prototype = {
     editBacklog: function (backlog_id) {
         var me = this,
             nc = bui.Control.getById('editBacklog', me),
-            sprint_id = me.getByFormName('sprint_list').getValue(),
+            sprint_id = me.getByFormname('sprint_list').getValue(),
             backlogValue,
             backlogItem;
         
@@ -298,7 +298,7 @@ taskboard.prototype = {
     saveBacklog: function () {
         var me = this;
         var nc = bui.Control.getById('editBacklog', me),
-            taskboard = me.getByFormName('taskboard');
+            taskboard = me.getByFormname('taskboard');
         
         if (nc && nc.validate()) {
             var backlogValue = nc.getParamMap();
@@ -320,10 +320,10 @@ taskboard.prototype = {
     },
     repaintTaskboard: function () {
         var me = this,
-            taskboard = me.getByFormName('taskboard');
+            taskboard = me.getByFormname('taskboard');
         taskboard.removeBacklogRow('all');
         
-        taskboard.product_key = me.getProduct(me.getByFormName('product_list').getValue()).product_key;
+        taskboard.product_key = me.getProduct(me.getByFormname('product_list').getValue()).product_key;
         taskboard.backlogList = me.model.get('backlog_list');
         
         taskboard.setBacklogList();
@@ -363,7 +363,7 @@ taskboard.prototype = {
      */
     takeTask: function (task_id) {
         var me = this,
-            user_id = me.getByFormName('user_list').getValue(),
+            user_id = me.getByFormname('user_list').getValue(),
             taskItem = me.getTaskItem(task_id);
         taskItem.task_person    = user_id;
         taskItem.task_deleted   = '';
@@ -384,7 +384,7 @@ taskboard.prototype = {
     },
     deleteTask: function (task_id) {
         var me = this,
-            user_id = me.getByFormName('user_list').getValue(),
+            user_id = me.getByFormname('user_list').getValue(),
             taskItem = me.getTaskItem(task_id);
         taskItem.task_deleted   = 'deleted';
         
@@ -397,7 +397,7 @@ taskboard.prototype = {
     addTask: function(backlog_id) {
         var me = this,
             users = me.model.get('user_list'),
-            sprint_id = me.getByFormName('sprint_list').getValue(),
+            sprint_id = me.getByFormname('sprint_list').getValue(),
             taskItem = {};
         taskItem.sprint_id  = sprint_id;
         taskItem.backlog_id = backlog_id;
@@ -433,8 +433,8 @@ taskboard.prototype = {
         nc.setTitle(taskItem.task_name ? ' Edit Task - ' + taskItem.task_name + '' : 
                     ' Add Task to - ' + me.getBacklogItem(taskItem.backlog_id).backlog_name + '');
         // 必须先初始化options，否则task_person无法setValue!!
-        nc.getByFormName('task_person').setOptions(me.getUserList());
-        nc.getByFormName('task_person').setValue(bui.getCookie('taskboard_user'));
+        nc.getByFormname('task_person').setOptions(me.getUserList());
+        nc.getByFormname('task_person').setValue(bui.getCookie('taskboard_user'));
         // 默认解除deleted状态
         taskItem.task_deleted = '';
         nc.setValueByTree(taskItem);
@@ -470,7 +470,7 @@ taskboard.prototype = {
     saveTaskCallback: function (err, data) {
         var me = this;
         if (data.success == 'true') {
-            var taskboard = me.getByFormName('taskboard'),
+            var taskboard = me.getByFormname('taskboard'),
                 list = me.model.get('task_list'),
                 isAdd = true,
                 taskValue = data.result[0];
@@ -518,7 +518,7 @@ taskboard.prototype = {
             str = backlogItem.id.split('_'),
             task_status = str[0],
             backlog_id = str[1],
-            sprint_id = me.getByFormName('sprint_list').getValue(),
+            sprint_id = me.getByFormname('sprint_list').getValue(),
             list = backlogItem.childNodes,
             taskindex = [];
         for (var i=0,len=list.length; i<len; i++) {
@@ -540,7 +540,7 @@ taskboard.prototype = {
     },
     highlightTask: function () {
         var me = this,
-            user_id = me.getByFormName('user_list').getValue(),
+            user_id = me.getByFormname('user_list').getValue(),
             list = bui.c('task'),
             task_person;
         for (var i=0,len=list.length; i<len; i++) {
@@ -588,7 +588,7 @@ taskboard.prototype = {
     editProduct: function (isNew) {
         var me = this,
             nc = bui.Control.getById('editProduct', me),
-            product_id = me.getByFormName('product_list').getValue(),
+            product_id = me.getByFormname('product_list').getValue(),
             productValue,
             productItem;
         
@@ -654,8 +654,8 @@ taskboard.prototype = {
     editSprint: function (isNew) {
         var me = this,
             nc = bui.Control.getById('editSprint', me),
-            product_id = me.getByFormName('product_list').getValue(),
-            sprint_id  = me.getByFormName('sprint_list').getValue(),
+            product_id = me.getByFormname('product_list').getValue(),
+            sprint_id  = me.getByFormname('sprint_list').getValue(),
             sprintValue,
             sprintItem;
         

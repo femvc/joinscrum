@@ -158,6 +158,7 @@ exports.login = function (req, res, next) {
             return response.err(req, res, 'USER_LOGIN_FAIL');
 
         var user = userLogic.output(resp);
+        user.mid = user.uid;
         req.sessionStore.user = req.sessionStore.user || {};
         req.sessionStore.user[req.sessionID] = user.uid;
 
