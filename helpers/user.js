@@ -5,7 +5,7 @@ var output = function(user) {
     if (!user)
         return null;
 
-    user.uid = user._id.toString();
+    // user.uid = user._id.toString();
     
     delete user._id;
     delete user.password;

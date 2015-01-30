@@ -36,7 +36,7 @@ a:hover {color: #f60;}
 // 判断屏幕是否旋转
 /*
 function orientationChange() {
-    var action = bui.Action.get();
+    var action = bui.Master.get();
     if (action && action.orientationChange) {
         action.orientationChange();
     }

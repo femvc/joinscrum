@@ -105,11 +105,11 @@ th.impedimentattribute {font-size: 9pt; color: black; font-weight: bold; text-al
             <tr>
                 <td>
                     <span>View Product:</span> 
-                    <button class="link" style="margin-left: 0px;" onclick="bui.Action.get().addProduct()">add</button><i>/</i><button class="link" style="margin-left:0px;" onclick="bui.Action.get().editProduct()">edit</button>
+                    <button class="link" style="margin-left: 0px;" onclick="bui.Master.get().addProduct()">add</button><i>/</i><button class="link" style="margin-left:0px;" onclick="bui.Master.get().editProduct()">edit</button>
                 </td>
                 <td>
                     <span>View Sprint:</span>
-                    <button class="link" style="" onclick="bui.Action.get().addSprint()">add</button><i>/</i><button class="link" style="margin-left:0px;" onclick="bui.Action.get().editSprint()">edit</button>
+                    <button class="link" style="" onclick="bui.Master.get().addSprint()">add</button><i>/</i><button class="link" style="margin-left:0px;" onclick="bui.Master.get().editSprint()">edit</button>
                 </td>
             </tr>
             <tr>
@@ -153,7 +153,7 @@ th.impedimentattribute {font-size: 9pt; color: black; font-weight: bold; text-al
     <table id="displayPrefs">
         <tr>
             <td width="55%">
-            <input id="include_deleted" name="include_deleted" type="checkbox" onclick="bui.Action.get().switchSprint()" />
+            <input id="include_deleted" name="include_deleted" type="checkbox" onclick="bui.Master.get().switchSprint()" />
             <label for="include_deleted">Show deleted task</label> </td>
             <td>
             <label>Highlight Tasks</label>

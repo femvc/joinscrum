@@ -45,7 +45,7 @@ home.prototype = {
     initBehavior: function(controlMap) {
         var me = this;
         
-        // bui.Action.get().controlMap.vModal2.show();
+        // bui.Master.get().controlMap.vModal2.show();
         // me.controlMap.submit.onclick = bui.fn(me.onSubmit, me);
         var productList = me.getByFormname('product_list');
         var sprintList  = me.getByFormname('sprint_list' );

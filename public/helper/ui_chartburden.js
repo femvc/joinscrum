@@ -52,18 +52,18 @@ bui.ChartBurden.prototype = {
     getBacklogTpl: function () {
         var str = 
         '<div>' +
-            '<span ondblclick="bui.Action.get().editBacklog(\'#{backlog_id}\')">' + 
+            '<span ondblclick="bui.Master.get().editBacklog(\'#{backlog_id}\')">' + 
             '<span class="pbikey"   id="pbikey_#{backlog_id}">(#{product_key}-#{backlog_id})</span>&nbsp;' +
             '<span class="pbititle" id="pbititle_#{backlog_id}">#{backlog_name}</span></span><br><br><br>' +
             '<div  class="pbidesc"  id="pbidesc_#{backlog_id}">#{backlog_desc}</div>' +
         '</div>' +
         '<div style="width: 100%; height: 30px;">' +
             '<div class="pbiestimate">Estimate: - #{backlog_estimate}</div>' +
-            '<div class="pbidone"><input type="checkbox" id="markdone_#{backlog_id}" onclick="bui.Action.get().doneBacklog(this)" ><label for="markdone_#{backlog_id}">Done</label></div>' +
+            '<div class="pbidone"><input type="checkbox" id="markdone_#{backlog_id}" onclick="bui.Master.get().doneBacklog(this)" ><label for="markdone_#{backlog_id}">Done</label></div>' +
         '</div>' +
         '<div style="width: 100%; height: 30px;">' +
             '<div id="person_#{backlog_id}"></div>' +
-            '<img title="Add Task" src="vm/img/add-task-active.gif" id="addtask_#{backlog_id}" style="cursor: pointer;" onclick="bui.Action.get().addTask(\'#{backlog_id}\')" class="addtask">' +
+            '<img title="Add Task" src="vm/img/add-task-active.gif" id="addtask_#{backlog_id}" style="cursor: pointer;" onclick="bui.Master.get().addTask(\'#{backlog_id}\')" class="addtask">' +
         '</div>';
         return str;
     },
@@ -75,7 +75,7 @@ bui.ChartBurden.prototype = {
     },
     getTaskContentTpl: function () {
         var str = 
-            '<div class="tasktitle" ondblclick="bui.Action.get().editTask(\'#{task_id}\')" id="tasktitle_#{task_id}" title="#{task_name}">#{task_name}</div>' +
+            '<div class="tasktitle" ondblclick="bui.Master.get().editTask(\'#{task_id}\')" id="tasktitle_#{task_id}" title="#{task_name}">#{task_name}</div>' +
             '<div class="draghandle">' +
                 '<div class="taskhours">Hrs: <span id="hours_#{task_id}">#{task_remaining}</span></div>' +
                 '<div class="pointperson" id="pp_#{task_id}" task_person="#{task_person}">#{user_label}</div>' +
@@ -84,9 +84,9 @@ bui.ChartBurden.prototype = {
             '<div class="taskmenu_list" style="display:none;" '+
                 ' id="menu_#{task_id}" onmouseover="window.clearTimeout(this.timer)" ' +
                 ' onmouseout="var me=this;me.timer=window.setTimeout(function(){me.style.display=\'none\';}, 500);">' +
-                '<div class="taskmenu_item" onclick="bui.Action.get().takeTask(\'#{task_id}\')">Take Task</div>' +
-                '<div class="taskmenu_item" onclick="bui.Action.get().editTask(\'#{task_id}\')">Edit Task</div>' +
-                '<div class="taskmenu_item" onclick="bui.Action.get().deleteTask(\'#{task_id}\')">Delete Task</div>' +
+                '<div class="taskmenu_item" onclick="bui.Master.get().takeTask(\'#{task_id}\')">Take Task</div>' +
+                '<div class="taskmenu_item" onclick="bui.Master.get().editTask(\'#{task_id}\')">Edit Task</div>' +
+                '<div class="taskmenu_item" onclick="bui.Master.get().deleteTask(\'#{task_id}\')">Delete Task</div>' +
             '</div>';
         return str;
     },
@@ -154,14 +154,14 @@ bui.ChartBurden.prototype = {
                 me.startTime = new Date();
             },
             end:function(){
-                bui.Action.get().moveTask(this);
+                bui.Master.get().moveTask(this);
             }
         });
         
     },
     updateTask: function(task){
         var me = this,
-            u = bui.Action.get().getUserItem(task.task_person);
+            u = bui.Master.get().getUserItem(task.task_person);
         task.task_remaining = task.task_remaining === '' ? '-' : task.task_remaining;
         task.user_label = u.user_name + '(' + u.user_id + ')';
         

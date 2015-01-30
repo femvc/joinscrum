@@ -32,7 +32,7 @@ var page301 = function() {
     /**
      * 初始化数据模型
      */
-    var baseModel = bui.Action.getExtClass('bui.BaseModel'); 
+    var baseModel = bui.Master.getExtClass('bui.BaseModel'); 
     this.model = new baseModel();
     
     
@@ -96,7 +96,7 @@ function do404() {
 <div id="main">
 </div>
 <button type="button" onclick="do404()">Create Action</button>
-<button type="button" onclick="alert(bui.Action.get() ? 'true' : 'false')">test action</button>
+<button type="button" onclick="alert(bui.Master.get() ? 'true' : 'false')">test action</button>
 </body>
 
 </html>

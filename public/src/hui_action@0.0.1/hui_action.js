@@ -427,12 +427,10 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
         return result;
     };
 
-
     hui.Router = {
         pathRules: [],
         /**
-         * 根据location找到匹配的rule并返回对应的action
-         *
+         * @name 根据location找到匹配的rule并返回对应的action
          * @public
          * @param {String} loc 路径
          */
@@ -488,8 +486,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
             }
         },
         /**
-         * 载入完成读取所有rule
-         *
+         * @name 载入完成读取所有rule
          * @protected
          * @param {String} rule 路径
          * @param {String} func 对应action
@@ -584,7 +581,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
             if (me.historyList.length > 1) {
                 //当前action
                 result = me.parseLocator(me.historyList.pop());
-                loc = result['location'];
+                loc = result.location;
 
                 me.disposeAction(loc);
 
@@ -596,7 +593,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
             else {
                 //当前action
                 result = me.parseLocator(me.historyList[me.historyList.length - 1]);
-                loc = result['location'];
+                loc = result.location;
 
                 //跳转到指定后退location
                 loc = me.disposeAction(loc);
@@ -707,6 +704,15 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
             }
 
             return action;
+        },
+        /**
+         * @name 返回当前action实例
+         * @public
+         */
+        get: function () {
+            var me = this,
+                loc = hui.Master.parseLocator();
+            return me.getActionInstance(me.findActionNameByLocation(loc.location, 'nolog'));
         },
         /**
          * @name 解析获取到的location字符串
@@ -831,7 +837,15 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
          * @private
          */
         CONTROL_IFRAME_ID: 'ERHistroyRecordIframe' + String(Math.random()).replace('.', ''),
-        IFRAME_CONTENT: '<html><head></head><body><input type="text" id="save">' + '<script type="text/javascript">' + 'var loc = "#{0}";' + 'document.getElementById("save").value = loc;' + 'parent.hui.Locator.updateLocation(loc);' + 'parent.hui.Locator.switchToLocation(loc);' + '<' + '/script ></body></html>',
+        IFRAME_CONTENT: [
+            '<html><head></head><body><input type="text" id="save">',
+            '<script type="text/javascript">',
+            'var loc = "#{0}";',
+            'document.getElementById("save").value = loc;',
+            'parent.hui.Locator.updateLocation(loc);',
+            'parent.hui.Locator.switchToLocation(loc);<',
+            '/script></body></html>'
+        ].join(''),
         /**
          * @name 获取location信息
          * @private
@@ -1245,7 +1259,16 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
 
     page404.prototype = {
         getView: function () {
-            var str = hui.Control.format('<div style="font-size:10pt;line-height:1.2em; line-height: 1.2em;padding: 15px;text-align: left;background-color: #f1f1f1;"><h3 style="margin:0px;line-height:3em;">The page cannot be found</h3>' + '<p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>' + '<p>Please try the following:</p>' + '<ul><li>If you typed the page address in the Address bar, make sure that it is spelled correctly.<br/></li>' + '<li>Open the <a href="#/">home page</a>, and then look for links to the information you want.</li>' + '<li>Click the <a href="javascript:history.go(-1)">Back</a> button to try another link. </li>' + '</ul><p><br></p>HTTP 404 - File not found<br />Need any help? Please contact the Monsieur #{name}.<br /></div>', this.querystring);
+            var str = hui.Control.format([
+                '<div style="font-size:10pt;line-height:1.2em; line-height: 1.2em;padding: 15px;text-align: left;background-color: #f1f1f1;">',
+                '<h3 style="margin:0px;line-height:3em;">The page cannot be found</h3>',
+                '<p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>',
+                '<p>Please try the following:</p>',
+                '<ul><li>If you typed the page address in the Address bar, make sure that it is spelled correctly.<br/></li>',
+                '<li>Open the <a href="#/">home page</a>, and then look for links to the information you want.</li>',
+                '<li>Click the <a href="javascript:history.go(-1)">Back</a> button to try another link. </li>',
+                '</ul><p><br></p>HTTP 404 - File not found<br />Need any help? Please contact the Monsieur #{name}.<br /></div>'
+            ].join(''), this.querystring);
             return str;
         },
         initModel: function (callback) {
@@ -1263,7 +1286,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                 me.setInnerHTML(me, hui.Control.format(me.getInnerHTML(), {name: data.result}));
             }});*/
             // 设置_rendered
-            main.setAttribute('_rendered', 'true');
+            this.getMain().setAttribute('_rendered', 'true');
         },
         /**
          * @name 初始化列表行为
@@ -1283,7 +1306,16 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
     hui.Router.setRule('/404', {
         model: new hui.BaseModel(),
         getView: function () {
-            var str = hui.Control.format('<div style="font-size:10pt;line-height:1.2em; line-height: 1.2em;padding: 15px;text-align: left;background-color: #f1f1f1;"><button style="display:none" ui="type:\'Button\'">ddd</button><h3 style="margin:0px;line-height:3em;">The page cannot be found</h3>' + '<p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>' + '<p>Please try the following:</p>' + '<ul><li>If you typed the page address in the Address bar, make sure that it is spelled correctly.<br/></li>' + '<li>Open the <a href="#/">home page</a>, and then look for links to the information you want.</li>' + '<li>Click the <a href="javascript:history.go(-1)">Back</a> button to try another link. </li>' + '</ul><p><br></p>HTTP 404 - File not found<br />Need any help? Please contact the Monsieur #{name}.<br /></div>', this.querystring);
+            var str = hui.Control.format([
+                '<div style="font-size:10pt;line-height:1.2em; line-height: 1.2em;padding: 15px;text-align: left;background-color: #f1f1f1;">',
+                '<button style="display:none" ui="type:\'Button\'">ddd</button><h3 style="margin:0px;line-height:3em;">The page cannot be found</h3>',
+                '<p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>',
+                '<p>Please try the following:</p>',
+                '<ul><li>If you typed the page address in the Address bar, make sure that it is spelled correctly.<br/></li>',
+                '<li>Open the <a href="#/">home page</a>, and then look for links to the information you want.</li>',
+                '<li>Click the <a href="javascript:history.go(-1)">Back</a> button to try another link. </li>',
+                '</ul><p><br></p>HTTP 404 - File not found<br />Need any help? Please contact the Monsieur #{name}.<br /></div>'
+            ].join(''), this.querystring);
             return str;
         },
         getViewAsync: function (callback) {
