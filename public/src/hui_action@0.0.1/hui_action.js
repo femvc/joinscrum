@@ -746,6 +746,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
             }
             if (~url.indexOf('#') || str.length === 1) {
                 href = str.length === 1 ? str[0] : str[1];
+                href = href.replace(/^!/, '');
                 // Parse #~bb=xxx
                 pair = href.match(/^([^~]*)(~(.*))?$/);
                 if (pair) {
@@ -868,7 +869,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
             }
 
             if (hash) {
-                return hash.replace(/^#/, '');
+                return hash.replace(/^#!/, '').replace(/^#/, '');
             }
 
             return '';
@@ -921,7 +922,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
 
             // 增加location带起始#号的容错性
             // 可能有人直接读取location.hash，经过string处理后直接传入
-            loc = loc.replace(/^#/, '');
+            loc = loc.replace(/^#!/, '').replace(/^#/, '');
 
             // 空string当成DEFAULT_INDEX处理
             if (loc.length === 0) {
@@ -1265,7 +1266,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                 '<p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>',
                 '<p>Please try the following:</p>',
                 '<ul><li>If you typed the page address in the Address bar, make sure that it is spelled correctly.<br/></li>',
-                '<li>Open the <a href="#/">home page</a>, and then look for links to the information you want.</li>',
+                '<li>Open the <a href="#!/">home page</a>, and then look for links to the information you want.</li>',
                 '<li>Click the <a href="javascript:history.go(-1)">Back</a> button to try another link. </li>',
                 '</ul><p><br></p>HTTP 404 - File not found<br />Need any help? Please contact the Monsieur #{name}.<br /></div>'
             ].join(''), this.querystring);
@@ -1312,7 +1313,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                 '<p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>',
                 '<p>Please try the following:</p>',
                 '<ul><li>If you typed the page address in the Address bar, make sure that it is spelled correctly.<br/></li>',
-                '<li>Open the <a href="#/">home page</a>, and then look for links to the information you want.</li>',
+                '<li>Open the <a href="#!/">home page</a>, and then look for links to the information you want.</li>',
                 '<li>Click the <a href="javascript:history.go(-1)">Back</a> button to try another link. </li>',
                 '</ul><p><br></p>HTTP 404 - File not found<br />Need any help? Please contact the Monsieur #{name}.<br /></div>'
             ].join(''), this.querystring);

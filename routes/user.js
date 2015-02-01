@@ -79,11 +79,7 @@ exports.detail = function (req, res, next) {
     return get_user(req, res, user);
 };
 
-exports.save = function (req, res, next) {
-    var uid = req.paramlist.uid,
-        user = {},
-        callback;
-
+function add(req, res, next) {
     if (!req.paramlist.username) {
         return response.err(req, res, 'MISSING_PARAMETERS', 'username');
     }
@@ -94,55 +90,75 @@ exports.save = function (req, res, next) {
         return response.err(req, res, 'MISSING_PARAMETERS', 'password');
     }
 
+    var user = {};
     user.username = req.paramlist.username;
     user.password = req.paramlist.password;
-
-    callback = function (err, doc) {
-        if (err) {
-            response.send(req, res, 'INTERNAL_DB_OPT_FAIL');
-        }
-        response.ok(req, res, doc);
-    };
+    user.realname = req.paramlist.realname || req.paramlist.username;
 
     var now = new Date();
     var date = global.common.formatDate(now, 'yyyy-MM-dd HH:mm:ss');
-    // Update
-    if (uid) {
-        user.update_time = date;
-        user.uid = uid;
-        userModel.update({
-            uid: uid
-        }, {
-            $set: user
-        }, {
-            upsert: false,
-            multi: false
-        }, function (err, doc) {
-            if (err) {
-                callback(err, doc);
-            }
-            else {
-                return get_user(req, res, {uid: req.paramlist.uid});
-            }
-        });
-    }
-    // Add
-    else {
-        get_user(req, res, {username: req.paramlist.username}, function (doc) {
-            if (doc) {
-                response.err(req, res, 'USER_ALREADY_EXIST');
-            }
-            else {
-                user.update_time = date;
-                user.uid = global.common.formatDate(now, 'yyyyMMddHHmmss') + '_' + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 16);
 
-                userModel.insert(user, callback);
-            }
-        });
+    get_user(req, res, {username: req.paramlist.username}, function (doc) {
+        if (doc) {
+            response.err(req, res, 'USER_ALREADY_EXIST');
+        }
+        else {
+            user.update_time = date;
+            user.uid = global.common.formatDate(now, 'yyyyMMddHHmmss') + '_' + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 16);
+
+            userModel.insert(user, function (err, doc) {
+                if (err) {
+                    response.send(req, res, 'INTERNAL_DB_OPT_FAIL');
+                }
+                response.ok(req, res, doc);
+            });
+        }
+    });
+
+};
+function save(req, res, next) {
+    if (!req.paramlist.uid) {
+        // return response.err(req, res, 'MISSING_PARAMETERS', 'uid');
+        return add(req, res, next);
     }
+
+    var user = {};
+    var arr = ['username', 'password', 'realname'];
+    for (var i=0,len=arr.length; i<len; i++) {
+        if (req.paramlist[arr[i]] !== undefined) {
+            user[arr[i]] = req.paramlist[arr[i]];
+        }
+    }
+
+    if (JSON.stringify(user) === '{}') {
+        return get_user(req, res, {uid: req.paramlist.uid});
+    }
+
+    var now = new Date();
+    var date = global.common.formatDate(now, 'yyyy-MM-dd HH:mm:ss');
+    user.update_time = date;
+
+    userModel.update({
+        uid: req.paramlist.uid
+    }, {
+        $set: user
+    }, {
+        upsert: false,
+        multi: false
+    }, function (err, doc) {
+        if (err) {
+            response.send(req, res, 'INTERNAL_DB_OPT_FAIL');
+        }
+        else {
+            return get_user(req, res, {uid: req.paramlist.uid});
+        }
+    });
+
 
 };
 
+exports.add = add;
+exports.save = save;
 exports.login = function (req, res, next) {
     if (!req.paramlist.username) {
         return response.err(req, res, 'MISSING_PARAMETERS', 'username');

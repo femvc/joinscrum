@@ -17,10 +17,10 @@
 
     </style>
 
+    <link rel="stylesheet" type="text/css" href="vm/m.css">
     <link rel="stylesheet" type="text/css" href="vm/taskboard.css">
     <link rel="stylesheet" type="text/css" href="vm/webclient.css">
 
-    <link rel="stylesheet" type="text/css" href="vm/css/ui-modal.css">
     <link rel="stylesheet" type="text/css" href="vm/css/bootstrap-btn.css">
     <script type="text/javascript">
         'use strict';
@@ -66,6 +66,7 @@
     <!--.page>.page_head>.logo^+.page_banner>h1.test_title{你想知道自己前端技术实力排名吗？}+.test_desc{2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，想知道你自己技术实力的排名吗}+.test_btn{立即测试}^+.page_foot{2014-10-17}-->
     <div class="page">
         <div id="main" style="min-height: 750px;">
+            <!-- Login -->
             <div class="page_body" id="login" style="display:none">
                 <!-- target: login -->
                 <style type="text/css">
@@ -100,13 +101,13 @@
                                     <tr>
                                         <td valign="top">Username:</td>
                                         <td>
-                                            <input type="text" value="" style="width: 120px;" ui="type:'TextInput',formname:'username',rule:'required'">
+                                            <input type="text" value="andy" style="width: 120px;" ui="type:'TextInput',formname:'username',rule:'required'">
                                         </td>
                                     </tr>
                                     <tr>
                                         <td valign="top">Password:</td>
                                         <td>
-                                            <input type="password" value="" style="width: 120px;" ui="type:'TextInput',formname:'password',rule:'required'">
+                                            <input type="password" value="aaa" style="width: 120px;" ui="type:'TextInput',formname:'password',rule:'required'">
                                         </td>
                                     </tr>
                                     <tr>
@@ -326,10 +327,10 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <div ui="type:'Dropdown',formname:'product_list',data_value:'product_id',data_text:'product_name'" style="width:150px;"></div>
+                                    <div ui="type:'Dropdown',formname:'product_list',data_value:'product_id',data_text:'product_name',default_select:true" style="width:150px;"></div>
                                 </td>
                                 <td>
-                                    <div ui="type:'Dropdown',formname:'sprint_list',data_value:'sprint_id',data_text:'sprint_name'" style="width:450px;"></div>
+                                    <div ui="type:'Dropdown',formname:'sprint_list',data_value:'sprint_id',data_text:'sprint_name',default_select:true" style="width:450px;"></div>
                                 </td>
                                 <td>
                                     <input id="filterSprints" name="filterSprints" type="checkbox" />
@@ -588,14 +589,16 @@
                                 }
                             }
                             me.getByFormname('sprint_list').setOptions(sprint_list);
-                            me.getByFormname('sprint_list').setValue(hui.getCookie('selected_sprint'));
+                            if (hui.getCookie('selected_sprint')) {
+                                me.getByFormname('sprint_list').setValue(hui.getCookie('selected_sprint'));
+                            }
                             
                             hui.setCookie('taskboard_product', product_id)
                             me.switchSprint();
                         },
                         switchSprint: function () {
                             var me = this,
-                                sprint_id = me.getByFormname('sprint_list').getValue() || -1;
+                                sprint_id = me.getByFormname('sprint_list').getValue() || '';
                             
                             hui.setCookie('selected_sprint', sprint_id);
                             
@@ -669,7 +672,7 @@
                             var me = this,
                                 list = me.model.get('user_list');
                             for (var i=0,len=list.length; i<len; i++) {
-                                list[i].user_label = list[i].username + '(' + list[i].uid + ')';
+                                list[i].user_label = (list[i].realname || list[i].username) + ' (' + list[i].username + ')';
                             }
                             return list;        
                         },

@@ -617,7 +617,7 @@ page404.prototype = {
             +'<p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>'
             +'<p>Please try the following:</p>'
             +'<ul><li>If you typed the page address in the Address bar, make sure that it is spelled correctly.<br/></li>'
-            +'<li>Open the <a href="#/">home page</a>, and then look for links to the information you want.</li>'
+            +'<li>Open the <a href="#!/">home page</a>, and then look for links to the information you want.</li>'
             +'<li>Click the <a href="javascript:history.go(-1)">Back</a> button to try another link. </li>'
             +'</ul><p><br></p>HTTP 404 - File not found<br />Need any help? This service is #{name}.<br /></div>';
         return str;
