@@ -110,7 +110,7 @@ function add(req, res, next) {
                 if (err) {
                     response.send(req, res, 'INTERNAL_DB_OPT_FAIL');
                 }
-                response.ok(req, res, doc);
+                response.ok(req, res, doc[0]);
             });
         }
     });

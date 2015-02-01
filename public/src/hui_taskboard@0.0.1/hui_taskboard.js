@@ -85,9 +85,9 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
                 '<div class="pbiestimate">Estimate: - #{backlog_estimate}</div>' +
                 '<div class="pbidone"><input type="checkbox" id="markdone_#{backlog_id}" onclick="hui.Master.get().doneBacklog(this)" ><label for="markdone_#{backlog_id}">Done</label></div>' +
             '</div>' +
-            '<div style="width: 100%; height: 30px;">' +
+            '<div style="width: 100%; height: 30px; text-align: right; padding-top: 6px;">' +
                 '<div id="person_#{backlog_id}"></div>' +
-                '<button class="link" id="addtask_#{backlog_id}" style="cursor: pointer;" onclick="hui.Master.get().addTask(\'#{backlog_id}\')">addTask</button>' +
+                '<button class="link" id="addtask_#{backlog_id}" style="cursor: pointer;" onclick="hui.Master.get().addTask(\'#{backlog_id}\')">add</button>' +
             '</div>';
             return str;
         },
@@ -167,7 +167,7 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
             taskElem = tmpContainer.childNodes[0];
             taskElem = taskElem&&taskElem.tagName ? taskElem : tmpContainer.childNodes[1];
             td = hui.g(status + '_' + backlog_id);
-            td.appendChild(taskElem);
+            td && td.appendChild(taskElem);
 
             me.updateTask(task);
             

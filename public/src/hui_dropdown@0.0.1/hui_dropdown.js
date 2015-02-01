@@ -241,7 +241,7 @@ hui.define('hui_dropdown', ['hui_util', 'hui_control'], function () {
             if (me.autoValidate) {
                 me.validate();
             }
-            if (value !== c) {
+            if (value !== c && c !== undefined) {
                 me.onchange(value, c);
             }
         },
@@ -254,7 +254,7 @@ hui.define('hui_dropdown', ['hui_util', 'hui_control'], function () {
             }
             else {
                 hui.setInnerText(me.getTitle(), me.placeholder || '');
-                me.setMainValue('');
+                me.setMainValue(undefined);
             }
         },
         setValue: function (v) {

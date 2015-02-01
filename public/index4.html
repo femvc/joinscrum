@@ -368,43 +368,15 @@
                     </style>
                     <table id="displayPrefs">
                         <tr>
-                            <td width="55%">
+                            <td>
                                 <input id="include_deleted" name="include_deleted" type="checkbox" onclick="hui.Master.get().switchSprint()" />
                                 <label for="include_deleted">Show deleted task</label>
                             </td>
                             <td>
-                                <label>Highlight Tasks</label>
-                                <div ui="type:'Dropdown',formname:'user_list',data_value:'uid',data_text:'user_label'" style="width:230px;">
+                                <div ui="type:'Dropdown',formname:'user_list',data_value:'uid',data_text:'user_label'" style="width:230px; float: right;">
                                     <!--option value="Aaron.lu (aaron.lu)">Aaron.lu (aaron.lu)</option-->
                                 </div>
-                            </td>
-                            <td width="100">
-                                <div id="colorSelector">
-                                    <img class="swatch" src="vm/img/Color_0.png" />
-                                    <img class="myTaskColor" src="vm/img/Dropdown_Arrow_button.gif" width="14" height="14" />
-                                </div>
-                                <div class="myTaskColorMenu" id="myTaskColorMenu" style="display:none;">
-                                    <ul>
-                                        <li id="li_color_0">
-                                            <img id="color_0" src="vm/img/Color_0.png" />
-                                        </li>
-                                        <li id="li_color_1">
-                                            <img id="color_1" src="vm/img/Color_1.png" />
-                                        </li>
-                                        <li id="li_color_2">
-                                            <img id="color_2" src="vm/img/Color_2.png" />
-                                        </li>
-                                        <li id="li_color_3">
-                                            <img id="color_3" src="vm/img/Color_3.png" />
-                                        </li>
-                                        <li id="li_color_4">
-                                            <img id="color_4" src="vm/img/Color_4.png" />
-                                        </li>
-                                        <li id="li_color_5">
-                                            <img id="color_5" src="vm/img/Color_5.png" />
-                                        </li>
-                                    </ul>
-                                </div>
+                                <label style="float: right;margin-top: 5px;margin-right: 10px;">Highlight Tasks</label>
                             </td>
                         </tr>
                     </table>
@@ -979,7 +951,7 @@
                                 isAdd && me.saveTaskIndex(taskValue);
                             }
                         },
-                        saveTaskIndex: function (taskValue) {
+                        saveTaskIndex: function (taskValue) {return;
                             var me = this,
                                 task_id = taskValue.task_id,
                                 backlogItem = hui.g('task_' + task_id).parentNode,
