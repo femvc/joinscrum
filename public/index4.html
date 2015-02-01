@@ -593,28 +593,28 @@
                                 }
                             });
                             
-                            // Requester.get('/ue_api/internal/taskindex_list?sprint_id='+sprint_id, {
-                            //     onsuccess: function (data) {
-                            //         //me.model.set('task_list'   , hui.sortBy(data[1].items, 'task_index'));
-                            //         me.model.set('taskindex_list'   , data[1].items);
-                            //         me.switchSprintCallback();
-                            //     }
-                            // });
+                            Requester.get('/ue_api/internal/taskindex_list?sprint_id='+sprint_id, {
+                                onsuccess: function (data) {
+                                    //me.model.set('task_list'   , hui.sortBy(data[1].items, 'task_index'));
+                                    me.model.set('taskindex_list'   , data[1].items);
+                                    me.switchSprintCallback();
+                                }
+                            });
 
-                            // Requester.get('/ue_api/internal/burden?sprint_id='+sprint_id, {
-                            //     onsuccess: function (data) {
-                            //         //me.model.set('task_list'   , hui.sortBy(data[1], 'task_index'));
-                            //         me.model.set('burden'   , data[1].items);
-                            //         me.switchSprintCallback();
-                            //     }
-                            // });
+                            Requester.get('/ue_api/internal/burden?sprint_id='+sprint_id, {
+                                onsuccess: function (data) {
+                                    //me.model.set('task_list'   , hui.sortBy(data[1], 'task_index'));
+                                    me.model.set('burden'   , data[1].items);
+                                    me.switchSprintCallback();
+                                }
+                            });
                             
                             
                         },
                         switchSprintCallback: function () {
                             var me = this,
                                 taskboard = me.getByFormname('taskboard');
-                            if (me.model.get('backlog_list') && me.model.get('task_list')) { // && me.model.get('taskindex_list') && me.model.get('burden')
+                            if (me.model.get('backlog_list') && me.model.get('task_list') && me.model.get('taskindex_list') && me.model.get('burden')) { //
                                 taskboard.taskList = me.model.get('task_list'); //me.sortTask();
                                 me.repaintTaskboard();
                             }
@@ -951,7 +951,7 @@
                                 isAdd && me.saveTaskIndex(taskValue);
                             }
                         },
-                        saveTaskIndex: function (taskValue) {return;
+                        saveTaskIndex: function (taskValue) {
                             var me = this,
                                 task_id = taskValue.task_id,
                                 backlogItem = hui.g('task_' + task_id).parentNode,
