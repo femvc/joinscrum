@@ -45,7 +45,7 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
                 '</colgroup>' + 
                 '<thead>' + 
                     '<tr class="taskboard-header">' + 
-                        '<th>Backlog Items <button class="link" style="margin-left:40px;margin-right:-20px;" onclick="hui.Master.get().addBacklog()">add</button></th>' + 
+                        '<th>Backlog Items <button class="link" style="margin-left:5px;margin-right:-20px;" onclick="hui.Master.get().addBacklog()">add</button></th>' + 
                         '<th colspan="4">Tasks / Status</th>' + 
                     '</tr>' + 
                     '<tr class="taskstatus">' + 
@@ -64,7 +64,7 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
             var str = 
             '<table>' +
                 '<tr>' +
-                    '<td class="taskboardCell pbiCell" id="pbi_#{backlog_id}">#{pbi_info}</td>' +
+                    '<td class="taskboardCell pbiCell" id="pbi_#{backlog_id}">#{!pbi_info}</td>' +
                     '<td class="taskboardCell" id="notstarted_#{backlog_id}" style="position: relative;"></td>' +
                     '<td class="taskboardCell" id="impeded_#{backlog_id}" style="position: relative;"></td>' +
                     '<td class="taskboardCell" id="inprogress_#{backlog_id}" style="position: relative;"></td>' +
@@ -77,7 +77,7 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
             var str = 
             '<div>' +
                 '<span ondblclick="hui.Master.get().editBacklog(\'#{backlog_id}\')">' + 
-                '<span class="pbikey"   id="pbikey_#{backlog_id}">(#{product_key}-#{backlog_id})</span>&nbsp;' +
+                '<span class="pbikey"   id="pbikey_#{backlog_id}">(#{product_key})</span>&nbsp;' +
                 '<span class="pbititle" id="pbititle_#{backlog_id}">#{backlog_name}</span></span><br><br><br>' +
                 '<div  class="pbidesc"  id="pbidesc_#{backlog_id}">#{backlog_desc}</div>' +
             '</div>' +
@@ -87,7 +87,7 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
             '</div>' +
             '<div style="width: 100%; height: 30px;">' +
                 '<div id="person_#{backlog_id}"></div>' +
-                '<img title="Add Task" src="vm/img/add-task-active.gif" id="addtask_#{backlog_id}" style="cursor: pointer;" onclick="hui.Master.get().addTask(\'#{backlog_id}\')" class="addtask">' +
+                '<button class="link" id="addtask_#{backlog_id}" style="cursor: pointer;" onclick="hui.Master.get().addTask(\'#{backlog_id}\')">addTask</button>' +
             '</div>';
             return str;
         },
@@ -129,7 +129,7 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
         addBacklogRow: function (backlogValue) {
             var me = this,
                 taskboard = hui.g('taskboard'),
-                row = hui.dom.createElement('DIV'),
+                row = document.createElement('DIV'),
                 pbi_info,
                 table,
                 tr;
@@ -149,10 +149,10 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
             taskboard.appendChild(tr);
             taskboard.insertBefore(tr, taskboard.rows[0]);
             
-            Droppables.add(hui.g('notstarted_' + backlogValue.backlog_id));
-            Droppables.add(hui.g('impeded_'     + backlogValue.backlog_id));
-            Droppables.add(hui.g('inprogress_' + backlogValue.backlog_id));
-            Droppables.add(hui.g('done_'        + backlogValue.backlog_id));
+            // Droppables.add(hui.g('notstarted_' + backlogValue.backlog_id));
+            // Droppables.add(hui.g('impeded_'     + backlogValue.backlog_id));
+            // Droppables.add(hui.g('inprogress_' + backlogValue.backlog_id));
+            // Droppables.add(hui.g('done_'        + backlogValue.backlog_id));
         },
         addTask: function(task){
             var me = this,
@@ -160,7 +160,7 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
                 status = task.task_status,
                 td,
                 taskElem,
-                tmpContainer = hui.dom.createElement('DIV');
+                tmpContainer = document.createElement('DIV');
             
             // todo
             tmpContainer.innerHTML = hui.Control.format(me.getTaskTpl(), task);
@@ -171,23 +171,23 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
 
             me.updateTask(task);
             
-            Draggable('task_'+task.task_id, {
-                //preventDefault: true,
-                start: function(){
-                    var me = this;
-                    me.startTime = new Date();
-                },
-                end:function(){
-                    hui.Master.get().moveTask(this);
-                }
-            });
+            // Draggable('task_'+task.task_id, {
+            //     //preventDefault: true,
+            //     start: function(){
+            //         var me = this;
+            //         me.startTime = new Date();
+            //     },
+            //     end:function(){
+            //         hui.Master.get().moveTask(this);
+            //     }
+            // });
             
         },
         updateTask: function(task){
             var me = this,
                 u = hui.Master.get().getUserItem(task.task_person);
             task.task_remaining = task.task_remaining === '' ? '-' : task.task_remaining;
-            task.user_label = u.user_name + '(' + u.user_id + ')';
+            task.user_label = u.realname + '(' + u.username + ')';
             
             var taskElem = hui.g('task_'+task.task_id);
             if (taskElem) {

@@ -200,7 +200,8 @@
                                     hui.Locator.redirect('/');
                                 }
                                 else {
-                                    hui.Locator.reload();
+                                    // hui.Locator.reload();
+                                    window.location.reload();
                                 }
                             }
                             else {
@@ -258,7 +259,7 @@
                 </div>
                 <div class="content">
                     <div id="needsUpdate" style="display: none;">
-                        <img src="vm/img/refresh_alert_final.gif" alt="Changes have been made to this page by another User. Click this message to update display." onclick="hui.Locator.reload();" />
+                        <img src="vm/img/refresh_alert_final.gif" alt="Changes have been made to this page by another User. Click this message to update display." onclick="window.location.reload();//hui.Locator.reload();" />
                     </div>
                     <div class="error" id="noSprints" style="display: none">
                         There are no sprints in the selected product.
@@ -615,7 +616,7 @@
                             Requester.get('/ue_api/internal/task_list?sprint_id='+sprint_id + (include_deleted? '&include_deleted=all' : ''), {
                                 onsuccess: function (data) {
                                     //me.model.set('task_list'   , hui.sortBy(data[1].items, 'task_index'));
-                                    me.model.set('task_list'   , data[1]);
+                                    me.model.set('task_list'   , data[1].items);
                                     me.switchSprintCallback();
                                 }
                             });
@@ -623,7 +624,7 @@
                             // Requester.get('/ue_api/internal/taskindex_list?sprint_id='+sprint_id, {
                             //     onsuccess: function (data) {
                             //         //me.model.set('task_list'   , hui.sortBy(data[1].items, 'task_index'));
-                            //         me.model.set('taskindex_list'   , data[1]);
+                            //         me.model.set('taskindex_list'   , data[1].items);
                             //         me.switchSprintCallback();
                             //     }
                             // });
@@ -631,7 +632,7 @@
                             // Requester.get('/ue_api/internal/burden?sprint_id='+sprint_id, {
                             //     onsuccess: function (data) {
                             //         //me.model.set('task_list'   , hui.sortBy(data[1], 'task_index'));
-                            //         me.model.set('burden'   , data[1]);
+                            //         me.model.set('burden'   , data[1].items);
                             //         me.switchSprintCallback();
                             //     }
                             // });
@@ -641,9 +642,8 @@
                         switchSprintCallback: function () {
                             var me = this,
                                 taskboard = me.getByFormname('taskboard');
-                            if (me.model.get('backlog_list') && me.model.get('task_list') && me.model.get('taskindex_list') && 
-                                me.model.get('burden')) {
-                                taskboard.taskList = me.sortTask();
+                            if (me.model.get('backlog_list') && me.model.get('task_list')) { // && me.model.get('taskindex_list') && me.model.get('burden')
+                                taskboard.taskList = me.model.get('task_list'); //me.sortTask();
                                 me.repaintTaskboard();
                             }
                         },
@@ -690,53 +690,29 @@
                             }
                             return item;        
                         },
-                        getProduct: function (id) {
+                        getDataItem: function (n, id) {
                             var me = this,
-                                list = me.model.get('product_list'),
+                                list = me.model.get(n + '_list'),
                                 item = null;
                             for (var i=0,len=list.length; i<len; i++) {
-                                if (list[i].product_id == id) {
+                                if (list[i][n + '_id'] === id) {
                                     item = list[i];
                                     break;
                                 }
                             }
                             return item;        
+                        },
+                        getProduct: function (id) {
+                            return this.getDataItem('product', id);        
                         },
                         getSprint: function (id) {
-                            var me = this,
-                                list = me.model.get('sprint_list'),
-                                item = null;
-                            for (var i=0,len=list.length; i<len; i++) {
-                                if (list[i].sprint_id == id) {
-                                    item = list[i];
-                                    break;
-                                }
-                            }
-                            return item;        
+                            return this.getDataItem('sprint', id);      
                         },
                         getBacklogItem: function (id) {
-                            var me = this,
-                                list = me.model.get('backlog_list'),
-                                item = null;
-                            for (var i=0,len=list.length; i<len; i++) {
-                                if (list[i].backlog_id == id) {
-                                    item = list[i];
-                                    break;
-                                }
-                            }
-                            return item;        
+                            return this.getDataItem('backlog', id);    
                         },
                         getTaskItem: function (id) {
-                            var me = this,
-                                list = me.model.get('task_list'),
-                                item = null;
-                            for (var i=0,len=list.length; i<len; i++) {
-                                if (list[i].task_id == id) {
-                                    item = list[i];
-                                    break;
-                                }
-                            }
-                            return item;        
+                            return this.getDataItem('task', id); 
                         },
                         /**
                          * @name 新增backlog
@@ -777,11 +753,11 @@
                                 id: 'editBacklog', 
                                 title: backlog_id ? ' Edit Backlog' : ' Add Backlog', 
                                 contentView: 'taskboard_addbacklog', 
-                                size: { width:'500px', height: '310px', bottom: '8%'}
+                                size: { width:'500px', height: '340px', bottom: '8%'}
                             });
                             this.appendControl(nc);
                             // 绑定事件
-                            nc.doAction_save = new Function('hui.Master.get().saveBacklog()');
+                            nc.getByFormname('submit').onclick = new Function('hui.Master.get().saveBacklog()');
                             
                             nc.setValueByTree(backlogValue);
                             nc.show();
@@ -794,7 +770,7 @@
                             if (nc && nc.validate()) {
                                 var backlogValue = nc.getParamMap();
                                 
-                                Requester.get(backlogValue.backlog_id ? '/ue_api/internal/backlog_edit' : '/ue_api/internal/backlog_add', {
+                                Requester.get('/ue_api/internal/backlog_save', {
                                     data: backlogValue,
                                     onsuccess: hui.fn(me.saveBacklogCallback, me)
                                 });
@@ -802,11 +778,12 @@
                         },
                         saveBacklogCallback: function (data) {
                             var me = this;
-                            if (data.success == 'true') {
+                            if (!data[0] && data[1]) {
                                 // 销毁对话框
                                 hui.Control.getById('editBacklog', me).dispose();
                                 
-                                me.switchSprint(); 
+                                // me.switchSprint(); 
+                                window.location.reload();
                             }
                         },
                         repaintTaskboard: function () {
@@ -845,7 +822,7 @@
                                 
                             }
 
-                            var myLine = new Chart(document.getElementById('chartBurden').getContext('2d')).Bar(barChartData);
+                            // var myLine = new Chart(document.getElementById('chartBurden').getContext('2d')).Bar(barChartData);
                         },
                         
                         /**
@@ -919,10 +896,10 @@
                             });
                             this.appendControl(nc);
                             // 绑定事件
-                            nc.doAction_save = new Function('hui.Master.get().saveTask()');
+                            nc.getByFormname('submit').onclick = new Function('hui.Master.get().saveTask()');
                             
-                            nc.setTitle(taskItem.task_name ? ' Edit Task - ' + taskItem.task_name + '' : 
-                                        ' Add Task to - ' + me.getBacklogItem(taskItem.backlog_id).backlog_name + '');
+                            // nc.setTitle(taskItem.task_name ? ' Edit Task - ' + taskItem.task_name + '' : 
+                            //             ' Add Task to - ' + me.getBacklogItem(taskItem.backlog_id).backlog_name + '');
                             // 必须先初始化options，否则task_person无法setValue!!
                             nc.getByFormname('task_person').setOptions(me.getUserList());
                             nc.getByFormname('task_person').setValue(hui.getCookie('taskboard_user'));
@@ -941,13 +918,13 @@
                             }
                             
                             if (taskValue) {
-                                taskValue.backlog_id = Number(taskValue.backlog_id);
+                                // taskValue.backlog_id = Number(taskValue.backlog_id);
                                 
-                                if (!hui.isEqual(taskValue, me.getTaskItem(taskValue.task_id))) {
+                                if (!hui.util.isEqual(taskValue, me.getTaskItem(taskValue.task_id))) {
                                     // 自己修改的，无需显示刷新提示
                                     hui.setCookie('task_lastmodify', '');
                                     
-                                    Requester.get(taskValue.task_id ? '/ue_api/internal/task_edit' : '/ue_api/internal/task_add', {
+                                    Requester.get('/ue_api/internal/task_save', {
                                         data: taskValue,
                                         onsuccess: hui.fn(me.saveTaskCallback, me)
                                     });
@@ -960,11 +937,11 @@
                         },
                         saveTaskCallback: function (data) {
                             var me = this;
-                            if (data.success == 'true') {
+                            if (!data[0] && data[1]) {
                                 var taskboard = me.getByFormname('taskboard'),
                                     list = me.model.get('task_list'),
                                     isAdd = true,
-                                    taskValue = data[1][0];
+                                    taskValue = data[1];
                                 // 注：更新task_list
                                 for (var i=0,len=list.length; i<len; i++) {
                                     if (list[i].task_id === taskValue.task_id) {
@@ -1103,11 +1080,11 @@
                                 id: 'editProduct', 
                                 title: product_id ? ' Edit Product' : ' Add Product', 
                                 contentView: 'taskboard_addproduct', 
-                                size: { width:'500px', height: '310px', bottom: '8%'}
+                                size: { width:'500px', height: '340px', bottom: '8%'}
                             });
                             this.appendControl(nc);
                             // 绑定事件
-                            nc.doAction_save = new Function('hui.Master.get().saveProduct()');
+                            nc.getByFormname('submit').onclick = new Function('hui.Master.get().saveProduct()');
                             
                             nc.setValueByTree(productValue);
                             nc.show();
@@ -1119,7 +1096,7 @@
                             if (nc && nc.validate()) {
                                 var productValue = nc.getParamMap();
                                 
-                                Requester.get(productValue.product_id ? '/ue_api/internal/product_edit' : '/ue_api/internal/product_add', {
+                                Requester.get('/ue_api/internal/product_save', {
                                     data: productValue,
                                     onsuccess: hui.fn(me.saveProductCallback, me)
                                 });
@@ -1127,12 +1104,13 @@
                         },
                         saveProductCallback: function (data) {
                             var me = this;
-                            if (data.success == 'true') {
+                            if (!data[0] && data[1]) {
                                 // 销毁对话框
                                 hui.Control.getById('editProduct', me).dispose();
                                 
-                                hui.setCookie('taskboard_product', data[1][0].product_id);
-                                hui.Locator.reload();
+                                // hui.setCookie('taskboard_product', data[1][0].product_id);
+                                // hui.Locator.reload();
+                                window.location.reload();
                             }
                         },
                         /**
@@ -1171,11 +1149,11 @@
                                 id: 'editSprint', 
                                 title: sprint_id ? ' Edit Sprint' : ' Add Sprint', 
                                 contentView: 'taskboard_addsprint', 
-                                size: { width:'500px', height: '310px', bottom: '8%'}
+                                size: { width:'500px', height: '340px', bottom: '8%'}
                             });
                             this.appendControl(nc);
                             // 绑定事件
-                            nc.doAction_save = new Function('hui.Master.get().saveSprint()');
+                            nc.getByFormname('submit').onclick = new Function('hui.Master.get().saveSprint()');
                             
                             nc.setValueByTree(sprintValue);
                             nc.show();
@@ -1187,7 +1165,7 @@
                             if (nc && nc.validate()) {
                                 var sprintValue = nc.getParamMap();
                                 
-                                Requester.get(sprintValue.sprint_id ? '/ue_api/internal/sprint_edit' : '/ue_api/internal/sprint_add', {
+                                Requester.get('/ue_api/internal/sprint_save', {
                                     data: sprintValue,
                                     onsuccess: hui.fn(me.saveSprintCallback, me)
                                 });
@@ -1195,12 +1173,13 @@
                         },
                         saveSprintCallback: function (data) {
                             var me = this;
-                            if (data.success == 'true') {
+                            if (!data[0] && data[1]) {
                                 // 销毁对话框
                                 hui.Control.getById('editSprint', me).dispose();
                                 
-                                hui.setCookie('selected_sprint', data[1][0].sprint_id);
-                                hui.Locator.reload();
+                                // hui.setCookie('selected_sprint', data[1][0].sprint_id);
+                                // hui.Locator.reload();
+                                window.location.reload();
                             }
                         }
                     };
@@ -1213,6 +1192,10 @@
             <div class="page_body" id="history" style="background-color: white;display: none;">
                 <!-- target: taskboard_addsprint -->
                 <table>
+                    <tr>
+                        <td align="right" valign="top"> </td>
+                        <td align="left" valign="top" colspan="3"><h3>Add Sprint</h3></td>
+                    </tr>
                     <tr>
                         <td align="right" valign="top">Sprint Name:</td>
                         <td>
@@ -1233,10 +1216,20 @@
                             <input type="text" size="16" ui="type:'TextInput',formname:'sprint_index'" />
                         </td>
                     </tr>
-                </table>
+                    <tr>
+                        <td align="right" valign="top"> </td>
+                        <td height="40" valign="bottom">
+                            <button ui="type:'Button',formname:'submit'">提交</button>
+                        </td>
+                    </tr>
+               </table>
 
                 <!-- target: taskboard_addproduct -->
                 <table>
+                    <tr>
+                        <td align="right" valign="top"> </td>
+                        <td align="left" valign="top" colspan="3"><h3>Add Product</h3></td>
+                    </tr>
                     <tr>
                         <td align="right" valign="top">Name:</td>
                         <td>
@@ -1260,10 +1253,21 @@
                             <input type="text" size="13" ui="type:'TextInput',formname:'product_index'" />
                         </td>
                     </tr>
+                    <tr>
+                        <td align="right" valign="top"> </td>
+                        <td height="40" valign="bottom">
+                            <button ui="type:'Button',formname:'submit'">提交</button>
+                        </td>
+                    </tr>
+                    
                 </table>
 
                 <!-- target: taskboard_addbacklog -->
                 <table>
+                    <tr>
+                        <td align="right" valign="top"> </td>
+                        <td align="left" valign="top" colspan="3"><h3>Add Backlog</h3></td>
+                    </tr>
                     <tr>
                         <td align="right" valign="top">Title:</td>
                         <td>
@@ -1287,7 +1291,13 @@
                             <input type="text" size="16" ui="type:'TextInput',formname:'backlog_index'" />
                         </td>
                     </tr>
-                </table>
+                    <tr>
+                        <td align="right" valign="top"> </td>
+                        <td height="40" valign="bottom">
+                            <button ui="type:'Button',formname:'submit'">提交</button>
+                        </td>
+                    </tr>
+               </table>
 
 
                 <!-- target: taskboard_addtask -->
@@ -1295,6 +1305,10 @@
 
                 <div id="addTaskModal">
                     <table id="addTaskTable">
+                        <tr>
+                            <td align="right" valign="top"> </td>
+                            <td align="left" valign="top" colspan="3"><h3>Add Task</h3></td>
+                        </tr>
                         <tr>
                             <td align="right" valign="top">Title:</td>
                             <td>
@@ -1341,7 +1355,7 @@
                         <tr>
                             <td class="inputLabel">Status:</td>
                             <td>
-                                <div ui="type:'Dropdown',formname:'task_status',options:[{value:\'notstarted\',text:'Not Started'},{value:\'impeded\',text:'Impeded'},{value:\'inprogress\',text:'In Progress'},{value:\'done\',text:'Done'}]">
+                                <div ui="type:'Dropdown',formname:'task_status',options:[{value:\'notstarted\',text:'Not Started'},{value:\'impeded\',text:'Impeded'},{value:\'inprogress\',text:'In Progress'},{value:\'done\',text:'Done'}],size:{width:\'150px\'},default_select:true">
                                 </div>
                             </td>
                         </tr>
@@ -1364,6 +1378,12 @@
                         </tr>
                         <tr style="height: 30px;">
                             <td colspan="2">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top"> </td>
+                            <td height="40" valign="bottom">
+                                <button ui="type:'Button',formname:'submit'">提交</button>
+                            </td>
                         </tr>
                     </table>
                 </div>
