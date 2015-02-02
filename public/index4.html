@@ -64,7 +64,7 @@
 
 <body style="" onload123="initForTest()">
     <!--.page>.page_head>.logo^+.page_banner>h1.test_title{你想知道自己前端技术实力排名吗？}+.test_desc{2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，想知道你自己技术实力的排名吗}+.test_btn{立即测试}^+.page_foot{2014-10-17}-->
-    <div class="page">
+    <div class="page" style="width: 980px; margin: auto;">
         <div id="main" style="min-height: 750px;">
             <!-- Login -->
             <div class="page_body" id="login" style="display:none">
@@ -84,15 +84,16 @@
                     .header a { text-decoration: underline; color: white; }
                 </style>
                 <div class="header">
+                    <h1 class="header_title">JoinScrum</h1>
                     <div class="headertext">
-                        <a href="#">ScrumWorks Pro Home</a> | <a href="#!/help" target="_blank">Help</a>
+                        <a href="#">Home</a> | <a href="#!/help" target="_blank">Help</a>
                     </div>
                 </div>
                 <div>
-                    <div class="loginboxtitle">Web Client Login</div>
-                    <div class="loginbox">
+                    <div class="loginboxtitle" style="width:890px;margin-left:30px;">Web Client Login</div>
+                    <div class="loginbox" style="width:890px;margin-left:30px;">
                         <div>
-                            The ScrumWorks Pro Web Client provides a personalized view and limited updating of ScrumWorks Pro data such as your task status and remaining hours.
+                            The JoinScrum provides a personalized view and limited updating of scrum data such as your task status and remaining hours.
                         </div>
                         <div class="logintable" style="line-height: 30px;">
                             <form method="post" action="/">
@@ -123,7 +124,7 @@
                         </div>
                     </div>
                 </div>
-                <div style="color: #AAAAAA; margin: 20px; text-align: center; width: 970px;">Copyright © 2010 CollabNet, Inc. All rights reserved.</div>
+                <div style="color: #AAAAAA; margin: 20px; text-align: center; width: 970px;">Copyright © 2015 JoinScrum, Inc. All rights reserved.</div>
             </div>
             <script>
                 function initPageLogin() {
@@ -179,7 +180,7 @@
                                 Requester.get('/ue_api/internal/user_login', {
                                     data: { 
                                         username: username,
-                                        password: password
+                                        password: MD5.encode(password)
                                     },  
                                     onsuccess: hui.fn(me.loginCallback, me)
                                 });
@@ -248,11 +249,12 @@
                 </style>
 
                 <div class="header">
+                    <h1 class="header_title">JoinScrum</h1>
                     <div class="headertext">
                         Welcome: <span id="welcome_user">andy.wang</span>
                         <span style="padding-left: 20px; font-size: 8pt;">
                             <a href="#!/login~logout=true">Log out</a> |
-                            <a href="#">ScrumWorks Pro Home</a> |
+                            <a href="#">Home</a> |
                             <a href="#!/help" target="_blank">Help</a>
                         </span>
                     </div>
@@ -290,8 +292,8 @@
                                         <td><span id="displayMode">Taskboard View:</span>
                                             <input type="radio" checked="true" class="displaymode" value="teamview" name="displaymode" id="teamview">
                                             <label for="teamview">All Tasks</label>
-                                            <input type="radio" class="displaymode" value="mytasksview" name="displaymode" id="mytasksview">
-                                            <label for="mytasksview">My Tasks</label>
+                                            <!--input type="radio" class="displaymode" value="mytasksview" name="displaymode" id="mytasksview">
+                                            <label for="mytasksview">My Tasks</label-->
                                         </td>
                                         <td>
                                             <div id="todaysDate">
@@ -369,7 +371,7 @@
                     <table id="displayPrefs">
                         <tr>
                             <td>
-                                <input id="include_deleted" name="include_deleted" type="checkbox" onclick="hui.Master.get().switchSprint()" />
+                                <input id="include_deleted" name="include_deleted" type="checkbox" onclick="hui.setCookie('include_deleted', String(this.checked));hui.Master.get().switchSprint()" />
                                 <label for="include_deleted">Show deleted task</label>
                             </td>
                             <td>
@@ -462,7 +464,7 @@
                         There are no impediments for this team.
                     </div>
                 </div>
-                <div style="    color: #AAAAAA;margin: 20px;text-align: center;width: 970px;">Copyright &copy; 2010 CollabNet, Inc. All rights reserved.</div>
+                <div style="    color: #AAAAAA;margin: 20px;text-align: center;width: 970px;">Copyright &copy; 2015 JoinScrum, Inc. All rights reserved.</div>
             </div>
             <script>
                 function initPageIndex() {
@@ -526,6 +528,10 @@
                             productList.onchange = hui.fn(me.switchProduct, me);
                             sprintList.onchange  = hui.fn(me.switchSprint, me);
                             userList.onchange    = hui.fn(me.switchUser, me);
+
+                            if (hui.getCookie('include_deleted') === 'true') {
+                                hui.g('include_deleted').checked = 'checked';
+                            }
                             
                             me.getSprintData(function(){
                                 me.getByFormname('product_list').setOptions(me.model.get('product_list'));
@@ -584,8 +590,8 @@
                                     me.switchSprintCallback();
                                 }
                             });
-                            var include_deleted = hui.g('include_deleted').checked;
-                            Requester.get('/ue_api/internal/task_list?sprint_id='+sprint_id + (include_deleted? '&include_deleted=all' : ''), {
+                            var include_deleted = hui.getCookie('include_deleted') === 'true' ? '' : '&task_deleted=0';
+                            Requester.get('/ue_api/internal/task_list?sprint_id='+ sprint_id + include_deleted, {
                                 onsuccess: function (data) {
                                     //me.model.set('task_list'   , hui.sortBy(data[1].items, 'task_index'));
                                     me.model.set('task_list'   , data[1].items);
@@ -593,7 +599,7 @@
                                 }
                             });
                             
-                            Requester.get('/ue_api/internal/taskindex_list?sprint_id='+sprint_id, {
+                            Requester.get('/ue_api/internal/taskindex_list?sprint_id=' + sprint_id, {
                                 onsuccess: function (data) {
                                     //me.model.set('task_list'   , hui.sortBy(data[1].items, 'task_index'));
                                     me.model.set('taskindex_list'   , data[1].items);
@@ -601,10 +607,10 @@
                                 }
                             });
 
-                            Requester.get('/ue_api/internal/burden?sprint_id='+sprint_id, {
+                            Requester.get('/ue_api/internal/burden?sprint_id=' + sprint_id + include_deleted, {
                                 onsuccess: function (data) {
                                     //me.model.set('task_list'   , hui.sortBy(data[1], 'task_index'));
-                                    me.model.set('burden'   , data[1].items);
+                                    me.model.set('burden'   , data[1]);
                                     me.switchSprintCallback();
                                 }
                             });
@@ -613,9 +619,11 @@
                         },
                         switchSprintCallback: function () {
                             var me = this,
-                                taskboard = me.getByFormname('taskboard');
+                                taskboard = me.getByFormname('taskboard'),
+                                task_list;
                             if (me.model.get('backlog_list') && me.model.get('task_list') && me.model.get('taskindex_list') && me.model.get('burden')) { //
-                                taskboard.taskList = me.model.get('task_list'); //me.sortTask();
+                                task_list = me.model.get('task_list');
+                                taskboard.taskList = me.sortTask(); 
                                 me.repaintTaskboard();
                             }
                         },
@@ -627,7 +635,7 @@
                                 item,
                                 index = 1;
                             for (var i=0,len=taskindex_list.length; i<len; i++) {
-                                item = JSON.parse(taskindex_list[i].taskindex);
+                                item = taskindex_list[i].taskindex;
                                 for (var j=0,len2=item.length; j<len2; j++) {
                                     if (!taskList[item[j]]) {
                                         taskList[item[j]] = index++;
@@ -773,10 +781,12 @@
                             
                             var burden = me.model.get('burden');
                             var labels = [], 
-                                datasets = [];
+                                datasets = [],
+                                u;
                             for (var i in burden) {
                                 if (i) {
-                                    labels.push(i);
+                                    u = me.getUserItem(i);
+                                    labels.push(u.realname || u.username);
                                     datasets.push(Number(burden[i]));
                                 }
                             }
@@ -794,7 +804,7 @@
                                 
                             }
 
-                            // var myLine = new Chart(document.getElementById('chartBurden').getContext('2d')).Bar(barChartData);
+                            var myLine = new Chart(document.getElementById('chartBurden').getContext('2d')).Bar(barChartData);
                         },
                         
                         /**
@@ -806,7 +816,7 @@
                                 uid = me.getByFormname('user_list').getValue(),
                                 taskItem = me.getTaskItem(task_id);
                             taskItem.task_person    = uid;
-                            taskItem.task_deleted   = '';
+                            taskItem.task_deleted   = '0';
                             
                             me.saveTask(taskItem);
                         },
@@ -818,7 +828,7 @@
                             taskItem.task_status    = str[0];
                             taskItem.backlog_id     = str[1];
                             taskItem.task_remaining = taskItem.task_status == 'done' ? 0 : taskItem.task_remaining;
-                            taskItem.task_deleted   = '';
+                            taskItem.task_deleted   = '0';
                             
                             me.saveTask(taskItem);
                         },
@@ -876,7 +886,7 @@
                             nc.getByFormname('task_person').setOptions(me.getUserList());
                             nc.getByFormname('task_person').setValue(hui.getCookie('taskboard_user'));
                             // 默认解除deleted状态
-                            taskItem.task_deleted = '';
+                            taskItem.task_deleted = '0';
                             nc.setValueByTree(taskItem);
                             nc.show();
                             
@@ -943,6 +953,7 @@
                                 // 销毁对话框
                                 var editTask = hui.Control.getById('editTask', me);
                                 editTask&&editTask.dispose();
+                                hui.Mask.hide();
                                 
                                 // 高亮任务
                                 me.highlightTask();
@@ -1284,7 +1295,7 @@
                         <tr>
                             <td align="right" valign="top">Title:</td>
                             <td>
-                                <input type="hidden" ui="type:'TextInput',formname:'task_deleted',value:''" />
+                                <input type="hidden" ui="type:'TextInput',formname:'task_deleted',value:'0'" />
                                 <input type="hidden" ui="type:'TextInput',formname:'product_id'" />
                                 <input type="hidden" ui="type:'TextInput',formname:'sprint_id'" />
                                 <input type="hidden" ui="type:'TextInput',formname:'backlog_id'" />
@@ -1586,6 +1597,9 @@
     <!--script type="text/javascript" src="src/jquery1.9.1.js         "></script>
     <script type="text/javascript" src="src/highcharts.js          "></script>
     <script type="text/javascript" src="src/highcharts-more.js     "></script-->
+    <script type="text/javascript" src="src/ext_dragdrop.js          "></script>
+    <script type="text/javascript" src="src/ext_chart.js             "></script>
+    <script type="text/javascript" src="src/ext_md5.js             "></script>
 </body>
 
 </html>

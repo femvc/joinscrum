@@ -101,7 +101,7 @@ function add(req, res, next) {
         }
         else {
             filter.update_time = date;
-            filter.sprint_id = global.common.formatDate(now, 'yyyyMMddHHmmss') + '_' + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 16);
+            filter.sprint_id = '30' +  global.common.formatDate(now, 'yyyyMMddHHmmss') + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 8);
 
             dataModel.insert(filter, function (err, doc) {
                 if (err) {

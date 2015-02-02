@@ -5,11 +5,10 @@ var dataModel = require('../models/task').createNew();
 // app.get('/ue_api/internal/burndown',        account.auth, chart.burndown);
 // app.get('/ue_api/internal/burden',          account.auth, chart.burden);
 
-var arr = ['sprint_id'];
 exports.burden = function (req, res, next) {
-    if (!req.paramlist.sprint_id) {
-        return response.err(req, res, 'MISSING_PARAMETERS', 'sprint_id');
-    }
+    // if (!req.paramlist.sprint_id) {
+    //     return response.err(req, res, 'MISSING_PARAMETERS', 'sprint_id');
+    // }
     
     var params = req.paramlist,
         current = params.current || 1,
@@ -19,12 +18,16 @@ exports.burden = function (req, res, next) {
             'create_time': -1
         },
         filter = {};
-    for (var i = 0, len = arr.length; i < len; i++) {
-        if (req.paramlist[arr[i]] !== undefined) {
-            filter[arr[i]] = req.paramlist[arr[i]];
-        }
+    if (req.paramlist.task_deleted === '0') {
+        filter.task_deleted = '0';
     }
-    filter.task_deleted = 0;
+    else if (req.paramlist.task_deleted === 'deleted') {
+        filter.task_deleted = 'deleted';
+    }
+    
+    if (req.paramlist.sprint_id) {
+        filter.sprint_id = req.paramlist.sprint_id;
+    }
 
     dataModel.getItems(filter, sort, current, count, function (err, doc) {
         if (err) {

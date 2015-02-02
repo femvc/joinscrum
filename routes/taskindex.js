@@ -53,6 +53,12 @@ exports.save = function (req, res, next) {
             filter[arr[i]] = req.paramlist[arr[i]];
         }
     }
+    try {
+        filter.taskindex = JSON.parse(req.paramlist.taskindex);
+    }
+    catch (e) {
+        filter.taskindex = req.paramlist.taskindex;
+    }
 
     var now = new Date();
     var date = global.common.formatDate(now, 'yyyy-MM-dd HH:mm:ss');
@@ -72,7 +78,7 @@ exports.save = function (req, res, next) {
             response.send(req, res, 'INTERNAL_DB_OPT_FAIL');
         }
         else {
-            response.ok(req, res, doc[0]);
+            response.ok(req, res, doc ? doc[0] : null);
         }
     });
 

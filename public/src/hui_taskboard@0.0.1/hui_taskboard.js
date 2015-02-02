@@ -87,7 +87,7 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
             '</div>' +
             '<div style="width: 100%; height: 30px; text-align: right; padding-top: 6px;">' +
                 '<div id="person_#{backlog_id}"></div>' +
-                '<button class="link" id="addtask_#{backlog_id}" style="cursor: pointer;" onclick="hui.Master.get().addTask(\'#{backlog_id}\')">add</button>' +
+                '<button class="link" id="addtask_#{backlog_id}" style="cursor: pointer; margin-right: 7px;" onclick="hui.Master.get().addTask(\'#{backlog_id}\')">add</button>' +
             '</div>';
             return str;
         },
@@ -149,10 +149,10 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
             taskboard.appendChild(tr);
             taskboard.insertBefore(tr, taskboard.rows[0]);
             
-            // Droppables.add(hui.g('notstarted_' + backlogValue.backlog_id));
-            // Droppables.add(hui.g('impeded_'     + backlogValue.backlog_id));
-            // Droppables.add(hui.g('inprogress_' + backlogValue.backlog_id));
-            // Droppables.add(hui.g('done_'        + backlogValue.backlog_id));
+            Droppables.add(hui.g('notstarted_' + backlogValue.backlog_id));
+            Droppables.add(hui.g('impeded_'     + backlogValue.backlog_id));
+            Droppables.add(hui.g('inprogress_' + backlogValue.backlog_id));
+            Droppables.add(hui.g('done_'        + backlogValue.backlog_id));
         },
         addTask: function(task){
             var me = this,
@@ -171,16 +171,16 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
 
             me.updateTask(task);
             
-            // Draggable('task_'+task.task_id, {
-            //     //preventDefault: true,
-            //     start: function(){
-            //         var me = this;
-            //         me.startTime = new Date();
-            //     },
-            //     end:function(){
-            //         hui.Master.get().moveTask(this);
-            //     }
-            // });
+            Draggable('task_'+task.task_id, {
+                //preventDefault: true,
+                start: function(){
+                    var me = this;
+                    me.startTime = new Date();
+                },
+                end:function(){
+                    hui.Master.get().moveTask(this);
+                }
+            });
             
         },
         updateTask: function(task){
