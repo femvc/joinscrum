@@ -552,6 +552,10 @@
                         finish: function () {
                             var me = this;
                             showTab('index');
+
+                            if (!hui.getCookie('mid')) {
+                                window.location.href = '#!/login';
+                            }
                         },
                         switchUser: function () {
                             var me = this;
