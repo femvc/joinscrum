@@ -198,7 +198,8 @@
 
                                 if (hui.Locator.currentLocation.indexOf('/login') == 0) {
                                     hui.setCookie('taskboard_user', result['mid']);
-                                    hui.Locator.redirect('/');
+                                    //  hui.Locator.redirect('/');
+                                    window.location.href = '#!/';
                                 }
                                 else {
                                     // hui.Locator.reload();
