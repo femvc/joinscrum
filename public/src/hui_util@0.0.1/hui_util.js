@@ -371,7 +371,6 @@ hui.define('hui_util', [], function () {
         }
     };
 
-
     /** 
      * @name 对目标字符串进行格式化
      * @public
@@ -380,6 +379,47 @@ hui.define('hui_util', [], function () {
      * @return {String} 格式化后的字符串
      */
     hui.util.format = function (source, opts) {
+        function handler(match, key) {
+            var type = String(key).indexOf('!!') === 0 ? 'decode' : String(key).indexOf('!') === 0 ? '' : 'encode',
+                parts = key.replace(/^!!?/, '').split('.'),
+                part = parts.shift(),
+                cur = data,
+                variable;
+            while (part) {
+                if (cur[part] !== undefined) {
+                    cur = cur[part];
+                }
+                else {
+                    cur = undefined;
+                    break;
+                }
+                part = parts.shift();
+            }
+            
+            variable = cur;
+            if ('[object Function]' === toString.call(variable)) {
+                variable = variable(key);
+            }
+            if (undefined !== variable) {
+                variable = String(variable);
+                // encodeURIComponent not encode '
+                var fr = '&|<|>| |\'|"|\\'.split('|'),
+                    to = '&amp;|&lt;|&gt;|&nbsp;|&apos;|&quot;|&#92;'.split('|');
+                if (type === 'decode') {
+                    for (var i = fr.length - 1; i > -1; i--) {
+                        variable = variable.replace(new RegExp('\\' + to[i], 'ig'), fr[i]);
+                    }
+                }
+                else if (type === 'encode') {
+                    for (var i = 0, l = fr.length; i < l; i++) {
+                        variable = variable.replace(new RegExp('\\' + fr[i], 'ig'), to[i]);
+                    }
+                }
+            }
+
+            return (undefined === variable ? '' : variable);
+        }
+        
         source = String(source);
         var data = Array.prototype.slice.call(arguments, 1),
             toString = Object.prototype.toString;
@@ -387,28 +427,8 @@ hui.define('hui_util', [], function () {
             data = (data.length == 1 ?
                 /* ie 下 Object.prototype.toString.call(null) == '[object Object]' */
                 (opts !== null && (/\[object (Array|Object)\]/.test(toString.call(opts))) ? opts : data) : data);
-            return source.replace(/#\{(.+?)\}/g, function (match, key) {
-                var parts = key.split('.'),
-                    part = parts.shift(),
-                    cur = data,
-                    variable;
-                while (part) {
-                    if (cur[part] !== undefined) {
-                        cur = cur[part];
-                    }
-                    else {
-                        cur = undefined;
-                        break;
-                    }
-                    part = parts.shift();
-                }
-                variable = cur;
-
-                if ('[object Function]' === toString.call(variable)) {
-                    variable = variable(key);
-                }
-                return (undefined === variable ? '' : variable);
-            });
+            
+            return source.replace(/#\{(.+?)\}/g, handler).replace(/\{\{(.+?)\}\}/g, handler);
         }
         return source;
     };
