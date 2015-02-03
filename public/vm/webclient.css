@@ -1,4 +1,4 @@
-﻿html {
+html {
     height: 100%;
 }
 
@@ -13,7 +13,12 @@ body {
 	min-width: 750px;
 	min-height: 100%;
     letter-spacing: .075px;
-   background-color: #ffffff;
+   
+	background-color: #AFB3BA;
+	background-image: url(img/page_bg.gif);
+	background-position: center top;
+	background-repeat: repeat-y;
+	overflow-y: scroll;
 }
 
 textarea {
@@ -23,6 +28,12 @@ textarea {
 
 input {
    vertical-align:middle;
+}
+
+.page {
+    background-image: url(img/head_bg.png);
+    background-repeat: no-repeat;
+    background-position: 0px -15px;
 }
 
 div.content {
@@ -43,28 +54,39 @@ div.pageheader {
 
 div.header {
    width: 970px;
-   height: 61px;
+   height: 60px;
    font-size: 8pt;
    display: block;
-   background-image: url('images/webclient-header.gif');
+   background: none;
    background-repeat: no-repeat;
    position: relative;
    top: 0px;
    left: 0px;
-   color: white;
+   color: #333;
    margin-bottom: 12px;
 }
 
 div.header div.headertext {
-   position: absolute;
+   position: static;
    bottom: 12px;
    left: 21px;
-   color: white;
+   color: #333;
+   float: right;
+   margin-right: 30px;
+   margin-top: 30px;
+}
+.header_title {
+    float: left;
+    font-size: 30px;
+    padding: 0px;
+    margin: 0px;
+    margin-left: 30px;
+    padding-top: 17px;
 }
 
 div.header a {
     text-decoration:underline;
-    color: white;
+    color: #333;
 }
 
 img.logo {
@@ -187,7 +209,7 @@ div#burndownChart {
 table.taskboard {
     border-spacing: 0px;
     border: 2px solid #cccccc;
-    width: 900px;
+    width: 927px;
     table-layout:fixed;
 }
 
@@ -550,6 +572,10 @@ table#displayPrefs td {
    border: 0px;
    white-space: nowrap;
    vertical-align:middle;
+}
+
+table#displayPrefs .hui_dropdown {
+    margin-right: 0px;
 }
 
 #colorSelector {

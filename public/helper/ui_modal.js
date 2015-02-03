@@ -238,7 +238,7 @@ bui.Modal.prototype = {
         me.getMain().onclick = 'bui.Control.getById(\''+me.getId()+'\').onMainClick();';
         // _.getDragClass({el: main, start:function(e){if (e.target.className !== 'ui-modal-title') {return false;}}});
         // 渲染对话框
-        bui.Control.init(me.getMain(), (bui.Action ? bui.Action.get() : {}).model, me);
+        bui.Control.init(me.getMain(), (bui.Action ? bui.Master.get() : {}).model, me);
         
         me.setSize(me.size);
     },

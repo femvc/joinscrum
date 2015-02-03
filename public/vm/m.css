@@ -1,0 +1,22 @@
+.page .hui_dropdown{
+}
+.page .hui_dropdown .hui_dropdown_title{
+    height: 23px;
+    line-height: 22px;
+    padding-left: 10px;
+}
+.page .hui_dropdown .hui_dropdown_title:hover{}
+.page .hui_dropdown .hui_dropdown_options{}
+.page .hui_dropdown .hui_dropdown_item{}
+.page .hui_dropdown .hui_dropdown_item:hover{}
+.page .hui_dropdown_arrow{
+    padding-top: 4px;
+    padding-bottom: 3px;
+}
+.page .hui_dropdown_arrow_icon{}
+.page .hui_dropdown_expand{}
+.page .hui_dropdown_expand .hui_dropdown_options{}
+.page .hui_dropdown_expand .hui_dropdown_arrow{
+    padding: 2px 5px 4px;
+}
+.page .hui_dropdown_expand .hui_dropdown_arrow_icon{}

@@ -573,15 +573,15 @@ Requester.updateStatus = function (data) {
  * @return {void}
  */
 Requester.backendError = function (xhr, data) {
-    if (window.bui && bui.Action && bui.Action.get){
+    if (window.bui && bui.Action && bui.Master.get){
         var key, 
             input, 
             formMap = {},
             errorMap = data.field || {},
-            action = bui.Action.get(); 
+            action = bui.Master.get(); 
         // Todo: 应该封装成可以手动调用
         for (key in errorMap) { 
-            input = action.getByFormname(key); 
+            input = Master.getByFormname(key); 
             if (input) { 
                 if (bui.Validator) {
                     input.hideError(); 

@@ -1,82 +1,1610 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-<meta charset="utf-8" />
-<title>HTML5 Template</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,target-densitydpi=medium-dpi" />
-<meta content="telephone=no" name="format-detection" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<script type="text/javascript">
-<!--
-(function(){if(!/*@cc_on!@*/0)return;var e = "abbr,article,aside,audio,bb,canvas,datagrid,datalist,details,dialog,eventsource,figure,footer,header,hgroup,mark,menu,meter,nav,output,progress,section,time,video".split(','),i=e.length;while(i--){document.createElement(e[i])}})()
-//-->
-</script>
-<style type="text/css">
-html {padding: 0px; margin: 0px;}
-body {padding: 0px; margin: 0px; font-family: Microsoft YaHei; }
-img {border: 0px;}
-a {border: 0px; color: green; }
-a:hover {color: #f60;}
-.clearfix {clear: both; font-size: 1px; height: 1px; line-height: 1px; margin-top: -1px; overflow: hidden;}
-.link { border:0px; color: #008000; display: inline; background-color: transparent; font-weight: bold; text-decoration: underline; cursor: pointer; padding: 0px 1px 0px 0px; }
-.link:hover { color: #FF6600; }
-.validate-text {color:red;}
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Ebbinghaus Intelligent Remember [v1.0]</title>
+    <style type="text/css">
+    html {padding: 0px; margin: 0px;}
+    body {padding: 0px; margin: 0px; font-family: Microsoft YaHei; }
+    img {border: 0px;}
+    a {border: 0px; color: green; }
+    a:hover {color: #f60;}
+    .clearfix {clear: both; font-size: 1px; height: 1px; line-height: 1px; margin-top: -1px; overflow: hidden;}
+    .link { border:0px; color: #008000; display: inline; background-color: transparent; font-weight: bold; text-decoration: underline; cursor: pointer; padding: 0px 1px 0px 0px; }
+    .link:hover { color: #FF6600; }
+    .validate-text {color:red;}
 
-</style>
+    </style>
 
-<link rel="stylesheet" type="text/css" href="vm/taskboard.css"     />
-<link rel="stylesheet" type="text/css" href="vm/webclient.css"     />
+    <link rel="stylesheet" type="text/css" href="vm/m.css">
+    <link rel="stylesheet" type="text/css" href="vm/taskboard.css">
+    <link rel="stylesheet" type="text/css" href="vm/webclient.css">
 
-<link rel="stylesheet" type="text/css" href="vm/css/ui-modal.css"     />
-<link rel="stylesheet" type="text/css" href="vm/css/bootstrap-btn.css"     />
+    <link rel="stylesheet" type="text/css" href="vm/css/bootstrap-btn.css">
+    <script type="text/javascript">
+        'use strict';
 
-<script type="text/javascript" src="asset/asset.js"></script>
-<script>
-// 判断屏幕是否旋转
-/*
-function orientationChange() {
-    var action = bui.Action.get();
-    if (action && action.orientationChange) {
-        action.orientationChange();
-    }
-}
-// 添加事件监听
-if (bui.window.addEventListener) {
-    bui.window.addEventListener('load', function(){
-        orientationChange();
-        bui.window.onorientationchange = orientationChange;
-    });
-}
-*/
-</script>
+        window.onload = function () {
+            // Requester.get('/ue_api/internal/account/get_uid?rand=' + Math.random(), {
+            //     onsuccess: function (result) {
+            //         if (result && !result[0] && result[1]) {
+            //             hui.g('uid').innerHTML = String(result[1]);
+            //             hui.cc('link').style.display = 'block';
+            //         }
+            //     }
+            // });
 
-<style type="text/css">
-.content-width { border: 1px solid green;max-width: 600px;}
-</style>
-<style media="all and (orientation:portrait)" type="text/css">
-.content-width { width: 98%; }
-</style>
-<style media="all and (orientation:landscape)" type="text/css">
-.content-width { width: 96%; }
-</style>  
+            // window.test_id = hui.util.getCookie('test_id');
+            hui.context = new hui.BaseModel();
+            
+            initPageLogin();
+            initPageIndex();
+            initPageAddTask();
+            initPageComment();
 
+            hui.Template.parseTemplate(hui.g('history').innerHTML);
+
+            hui.Action.start();
+        };
+        function showTab(tab, main) {
+            hui.g('login'    ).style.display = 'none';
+            hui.g('index'    ).style.display = 'none';
+            hui.g('industry' ).style.display = 'none';
+            hui.g('history'  ).style.display = 'none';
+            
+
+            main = main || tab;
+            hui.g(main).style.display = 'block';
+        }
+
+        //-->
+    </script>
 </head>
 
-<body>
-<div class="clearfix">&nbsp;</div>
-<div id="main"></div>
+<body style="" onload123="initForTest()">
+    <!--.page>.page_head>.logo^+.page_banner>h1.test_title{你想知道自己前端技术实力排名吗？}+.test_desc{2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，想知道你自己技术实力的排名吗}+.test_btn{立即测试}^+.page_foot{2014-10-17}-->
+    <div class="page" style="width: 980px; margin: auto;">
+        <div id="main" style="min-height: 750px;">
+            <!-- Login -->
+            <div class="page_body" id="login" style="display:none">
+                <!-- target: login -->
+                <style type="text/css">
+                    div.loginboxtitle { font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; border: 1px solid #c0c0c0; margin-left: 70px; margin-right: 70px; padding-left: 11px; padding-right: 11px; width: 830px; }
+                    div.loginboxtitle { background: #c0c0c0; font-size: 10pt; font-weight: bold; line-height: 21px; margin-top: 30px; margin-bottom: 0px; }
+                    div.loginbox { font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; border: 1px solid #c0c0c0; margin-left: 70px; margin-right: 70px; padding-left: 11px; padding-right: 11px; width: 830px; }
+                    div.loginbox { margin-top: 0px; font-size: 8pt; padding-top: 20px; color: #808080; }
+                    div.logintable { margin-top: 20px; }
+                    input { vertical-align: middle; }
+                    table.center { display: inline; text-align: center; }
+                    td.loginprompt { font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; text-align: right; color: #808080; font-size: 8pt; vertical-align: top; }
+                    input.loginprompt { font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; color: #252525; font-size: 10pt; border: 1px solid; margin-bottom: 11px; }
+                    .header { width: 970px; height: 61px; font-size: 8pt; display: block; background-image: url('vm/img/webclient-header.gif'); background-repeat: no-repeat; position: relative; top: 0px; left: 0px; color: white; margin-bottom: 12px; }
+                    .header .headertext { position: absolute; bottom: 12px; left: 21px; color: white; }
+                    .header a { text-decoration: underline; color: white; }
+                </style>
+                <div class="header">
+                    <h1 class="header_title">JoinScrum</h1>
+                    <div class="headertext">
+                        <a href="#">Home</a> | <a href="#!/help" target="_blank">Help</a>
+                    </div>
+                </div>
+                <div>
+                    <div class="loginboxtitle" style="width:890px;margin-left:30px;">Web Client Login</div>
+                    <div class="loginbox" style="width:890px;margin-left:30px;">
+                        <div>
+                            The JoinScrum provides a personalized view and limited updating of scrum data such as your task status and remaining hours.
+                        </div>
+                        <div class="logintable" style="line-height: 30px;">
+                            <form method="post" action="/">
+                                <!-- 搞笑，FF下table设置align="left" 居然有bug -->
+                                <table cellspadding="5">
+                                    <tr>
+                                        <td valign="top">Username:</td>
+                                        <td>
+                                            <input type="text" value="andy" style="width: 120px;" ui="type:'TextInput',formname:'username',rule:'required'">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">Password:</td>
+                                        <td>
+                                            <input type="password" value="aaa" style="width: 120px;" ui="type:'TextInput',formname:'password',rule:'required'">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td>
+                                            <button class="button" type="button" ui="type:'Button',formname:'login_submit'">Login</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br />
+                                <br />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div style="color: #AAAAAA; margin: 20px; text-align: center; width: 970px;">Copyright © 2015 JoinScrum, Inc. All rights reserved.</div>
+            </div>
+            <script>
+                function initPageLogin() {
+                    // pageLogin
+                    var pageLogin;
+                    pageLogin = function () {
+                        hui.Action.call(this);
+                        this.id = 'pageLogin';
+                        this.main = 'login';
 
-<script type="text/javascript">
-<!--
-define('./femvc_init', ['./bui.init'], function(){
+                        this.model = new hui.BaseModel({});
+                        this.BACK_LOCATION = '/login';
+                    };
+                    pageLogin.prototype = {
+                        /**
+                         * @name 初始化列表行为
+                         * @param {Object} controlMap 当前主内容区域绘制的控件集合.
+                         */
+                        initBehavior: function(controlMap) {
+                            var me = this;
+                            
+                            if (me.querystring['logout']) {
+                                Requester.get('/ue_api/internal/user_logout', {
+                                    onsuccess: new Function()
+                                });
+                                
+                                hui.context.set('mid', '');
+                                hui.context.set('token', '');
+                                hui.setCookie('token', '');
+                            }
+                            
+                            var username = me.getByFormname('username');
+                            var password = me.getByFormname('password');
+                            var login_submit = me.getByFormname('login_submit');
 
-bui.init();
+                            if (username.getValue() == '' && hui.getCookie('mid')) {
+                                 username.setValue(hui.getCookie('mid'));
+                            }
+                            
+                            username.onenter = password.onenter = login_submit.onclick = function(){ me.onSubmit();};
+                            
+                        },
+                        /**
+                         * @name 初始化列表行为
+                         * @param {Object} controlMap 当前主内容区域绘制的控件集合.
+                         */
+                        onSubmit: function(){
+                            if (this.validate()) {
+                                var me = this,
+                                    username = me.getByFormname('username').getValue(),
+                                    password = me.getByFormname('password').getValue();
+                                
+                                Requester.get('/ue_api/internal/user_login', {
+                                    data: { 
+                                        username: username,
+                                        password: MD5.encode(password)
+                                    },  
+                                    onsuccess: hui.fn(me.loginCallback, me)
+                                });
+                            }
+                        },
+                        loginCallback: function(data){
+                            var me = this,
+                                result = data ? data[1] : [];
+                            if (!data[0] && result.mid) {
+                                
+                                hui.context.set('mid', result['mid']);
+                                hui.context.set('token', result['token']);
+                                hui.setCookie('mid', result['mid']);
+                                hui.setCookie('token', result['token']);
 
-});
-//-->
-</script>
-<div class="clearfix">&nbsp;</div>
+                                if (hui.Locator.currentLocation.indexOf('/login') == 0) {
+                                    hui.setCookie('taskboard_user', result['mid']);
+                                    //  hui.Locator.redirect('/');
+                                    window.location.href = '#!/';
+                                }
+                                else {
+                                    // hui.Locator.reload();
+                                    window.location.reload();
+                                }
+                            }
+                            else {
+                                me.getByFormname('username').showError(data[0].mobile);
+                            }
+                        },
+                        finish: function () {
+                            var me = this;
+                            showTab('login');
+                        }
+                    };
+
+                    hui.inherits(pageLogin, hui.Action);
+                    hui.Router.setRule('/login', 'pageLogin');
+                    hui.window.pageLogin = pageLogin;
+                }
+            </script>
+            <div class="page_body" id="index" style="display: none;">
+                <!-- target: taskboard_layout -->
+                <style type="text/css">
+                    .content { margin-left: 20px; margin-right: 20px; }
+                    #needsUpdate { cursor: pointer; /* see: http://www.mandarindesign.com/opacity.html */; opacity: .85; filter: alpha(opacity=85); position: absolute; left: 57px; /* centered in the taskboard table: left margin + half of the diff between the table width and the image width */; z-index: 9999; }
+                    .error { font-size: 8pt; font-weight: bold; color: black; padding-left: 8px; margin-bottom: 12px; }
+                    .sectionHeader.nextSection { margin-top: 40px; }
+                    .sectionHeader { width: 930px; font-size: 12pt; color: white; text-align: left; background: transparent; margin-bottom: 12px; line-height: 21px; /* using line-height so that the text is vertically centered. */ }
+                    .sectionHeader_table { border-collapse: collapse; border-spacing: 0; width: 100%; margin: 0px; padding: 0px; }
+                    .sectionHeader_w { width: 2px; height: 28px; background: url('vm/img/taskboard-header-left.gif') no-repeat 0 0; }
+                    .sectionHeader_n { height: 28px; background: url('vm/img/taskboard-header-slice.gif') repeat-x 0 0; }
+                    .sectionHeaderText { color: white; margin-left: 5px; }
+                    .sectionHeader_e { width: 4px; height: 28px; background: url('vm/img/taskboard-header-right.gif') no-repeat 0 0; }
+                    .burndownChart { margin-top: 20px; }
+                    #burndownImg { border-width: 0px; padding-left: 8px; height: 480px; }
+                    #newImpediment { margin-bottom: 10px; }
+                    #impedimentsTable { border: none; font-size: 9pt; width: 900px; }
+                    col#entered { width: 100px; }
+                    col#lastmodified { width: 100px; }
+                    col#title { width: 200px; }
+                    col#description { width: 350px; }
+                    col#reporter { width: 150px; }
+                    th.impedimentattribute { font-size: 9pt; color: black; font-weight: bold; text-align: left; border: none; padding-bottom: 12px; padding-left: 8px; }
+                    .header { width: 970px; height: 61px; font-size: 8pt; display: block; background-image: url('vm/img/webclient-header.gif'); background-repeat: no-repeat; position: relative; top: 0px; left: 0px; color: white; margin-bottom: 12px; }
+                    .header .headertext { position: absolute; bottom: 12px; left: 21px; color: white; }
+                    .header a { text-decoration: underline; color: white; }
+                </style>
+
+                <div class="header">
+                    <h1 class="header_title">JoinScrum</h1>
+                    <div class="headertext">
+                        Welcome: <span id="welcome_user">andy.wang</span>
+                        <span style="padding-left: 20px; font-size: 8pt;">
+                            <a href="#!/login~logout=true">Log out</a> |
+                            <a href="#">Home</a> |
+                            <a href="#!/help" target="_blank">Help</a>
+                        </span>
+                    </div>
+                </div>
+                <div class="content">
+                    <div id="needsUpdate" style="display: none;">
+                        <img src="vm/img/refresh_alert_final.gif" alt="Changes have been made to this page by another User. Click this message to update display." onclick="window.location.reload();//hui.Locator.reload();" />
+                    </div>
+                    <div class="error" id="noSprints" style="display: none">
+                        There are no sprints in the selected product.
+                    </div>
+                    <div class="error" id="noPbis" style="display: none">
+                        There are no backlog items in this sprint.
+                    </div>
+                    <div class="error" id="noTaskAccess" style="display: none">
+                        You don&#39;t have access to view any tasks for this product.
+                    </div>
+
+                    <style type="text/css">
+                        div#displayMode { width: 930px; }
+                        .contentf { background: #ddd; }
+                        table#displayMode { width: 100%; }
+                        span#displayMode { font-weight: bold; vertical-align: bottom; }
+                        input { vertical-align: middle; }
+                        table#displayMode label { vertical-align: bottom; }
+                        div#todaysDate { font-size: 12pt; text-align: right; }
+                        .contentf div { margin-left: 5px; }
+                    </style>
+                    <div id="displayMode">
+                        <b class="b1f"></b><b class="b2f"></b><b class="b3f"></b><b class="b4f"> </b>
+                        <div style="padding: 10px;" class="contentf">
+                            <table id="displayMode" width="100%">
+                                <tbody>
+                                    <tr>
+                                        <td><span id="displayMode">Taskboard View:</span>
+                                            <input type="radio" checked="true" class="displaymode" value="teamview" name="displaymode" id="teamview">
+                                            <label for="teamview">All Tasks</label>
+                                            <!--input type="radio" class="displaymode" value="mytasksview" name="displaymode" id="mytasksview">
+                                            <label for="mytasksview">My Tasks</label-->
+                                        </td>
+                                        <td>
+                                            <div id="todaysDate">
+                                                Today's Date: <span id="today">11/26/13</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <b class="b4f"></b><b class="b3f"></b><b class="b2f"></b><b class="b1f">  </b>
+                    </div>
+
+                    <style type="text/css">
+                        #selectors { margin-top: 20px; margin-bottom: 20px; }
+                        #productSelector { width: 250px; }
+                        #sprintSelector { width: 250px; }
+                        #filterSprints { margin-left: 30px; }
+                        input { vertical-align: middle; }
+                    </style>
+                    <div id="selectors">
+                        <table class="selectors">
+                            <tr>
+                                <td>
+                                    <span>View Product:</span>
+                                    <button class="link" style="margin-left: 0px;" onclick="hui.Master.get().addProduct()">add</button><i>/</i>
+                                    <button class="link" style="margin-left:0px;" onclick="hui.Master.get().editProduct()">edit</button>
+                                </td>
+                                <td>
+                                    <span>View Sprint:</span>
+                                    <button class="link" style="" onclick="hui.Master.get().addSprint()">add</button><i>/</i>
+                                    <button class="link" style="margin-left:0px;" onclick="hui.Master.get().editSprint()">edit</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div ui="type:'Dropdown',formname:'product_list',data_value:'product_id',data_text:'product_name',default_select:true" style="width:150px;"></div>
+                                </td>
+                                <td>
+                                    <div ui="type:'Dropdown',formname:'sprint_list',data_value:'sprint_id',data_text:'sprint_name',default_select:true" style="width:450px;"></div>
+                                </td>
+                                <td>
+                                    <input id="filterSprints" name="filterSprints" type="checkbox" />
+                                    <label for="filterSprints">Show Sprints only for Teams to which I belong</label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+
+                    <div class="sectionHeader" id="taskboardSectionHeader">
+                        <table class="sectionHeader_table">
+                            <tbody>
+                                <tr>
+                                    <td class="sectionHeader_w"></td>
+                                    <td class="sectionHeader_n">
+                                        <div class="sectionHeaderText">
+                                            Taskboard: All Tasks</div>
+                                    </td>
+                                    <td class="sectionHeader_e"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <style type="text/css">
+                        table#displayPrefs { border: 0px; width: 930px; table-layout: fixed; margin-bottom: 6px; }
+                        table#displayPrefs td { border: 0px; white-space: nowrap; vertical-align: middle; }
+                        input { vertical-align: middle; }
+                        #colorSelector { vertical-align: top; border: 1px solid black; white-space: nowrap; margin-left: 12px; margin-right: 26px; padding: 2px; padding-bottom: 3px; padding-top: 1px; }
+                        #colorSelector img { vertical-align: middle; }
+                        div.myTaskColorMenu { position: absolute; z-index: 1000; border: 1px solid #888; background-color: white; margin: 0px 0px 0px 34px; padding: 0px; }
+                        div.myTaskColorMenu ul { list-style-type: none; margin: 0px; padding: 0px; }
+                        div.myTaskColorMenu ul li { list-style-type: none; display: block; margin: 0px; padding: 2px; }
+                    </style>
+                    <table id="displayPrefs">
+                        <tr>
+                            <td>
+                                <input id="include_deleted" name="include_deleted" type="checkbox" onclick="hui.setCookie('include_deleted', String(this.checked));hui.Master.get().switchSprint()" />
+                                <label for="include_deleted">Show deleted task</label>
+                            </td>
+                            <td>
+                                <div ui="type:'Dropdown',formname:'user_list',data_value:'uid',data_text:'user_label'" style="width:230px; float: right;">
+                                    <!--option value="Aaron.lu (aaron.lu)">Aaron.lu (aaron.lu)</option-->
+                                </div>
+                                <label style="float: right;margin-top: 5px;margin-right: 10px;">Highlight Tasks</label>
+                            </td>
+                        </tr>
+                    </table>
+                    <div ui="type:'Taskboard',formname:'taskboard'"></div>
+
+
+                    <div class="sectionHeader nextSection">
+                        <table class="sectionHeader_table">
+                            <tr>
+                                <td class="sectionHeader_w"></td>
+                                <td class="sectionHeader_n">
+                                    <div class="sectionHeaderText">
+                                        Sprint Burndown</div>
+                                </td>
+                                <td class="sectionHeader_e"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="burndownChart">
+                        <!--img src="vm/img/-270223436412208026.png" id="burndownImg" alt="Sprint Burndown" /-->
+                    </div>
+
+                    <div class="sectionHeader nextSection">
+                        <table class="sectionHeader_table">
+                            <tr>
+                                <td class="sectionHeader_w"></td>
+                                <td class="sectionHeader_n">
+                                    <div class="sectionHeaderText">
+                                        Team Member Loeded</div>
+                                </td>
+                                <td class="sectionHeader_e"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <!--img src="vm/img/-270223436412208026.png" id="burndownImg" alt="Sprint Burndown" /-->
+                        <canvas id="chartBurden" height="450" width="800"></canvas>
+                    </div>
+
+
+                    <div class="error" id="noBurndown" style="display: none">
+                        You either do not have permission to view tasks or there are no sprints for this product.
+                    </div>
+                    <div class="sectionHeader nextSection" id="impedimentsSectionHeader">
+                        <table class="sectionHeader_table">
+                            <tr>
+                                <td class="sectionHeader_w"></td>
+                                <td class="sectionHeader_n">
+                                    <div class="sectionHeaderText">
+                                        Impediments</div>
+                                </td>
+                                <td class="sectionHeader_e"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <img class="newImpediment" style="cursor: pointer;" id="newImpediment" src="vm/img/new-impediment.gif" alt="New Impediment" />
+                    <table id="impedimentsTable" style="display: none">
+                        <colgroup>
+                            <col id="entered" />
+                            <col id="lastmodified" />
+                            <col id="title" />
+                            <col id="description" />
+                            <col id="reporter" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th class="impedimentattribute">Entered</th>
+                                <th class="impedimentattribute">Last Modified</th>
+                                <th class="impedimentattribute">Title</th>
+                                <th class="impedimentattribute">Description</th>
+                                <th class="impedimentattribute">Reporter</th>
+                            </tr>
+                        </thead>
+                        <tbody id="impediments">
+                    </table>
+                    <div class="error" id="noImpedimentsAccess" style="display: none; padding-bottom: 12px;">
+                        You don&#39;t have access to view impediments.
+                    </div>
+                    <div class="error" id="noImpedimentsTeam" style="display: none; padding-bottom: 12px;">
+                        A sprint must be selected to view impediments.
+                    </div>
+                    <div class="error" id="noImpediments" style="padding-bottom: 12px;">
+                        There are no impediments for this team.
+                    </div>
+                </div>
+                <div style="    color: #AAAAAA;margin: 20px;text-align: center;width: 970px;">Copyright &copy; 2015 JoinScrum, Inc. All rights reserved.</div>
+            </div>
+            <script>
+                function initPageIndex() {
+                    // pageTaskboard
+                    var pageTaskboard;
+                    pageTaskboard = function () {
+                        hui.Action.call(this);
+                        /**
+                         * @name Action索引ID
+                         * @comment 主要用于控件中通过onclick="hui.Control.getById('listTable','login');
+                         */
+                        this.id = 'taskboard';
+                        // this.view = 'taskboard_layout';
+                        this.BACK_LOCATION = '/login';
+                        this.main = 'index';
+                    };
+                    pageTaskboard.prototype = {
+                        initModel: function(callback){
+                            var me = this;
+                            //me.getSprintData(callback);
+                            callback&&callback();
+                        },
+                        getSprintData: function (callback) {
+                            var me = this;
+                            me.count = 3;
+                            Requester.get('/ue_api/internal/user_list', {
+                                onsuccess: function (data) {
+                                    me.model.set('user_list'   , hui.sortBy(data[1].items, '_id'));
+                                    me.getSprintDataCallback(callback);
+                                }
+                            });
+                            Requester.get('/ue_api/internal/product_list', {
+                                onsuccess: function (data) {
+                                    me.model.set('product_list'   , hui.sortBy(data[1].items, 'product_id'));
+                                    me.getSprintDataCallback(callback);
+                                }
+                            });
+                            Requester.get('/ue_api/internal/sprint_list', {
+                                onsuccess: function (data) {
+                                    me.model.set('sprint_list'   , hui.sortBy(data[1].items, 'sprint_id', 'desc'));
+                                    me.getSprintDataCallback(callback);
+                                }
+                            });
+                        },
+                        getSprintDataCallback: function (callback) {
+                            this.count--;
+                            if (this.count<1) {
+                                this.count = 2;
+                                callback&&callback();
+                                //this.getTaskData(callback)
+                            }
+                        },
+                        initBehavior: function(controlMap) {
+                            var me = this;
+                            
+                            // hui.Master.get().controlMap.vModal2.show();
+                            // me.controlMap.submit.onclick = hui.fn(me.onSubmit, me);
+                            var productList = me.getByFormname('product_list');
+                            var sprintList  = me.getByFormname('sprint_list' );
+                            var userList    = me.getByFormname('user_list' );
+                            productList.onchange = hui.fn(me.switchProduct, me);
+                            sprintList.onchange  = hui.fn(me.switchSprint, me);
+                            userList.onchange    = hui.fn(me.switchUser, me);
+
+                            if (hui.getCookie('include_deleted') === 'true') {
+                                hui.g('include_deleted').checked = 'checked';
+                            }
+                            
+                            me.getSprintData(function(){
+                                me.getByFormname('product_list').setOptions(me.model.get('product_list'));
+                                me.getByFormname('user_list'   ).setOptions(me.getUserList());
+                                
+                                me.getByFormname('product_list').setValue(hui.getCookie('taskboard_product'));
+                                me.getByFormname('user_list'   ).setValue(hui.getCookie('taskboard_user'));
+                                
+                                hui.g('welcome_user').innerHTML = me.getUserItem(hui.getCookie('mid')).username;
+                                
+                                me.switchProduct();
+                            });
+                            //me.switchProduct();
+                            
+                            hui.setCookie('task_lastmodify', ''); 
+                            me.checkTaskModify();
+                        },
+                        finish: function () {
+                            var me = this;
+                            showTab('index');
+
+                            if (!hui.getCookie('mid')) {
+                                window.location.href = '#!/login';
+                            }
+                        },
+                        switchUser: function () {
+                            var me = this;
+                            me.highlightTask();
+                        },
+                        switchProduct: function(){
+                            var me = this,
+                                sprint_all = me.model.get('sprint_list'),
+                                sprint_list = [],
+                                product_id = me.getByFormname('product_list').getValue();
+                            for (var i=0,len=sprint_all.length; i<len; i++) {
+                                if (sprint_all[i].product_id == product_id) {
+                                    sprint_list.push(sprint_all[i]);
+                                }
+                            }
+                            me.getByFormname('sprint_list').setOptions(sprint_list);
+                            if (hui.getCookie('selected_sprint')) {
+                                me.getByFormname('sprint_list').setValue(hui.getCookie('selected_sprint'));
+                            }
+                            
+                            hui.setCookie('taskboard_product', product_id)
+                            me.switchSprint();
+                        },
+                        switchSprint: function () {
+                            var me = this,
+                                sprint_id = me.getByFormname('sprint_list').getValue() || '';
+                            
+                            hui.setCookie('selected_sprint', sprint_id);
+                            
+                            me.model.remove('backlog_list');
+                            me.model.remove('task_list');
+                            
+                            Requester.get('/ue_api/internal/backlog_list?sprint_id='+sprint_id, {
+                                onsuccess: function (data) {
+                                    me.model.set('backlog_list'   , hui.sortBy(data[1].items, 'backlog_index', 'desc'));
+                                    me.switchSprintCallback();
+                                }
+                            });
+                            var include_deleted = hui.getCookie('include_deleted') === 'true' ? '' : '&task_deleted=0';
+                            Requester.get('/ue_api/internal/task_list?sprint_id='+ sprint_id + include_deleted, {
+                                onsuccess: function (data) {
+                                    //me.model.set('task_list'   , hui.sortBy(data[1].items, 'task_index'));
+                                    me.model.set('task_list'   , data[1].items);
+                                    me.switchSprintCallback();
+                                }
+                            });
+                            
+                            Requester.get('/ue_api/internal/taskindex_list?sprint_id=' + sprint_id, {
+                                onsuccess: function (data) {
+                                    //me.model.set('task_list'   , hui.sortBy(data[1].items, 'task_index'));
+                                    me.model.set('taskindex_list'   , data[1].items);
+                                    me.switchSprintCallback();
+                                }
+                            });
+
+                            Requester.get('/ue_api/internal/burden?sprint_id=' + sprint_id + include_deleted, {
+                                onsuccess: function (data) {
+                                    //me.model.set('task_list'   , hui.sortBy(data[1], 'task_index'));
+                                    me.model.set('burden'   , data[1]);
+                                    me.switchSprintCallback();
+                                }
+                            });
+                            
+                            
+                        },
+                        switchSprintCallback: function () {
+                            var me = this,
+                                taskboard = me.getByFormname('taskboard'),
+                                task_list;
+                            if (me.model.get('backlog_list') && me.model.get('task_list') && me.model.get('taskindex_list') && me.model.get('burden')) { //
+                                task_list = me.model.get('task_list');
+                                taskboard.taskList = me.sortTask(); 
+                                me.repaintTaskboard();
+                            }
+                        },
+                        sortTask: function () {
+                            var me = this,
+                                task_list = me.model.get('task_list'),
+                                taskindex_list = me.model.get('taskindex_list'),
+                                taskList = {},
+                                item,
+                                index = 1;
+                            for (var i=0,len=taskindex_list.length; i<len; i++) {
+                                item = taskindex_list[i].taskindex;
+                                for (var j=0,len2=item.length; j<len2; j++) {
+                                    if (!taskList[item[j]]) {
+                                        taskList[item[j]] = index++;
+                                    }
+                                }
+                            }
+                            for (var i=0,len=task_list.length; i<len; i++) {
+                                task_list[i].task_index = taskList[task_list[i].task_id];
+                            }
+                            
+                            return hui.sortBy(task_list, 'task_index', 'ASC');
+                        },
+                        getUserList: function () {
+                            var me = this,
+                                list = me.model.get('user_list');
+                            for (var i=0,len=list.length; i<len; i++) {
+                                list[i].user_label = (list[i].realname || list[i].username) + ' (' + list[i].username + ')';
+                            }
+                            return list;        
+                        },
+                        getUserItem: function (id) {
+                            var me = this,
+                                list = me.model.get('user_list'),
+                                item = null;
+                            id = id === '' ? 'unspecified' : id;
+                            
+                            for (var i=0,len=list.length; i<len; i++) {
+                                if (list[i].uid == id) {
+                                    item = list[i];
+                                    break;
+                                }
+                            }
+                            return item;        
+                        },
+                        getDataItem: function (n, id) {
+                            var me = this,
+                                list = me.model.get(n + '_list'),
+                                item = null;
+                            for (var i=0,len=list.length; i<len; i++) {
+                                if (list[i][n + '_id'] === id) {
+                                    item = list[i];
+                                    break;
+                                }
+                            }
+                            return item;        
+                        },
+                        getProduct: function (id) {
+                            return this.getDataItem('product', id);        
+                        },
+                        getSprint: function (id) {
+                            return this.getDataItem('sprint', id);      
+                        },
+                        getBacklogItem: function (id) {
+                            return this.getDataItem('backlog', id);    
+                        },
+                        getTaskItem: function (id) {
+                            return this.getDataItem('task', id); 
+                        },
+                        /**
+                         * @name 新增backlog
+                         * @public
+                         */
+                        addBacklog: function () {
+                            this.editBacklog();
+                        },
+                        /**
+                         * @name 修改backlog
+                         * @public
+                         * @param {string} [backlog_id] 
+                         */
+                        editBacklog: function (backlog_id) {
+                            var me = this,
+                                nc = hui.Control.getById('editBacklog', me),
+                                sprint_id = me.getByFormname('sprint_list').getValue(),
+                                backlogValue,
+                                backlogItem;
+                            
+                            // 确定backlogItem的值
+                            backlogValue = {sprint_id: sprint_id};
+                            if (backlog_id) {
+                                backlogItem = me.getBacklogItem(backlog_id);
+                                if (backlogItem) {
+                                    backlogValue.backlog_id     = backlogItem.backlog_id;
+                                    backlogValue.backlog_name   = backlogItem.backlog_name;   
+                                    backlogValue.backlog_desc   = backlogItem.backlog_desc;
+                                    backlogValue.backlog_index  = backlogItem.backlog_index;  
+                                    backlogValue.sprint_id      = backlogItem.sprint_id;      
+                                }
+                            }
+                            // 弹出对话框
+                            if (nc) {
+                                nc.dispose();
+                            }
+                            nc = hui.Control.create('Boxpanel', {
+                                id: 'editBacklog', 
+                                title: backlog_id ? ' Edit Backlog' : ' Add Backlog', 
+                                contentView: 'taskboard_addbacklog', 
+                                size: { width:'500px', height: '340px', bottom: '8%'}
+                            });
+                            this.appendControl(nc);
+                            // 绑定事件
+                            nc.getByFormname('submit').onclick = new Function('hui.Master.get().saveBacklog()');
+                            
+                            nc.setValueByTree(backlogValue);
+                            nc.show();
+                        },
+                        saveBacklog: function () {
+                            var me = this;
+                            var nc = hui.Control.getById('editBacklog', me),
+                                taskboard = me.getByFormname('taskboard');
+                            
+                            if (nc && nc.validate()) {
+                                var backlogValue = nc.getParamMap();
+                                
+                                Requester.get('/ue_api/internal/backlog_save', {
+                                    data: backlogValue,
+                                    onsuccess: hui.fn(me.saveBacklogCallback, me)
+                                });
+                            }
+                        },
+                        saveBacklogCallback: function (data) {
+                            var me = this;
+                            if (!data[0] && data[1]) {
+                                // 销毁对话框
+                                hui.Control.getById('editBacklog', me).dispose();
+                                
+                                // me.switchSprint(); 
+                                window.location.reload();
+                            }
+                        },
+                        repaintTaskboard: function () {
+                            var me = this,
+                                taskboard = me.getByFormname('taskboard');
+                            taskboard.removeBacklogRow('all');
+                            
+                            taskboard.product_key = me.getProduct(me.getByFormname('product_list').getValue()).product_key;
+                            taskboard.backlogList = me.model.get('backlog_list');
+                            
+                            taskboard.setBacklogList();
+                            taskboard.setTaskList();
+
+                            me.highlightTask();
+                            
+                            var burden = me.model.get('burden');
+                            var labels = [], 
+                                datasets = [],
+                                u;
+                            for (var i in burden) {
+                                if (i) {
+                                    u = me.getUserItem(i);
+                                    labels.push(u.realname || u.username);
+                                    datasets.push(Number(burden[i]));
+                                }
+                            }
+                            var barChartData = {
+                                animation: false,
+                                labels : labels, //['January','February','March','April','May','June','July'],
+                                datasets : [
+                                    {
+                                        fillColor   : 'rgba(242,91,8,1)',
+                                        strokeColor : 'rgba(242,91,8,1)',
+                                        data : datasets //[65,59,90,81,56,55,20]
+                                    }
+                                ],
+                                scaleStartValue: 0
+                                
+                            }
+
+                            var myLine = new Chart(document.getElementById('chartBurden').getContext('2d')).Bar(barChartData);
+                        },
+                        
+                        /**
+                         * @name 操作task
+                         * @public
+                         */
+                        takeTask: function (task_id) {
+                            var me = this,
+                                uid = me.getByFormname('user_list').getValue(),
+                                taskItem = me.getTaskItem(task_id);
+                            taskItem.task_person    = uid;
+                            taskItem.task_deleted   = '0';
+                            
+                            me.saveTask(taskItem);
+                        },
+                        moveTask: function (task) {
+                            var me = this,
+                                task_id = task.elem.id.split('_')[1],
+                                str = task.elem.parentNode.id.split('_'),
+                                taskItem = me.getTaskItem(task_id);
+                            taskItem.task_status    = str[0];
+                            taskItem.backlog_id     = str[1];
+                            taskItem.task_remaining = taskItem.task_status == 'done' ? 0 : taskItem.task_remaining;
+                            taskItem.task_deleted   = '0';
+                            
+                            me.saveTask(taskItem);
+                        },
+                        deleteTask: function (task_id) {
+                            var me = this,
+                                uid = me.getByFormname('user_list').getValue(),
+                                taskItem = me.getTaskItem(task_id);
+                            taskItem.task_deleted   = 'deleted';
+                            
+                            me.saveTask(taskItem);
+                        },
+                        /**
+                         * @name 新增task
+                         * @public
+                         */
+                        addTask: function(backlog_id) {
+                            var me = this,
+                                users = me.model.get('user_list'),
+                                sprint_id = me.getByFormname('sprint_list').getValue(),
+                                taskItem = {};
+                            taskItem.sprint_id  = sprint_id;
+                            taskItem.backlog_id = backlog_id;
+                            //alert(objId);
+                            me.editTask(taskItem);
+                        },
+                        /**
+                         * @name 修改task
+                         * @public
+                         * @param {string} [task_id] 
+                         */
+                        editTask: function (taskItem) {
+                            var me = this;
+                            
+                            taskItem = !taskItem.sprint_id ? me.getTaskItem(taskItem) : taskItem;
+                            
+                            var nc = hui.Control.getById('editTask', me);
+                            if (nc) {
+                                nc.dispose();
+                            }
+                            
+                            // 弹出对话框
+                            nc = hui.Control.create('Boxpanel', {
+                                id: 'editTask', 
+                                title: '',  
+                                contentView: 'taskboard_addtask', 
+                                size: { width:'750px', height: '500px', bottom: '8%'}
+                            });
+                            this.appendControl(nc);
+                            // 绑定事件
+                            nc.getByFormname('submit').onclick = new Function('hui.Master.get().saveTask()');
+                            
+                            // nc.setTitle(taskItem.task_name ? ' Edit Task - ' + taskItem.task_name + '' : 
+                            //             ' Add Task to - ' + me.getBacklogItem(taskItem.backlog_id).backlog_name + '');
+                            // 必须先初始化options，否则task_person无法setValue!!
+                            nc.getByFormname('task_person').setOptions(me.getUserList());
+                            nc.getByFormname('task_person').setValue(hui.getCookie('taskboard_user'));
+                            // 默认解除deleted状态
+                            taskItem.task_deleted = '0';
+                            nc.setValueByTree(taskItem);
+                            nc.show();
+                            
+                        },
+                        saveTask: function (taskValue) {
+                            var me = this;
+                            
+                            if (!taskValue) {
+                                var nc = hui.Control.getById('editTask', me);
+                                taskValue =  nc && nc.validate() ? nc.getParamMap() : null;
+                            }
+                            
+                            if (taskValue) {
+                                // taskValue.backlog_id = Number(taskValue.backlog_id);
+                                
+                                if (!hui.util.isEqual(taskValue, me.getTaskItem(taskValue.task_id))) {
+                                    // 自己修改的，无需显示刷新提示
+                                    hui.setCookie('task_lastmodify', '');
+                                    
+                                    Requester.get('/ue_api/internal/task_save', {
+                                        data: taskValue,
+                                        onsuccess: hui.fn(me.saveTaskCallback, me)
+                                    });
+                                }
+                                // 保存任务上下次序
+                                if (taskValue.task_id) {
+                                    me.saveTaskIndex(taskValue);
+                                }
+                            }
+                        },
+                        saveTaskCallback: function (data) {
+                            var me = this;
+                            if (!data[0] && data[1]) {
+                                var taskboard = me.getByFormname('taskboard'),
+                                    list = me.model.get('task_list'),
+                                    isAdd = true,
+                                    taskValue = data[1];
+                                // 注：更新task_list
+                                for (var i=0,len=list.length; i<len; i++) {
+                                    if (list[i].task_id === taskValue.task_id) {
+                                        list[i] = taskValue;
+                                        isAdd = false; 
+                                        list[i].task_deleted === 'deleted' && list.splice(i, 1);
+                                        break;
+                                    }
+                                }
+                                isAdd && list.push(taskValue);
+                                
+                                //me.model.set('task_list'   , hui.sortBy(list, 'task_index', 'desc'));
+                                me.model.set('task_list'   , list);
+                                
+                                // 添加到任务板上
+                                if (String(taskValue.task_deleted) === 'deleted') {
+                                    taskboard.deleteTask(taskValue);
+                                }
+                                else if (hui.g('task_'+taskValue.task_id)) {
+                                    taskboard.updateTask(taskValue);
+                                    hui.removeClass(hui.g('task_'+taskValue.task_id), 'deleted');
+                                }
+                                else {
+                                    taskboard.addTask(taskValue);
+                                }
+                                
+                                // 销毁对话框
+                                var editTask = hui.Control.getById('editTask', me);
+                                editTask&&editTask.dispose();
+                                hui.Mask.hide();
+                                
+                                // 高亮任务
+                                me.highlightTask();
+                                
+                                // 新增任务需保存上下次序
+                                isAdd && me.saveTaskIndex(taskValue);
+                            }
+                        },
+                        saveTaskIndex: function (taskValue) {
+                            var me = this,
+                                task_id = taskValue.task_id,
+                                backlogItem = hui.g('task_' + task_id).parentNode,
+                                str = backlogItem.id.split('_'),
+                                task_status = str[0],
+                                backlog_id = str[1],
+                                sprint_id = me.getByFormname('sprint_list').getValue(),
+                                list = backlogItem.childNodes,
+                                taskindex = [];
+                            for (var i=0,len=list.length; i<len; i++) {
+                                if (list[i] && list[i].className && (' ' + list[i].className + ' ').indexOf(' task ') != -1) {
+                                    taskindex.push(list[i].id.split('_')[1]);
+                                }
+                            }
+                            
+                            Requester.get('/ue_api/internal/taskindex_save', {
+                                data: { 
+                                    backlog_id: backlog_id,
+                                    task_status: task_status,
+                                    sprint_id: sprint_id,
+                                    taskindex: JSON.stringify(taskindex)
+                                },  
+                                onsuccess: new Function()
+                            });
+
+                        },
+                        highlightTask: function () {
+                            var me = this,
+                                uid = me.getByFormname('user_list').getValue(),
+                                list = hui.c('task'),
+                                task_person;
+                            for (var i=0,len=list.length; i<len; i++) {
+                                task_person = hui.c('pointperson', list[i])[0];
+                                if (task_person.getAttribute('task_person') == uid) {
+                                    hui.addClass(list[i], 'taskofuser0');
+                                }
+                                else {
+                                    hui.removeClass(list[i], 'taskofuser0');
+                                }
+                            }
+                            
+                            hui.setCookie('taskboard_user', uid);
+                            
+                        },
+                        checkTaskModify: function () {
+                            var me = this;
+                            return;
+                            Requester.get('/ue_api/internal/task_lastmodify?rand=' + Math.random(), {
+                                onsuccess: hui.fn(me.checkTaskModifyCallback, me)
+                            });
+                        },
+                        checkTaskModifyCallback: function (data) {
+                            var me = this,
+                                task_lastmodify = String(hui.getCookie('task_lastmodify')),
+                                last_log = data[1][0] ? data[1][0] : {_id: '0'};
+                            
+                            if (task_lastmodify && task_lastmodify !== String(last_log._id)) {
+                                hui.g('needsUpdate').style.display = 'block';
+                            }
+                            else {            
+                                hui.setCookie('task_lastmodify', last_log._id);
+                                
+                                me.checkTaskModifyTimer = window.setTimeout(function(){me.checkTaskModify();}, 30000);
+                            }
+                            
+                        },
+                        /**
+                         * @name 修改Product
+                         * @public
+                         * @param {string} [product_id] 
+                         */
+                        addProduct: function () {
+                            this.editProduct('new');
+                        },
+                        editProduct: function (isNew) {
+                            var me = this,
+                                nc = hui.Control.getById('editProduct', me),
+                                product_id = me.getByFormname('product_list').getValue(),
+                                productValue,
+                                productItem;
+                            
+                            // 确定productItem的值
+                            productValue = {};
+                            if (isNew != 'new') {
+                                productItem = me.getProduct(product_id);
+                                if (productItem) {
+                                    productValue.product_id     = productItem.product_id;
+                                    productValue.product_name   = productItem.product_name;   
+                                    productValue.product_key    = productItem.product_key;    
+                                    productValue.product_index  = productItem.product_index;      
+                                }
+                            }
+                            // 弹出对话框
+                            if (nc) {
+                                nc.dispose();
+                            }
+                            nc = hui.Control.create('Boxpanel', {
+                                id: 'editProduct', 
+                                title: product_id ? ' Edit Product' : ' Add Product', 
+                                contentView: 'taskboard_addproduct', 
+                                size: { width:'500px', height: '340px', bottom: '8%'}
+                            });
+                            this.appendControl(nc);
+                            // 绑定事件
+                            nc.getByFormname('submit').onclick = new Function('hui.Master.get().saveProduct()');
+                            
+                            nc.setValueByTree(productValue);
+                            nc.show();
+                        },
+                        saveProduct: function () {
+                            var me = this;
+                            var nc = hui.Control.getById('editProduct', me);
+                            
+                            if (nc && nc.validate()) {
+                                var productValue = nc.getParamMap();
+                                
+                                Requester.get('/ue_api/internal/product_save', {
+                                    data: productValue,
+                                    onsuccess: hui.fn(me.saveProductCallback, me)
+                                });
+                            }
+                        },
+                        saveProductCallback: function (data) {
+                            var me = this;
+                            if (!data[0] && data[1]) {
+                                // 销毁对话框
+                                hui.Control.getById('editProduct', me).dispose();
+                                
+                                // hui.setCookie('taskboard_product', data[1][0].product_id);
+                                // hui.Locator.reload();
+                                window.location.reload();
+                            }
+                        },
+                        /**
+                         * @name 修改Sprint
+                         * @public
+                         * @param {string} [sprint_id] 
+                         */
+                        addSprint: function () {
+                            this.editSprint('new');
+                        },
+                        editSprint: function (isNew) {
+                            var me = this,
+                                nc = hui.Control.getById('editSprint', me),
+                                product_id = me.getByFormname('product_list').getValue(),
+                                sprint_id  = me.getByFormname('sprint_list').getValue(),
+                                sprintValue,
+                                sprintItem;
+                            
+                            // 确定sprintItem的值
+                            sprintValue = {product_id: product_id};
+                            if (isNew != 'new') {
+                                sprintItem = me.getSprint(sprint_id);
+                                if (sprintItem) {
+                                    sprintValue.sprint_id     = sprintItem.sprint_id;
+                                    sprintValue.sprint_name   = sprintItem.sprint_name;   
+                                    sprintValue.sprint_desc   = sprintItem.sprint_desc;  
+                                    sprintValue.sprint_index  = sprintItem.sprint_index; 
+                                    sprintValue.product_id    = sprintItem.product_id;      
+                                }
+                            }
+                            // 弹出对话框
+                            if (nc) {
+                                nc.dispose();
+                            }
+                            nc = hui.Control.create('Boxpanel', {
+                                id: 'editSprint', 
+                                title: sprint_id ? ' Edit Sprint' : ' Add Sprint', 
+                                contentView: 'taskboard_addsprint', 
+                                size: { width:'500px', height: '340px', bottom: '8%'}
+                            });
+                            this.appendControl(nc);
+                            // 绑定事件
+                            nc.getByFormname('submit').onclick = new Function('hui.Master.get().saveSprint()');
+                            
+                            nc.setValueByTree(sprintValue);
+                            nc.show();
+                        },
+                        saveSprint: function () {
+                            var me = this;
+                            var nc = hui.Control.getById('editSprint', me);
+                            
+                            if (nc && nc.validate()) {
+                                var sprintValue = nc.getParamMap();
+                                
+                                Requester.get('/ue_api/internal/sprint_save', {
+                                    data: sprintValue,
+                                    onsuccess: hui.fn(me.saveSprintCallback, me)
+                                });
+                            }
+                        },
+                        saveSprintCallback: function (data) {
+                            var me = this;
+                            if (!data[0] && data[1]) {
+                                // 销毁对话框
+                                hui.Control.getById('editSprint', me).dispose();
+                                
+                                // hui.setCookie('selected_sprint', data[1][0].sprint_id);
+                                // hui.Locator.reload();
+                                window.location.reload();
+                            }
+                        }
+                    };
+
+                    hui.inherits(pageTaskboard, hui.Action);
+                    hui.Router.setRule('/', 'pageTaskboard');
+                    hui.window.pageTaskboard = pageTaskboard;
+                }
+            </script>
+            <div class="page_body" id="history" style="background-color: white;display: none;">
+                <!-- target: taskboard_addsprint -->
+                <table>
+                    <tr>
+                        <td align="right" valign="top"> </td>
+                        <td align="left" valign="top" colspan="3"><h3>Add Sprint</h3></td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Sprint Name:</td>
+                        <td>
+                            <input type="hidden" ui="type:'TextInput',formname:'product_id'" />
+                            <input type="hidden" ui="type:'TextInput',formname:'sprint_id'" />
+                            <input type="text" size="30" ui="type:'TextInput',formname:'sprint_name',rule:'required'" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="inputLabel" style="vertical-align: top;">Description:</td>
+                        <td style="vertical-align: top;">
+                            <textarea ui="type:'TextInput',formname:'sprint_desc'" cols="40" rows="9"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="inputLabel" style="vertical-align: top;">Index:</td>
+                        <td style="vertical-align: top;">
+                            <input type="text" size="16" ui="type:'TextInput',formname:'sprint_index'" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top"> </td>
+                        <td height="40" valign="bottom">
+                            <button ui="type:'Button',formname:'submit'">提交</button>
+                        </td>
+                    </tr>
+               </table>
+
+                <!-- target: taskboard_addproduct -->
+                <table>
+                    <tr>
+                        <td align="right" valign="top"> </td>
+                        <td align="left" valign="top" colspan="3"><h3>Add Product</h3></td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Name:</td>
+                        <td>
+                            <input type="hidden" ui="type:'TextInput',formname:'product_id'" />
+                            <input type="text" size="30" ui="type:'TextInput',formname:'product_name',rule:'required'" />
+                        </td>
+                        <td rowspan="6" style="vertical-align: top; padding-left:20px;">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="inputLabel" style="vertical-align: top;">Description:</td>
+                        <td style="vertical-align: top;">
+                            <textarea ui="type:'TextInput',formname:'product_desc'" cols="40" rows="9"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Keyword :</td>
+                        <td>
+                            <input type="text" size="13" ui="type:'TextInput',formname:'product_key',rule:'required'" /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Index:
+                            <input type="text" size="13" ui="type:'TextInput',formname:'product_index'" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top"> </td>
+                        <td height="40" valign="bottom">
+                            <button ui="type:'Button',formname:'submit'">提交</button>
+                        </td>
+                    </tr>
+                    
+                </table>
+
+                <!-- target: taskboard_addbacklog -->
+                <table>
+                    <tr>
+                        <td align="right" valign="top"> </td>
+                        <td align="left" valign="top" colspan="3"><h3>Add Backlog</h3></td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Title:</td>
+                        <td>
+                            <input type="hidden" ui="type:'TextInput',formname:'sprint_id'" />
+                            <input type="hidden" ui="type:'TextInput',formname:'backlog_id'" />
+                            <input type="text" size="30" ui="type:'TextInput',formname:'backlog_name',rule:'required'" />
+                        </td>
+                        <td rowspan="6" style="vertical-align: top; padding-left:20px;">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="inputLabel" style="vertical-align: top;">Description:</td>
+                        <td style="vertical-align: top;">
+                            <textarea ui="type:'TextInput',formname:'backlog_desc'" cols="40" rows="9"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="inputLabel" style="vertical-align: top;">Index:</td>
+                        <td style="vertical-align: top;">
+                            <input type="text" size="16" ui="type:'TextInput',formname:'backlog_index'" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top"> </td>
+                        <td height="40" valign="bottom">
+                            <button ui="type:'Button',formname:'submit'">提交</button>
+                        </td>
+                    </tr>
+               </table>
+
+
+                <!-- target: taskboard_addtask -->
+
+
+                <div id="addTaskModal">
+                    <table id="addTaskTable">
+                        <tr>
+                            <td align="right" valign="top"> </td>
+                            <td align="left" valign="top" colspan="3"><h3>Add Task</h3></td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top">Title:</td>
+                            <td>
+                                <input type="hidden" ui="type:'TextInput',formname:'task_deleted',value:'0'" />
+                                <input type="hidden" ui="type:'TextInput',formname:'product_id'" />
+                                <input type="hidden" ui="type:'TextInput',formname:'sprint_id'" />
+                                <input type="hidden" ui="type:'TextInput',formname:'backlog_id'" />
+                                <input type="hidden" ui="type:'TextInput',formname:'task_id'" />
+                                <input type="text" ui="type:'TextInput',formname:'task_name',rule:'required'" style="width: 267px;" />
+                            </td>
+                            <td rowspan="6" style="vertical-align: top; padding-left:20px;">
+                                <table cellspacing="0px">
+                                    <tr>
+                                        <td style="padding-top: 0px;">
+                                            <textarea ui="type:'TextInput',formname:'new_comment',isForm:'false'" style="border: 1px solid #A9A9A9; color: #000000; height: 68px; padding: 2px; width: 260px; text-align: left;margin-bottom: 5px;" rows="1" cols="20"></textarea>
+                                            <div style="width: 264px; text-align: right;">
+                                                <img ui="type:'Button',formname:'btn_addcomment'" src="vm/img/comment-button.gif" title="Post Comment" style="cursor: pointer;" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="commentsLabel">Comments:</td>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="3">
+                                            <textarea ui="type:'TextInput',formname:'task_comments'" style="color: black; height: 220px; overflow: scroll; padding-bottom: 2px; padding-top: 2px; vertical-align: top; width: 264px; border: 1px solid #A9A9A9;"></textarea>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="inputLabel" style="vertical-align: top;">Description:</td>
+                            <td style="vertical-align: top;">
+                                <textarea ui="type:'TextInput',formname:'task_desc'" cols="40" rows="9" style="width: 288px;"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="inputLabel">Point Person:</td>
+                            <td>
+                                <div ui="type:'Dropdown',formname:'task_person',data_value:'uid',data_text:'user_label'" style="width: 288px;"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="inputLabel">Status:</td>
+                            <td>
+                                <div ui="type:'Dropdown',formname:'task_status',options:[{value:\'notstarted\',text:'Not Started'},{value:\'impeded\',text:'Impeded'},{value:\'inprogress\',text:'In Progress'},{value:\'done\',text:'Done'}],size:{width:\'150px\'},default_select:true">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="vertical-align: top">
+                                <table>
+                                    <tr>
+                                        <td class="inputLabel">Team hours remaining:</td>
+                                        <td>
+                                            <input ui="type:'TextInput',formname:'task_remaining'" size="7" type="text" value="4" />
+                                        </td>
+                                        <td class="inputLabel" style="padding-left:35px;">Original Estimate:</td>
+                                        <td>
+                                            <input ui="type:'TextInput',formname:'task_estimate'" size="9" value="4">
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr style="height: 30px;">
+                            <td colspan="2">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top"> </td>
+                            <td height="40" valign="bottom">
+                                <button ui="type:'Button',formname:'submit'">提交</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <script>
+                function initPageAddTask() {
+                    // pageHistory
+                    var pageHistory;
+                    pageHistory = function () {
+                        hui.Action.call(this);
+                        this.id = 'pageHistory';
+                        this.main = 'history';
+                    };
+                    pageHistory.prototype = {
+                        initBehavior: function () {
+                            var me = this;
+                            me.showTestHistory();
+                        },
+                        finish: function () {
+                            var me = this;
+                            showTab('history');
+                        },
+                        showTestHistory: function () {
+                            hui.Mockup.setRule('/ue_api/internal/get_test_history', [
+                                null, [{
+                                    user: 'a001',
+                                    time: '30 m',
+                                    score: '35',
+                                    date: '2015-01-05 16:40'
+                                }, {
+                                    user: 'a001',
+                                    time: '30 m',
+                                    score: '35',
+                                    date: '2015-01-05 16:40'
+                                }, {
+                                    user: 'a001',
+                                    time: '30 m',
+                                    score: '35',
+                                    date: '2015-01-05 16:40'
+                                }, {
+                                    user: 'a001',
+                                    time: '30 m',
+                                    score: '35',
+                                    date: '2015-01-05 16:40'
+                                }, {
+                                    user: 'a001',
+                                    time: '30 m',
+                                    score: '35',
+                                    date: '2015-01-05 16:40'
+                                }, {
+                                    user: 'a001',
+                                    time: '30 m',
+                                    score: '35',
+                                    date: '2015-01-05 16:40'
+                                }]
+                            ]);
+                            Requester.get('/ue_api/internal/get_test_history?rand=' + Math.random(), {
+                                onsuccess: function (result) {
+                                    if (result && !result[0] && result[1]) {
+                                        var tpl = [
+                                            '<li class="item_row">',
+                                            '    <span class="t_user">#{user}</span>',
+                                            '    <span class="t_time">#{time}</span>',
+                                            '    <span class="t_score">#{score}</span>',
+                                            '    <span class="t_date">#{date}</span>',
+                                            '</li>'
+                                        ].join('');
+
+                                        var list = result[1];
+                                        var html = '';
+                                        for (var i = 0, len = list.length; i < len; i++) {
+                                            html += hui.util.format(tpl, list[i]);
+                                        }
+                                        hui.g('history_list').innerHTML = html;
+                                    }
+                                }
+                            });
+                        },
+
+                    };
+
+                    hui.inherits(pageHistory, hui.Action);
+                    hui.Router.setRule('/history', 'pageHistory');
+                    hui.window.pageHistory = pageHistory;
+                }
+            </script>
+            <div class="page_body" id="industry" style="background-color: white;display: none;">
+                <!-- target: taskboard_impediment -->
+                <style type="text/css">
+                #editImpedimentTable { margin: 5px; }
+                #editImpedimentDiv td { padding-bottom: 2px; padding-right: 2px; }
+                .inputLabel { width: 100px; text-align: right; font-size: 9pt; color: black; }
+                #impediment_Title { width: 250px; }
+                input { vertical-align: middle; }
+                #impediment_Description { width: 250px; }
+                textarea { font-size: 10pt; font-family: Arial, Helvetica, sans-serif; }
+                #impediment_Reporter { width: 150px; }
+                </style>
+                <div id="editImpedimentDiv">
+                    <table id="editImpedimentTable">
+                        <tr>
+                            <td class="inputLabel">Title:</td>
+                            <td>
+                                <input id="impediment_Title" type="text" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="inputLabel" style="vertical-align: top;">Description:</td>
+                            <td>
+                                <textarea id="impediment_Description" cols="40" rows="6" name="S1"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="inputLabel">Reporter:</td>
+                            <td>
+                                <select id="impediment_Reporter" name="D1">
+                                    <option value="">(unspecified)</option>
+                                    <option value="Aaron.lu (aaron.lu)">Aaron.lu (aaron.lu)</option>
+                                    <option value="Ada.yang (ada.yang)">Ada.yang (ada.yang)</option>
+                                    <option value="Andy.wang (andy.wang)">Andy.wang (andy.wang)</option>
+                                    <option value="Blanche.xu (blanche.xu)">Blanche.xu (blanche.xu)
+                                    </option>
+                                    <option value="Chloe.yang (chloe.yang)">Chloe.yang (chloe.yang)
+                                    </option>
+                                    <option value="Cindy.liu (cindy.liu)">Cindy.liu (cindy.liu)</option>
+                                    <option value="Colin.zhang (colin.zhang)">Colin.zhang (colin.zhang)
+                                    </option>
+                                    <option value="Daini.xu (daini.xu)">Daini.xu (daini.xu)</option>
+                                    <option value="David (david)">David (david)</option>
+                                    <option value="Ethan (ethan)">Ethan (ethan)</option>
+                                    <option value="Harrison.lin (harrison.lin)">Harrison.lin (harrison.lin)
+                                    </option>
+                                    <option value="Jason (jason)">Jason (jason)</option>
+                                    <option value="Jicheng.li (jicheng.li)">Jicheng.li (jicheng.li)
+                                    </option>
+                                    <option value="Richard.xu (richard.xu)">Richard.xu (richard.xu)
+                                    </option>
+                                    <option value="Steven.cheng (steven.cheng)">Steven.cheng (steven.cheng)
+                                    </option>
+                                    <option value="Tiennan.lin (tiennan.lin)">Tiennan.lin (tiennan.lin)
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="inputLabel">Resolved:</td>
+                            <td>
+                                <input id="impediment_Resolved" name="impediment_Resolved" type="checkbox" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td style="text-align: right;">
+                                <input class="impediment_OK" style="cursor: pointer;" id="impediment_OK" src="vm/img/ok-button-active.gif" title="OK" type="image" />
+                                <input class="impediment_Cancel" style="cursor: pointer;" id="impediment_Cancel" src="vm/img/cancel-button-active.gif" title="Cancel" type="image" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <script>
+                function initPageComment() {
+                    // pageIndustry
+                    var pageIndustry;
+                    pageIndustry = function () {
+                        hui.Action.call(this);
+                        this.id = 'pageIndustry';
+                        this.main = 'industry';
+                    };
+                    pageIndustry.prototype = {
+                        initBehavior: function () {
+                            var me = this;
+                        },
+                        finish: function () {
+                            var me = this;
+                            showTab('industry');
+                        }
+
+                    };
+
+                    hui.inherits(pageIndustry, hui.Action);
+                    hui.Router.setRule('/industry', 'pageIndustry');
+                    hui.window.pageIndustry = pageIndustry;
+                }
+            </script>
+
+        </div>
+        <div class="page_foot">
+            <!--div class="page_container">
+                沪ICP备15001838号 上海轩禄商务咨询有限公司 ©2015 版权所有
+            </div-->
+        </div>
+    </div>
+
+    <div id="subject_add" class="subject_test">
+
+
+
+
+
+    </div>
+
+    <!-- script type="text/javascript" src="http://bpmjs.org/bpm_api/combo??hui_requester@0.0.1,hui_action@0.0.1,hui_panel@0.0.1,hui_table@0.0.1,hui_checkbox@0.0.1,hui_textinput@0.0.1,hui_button@0.0.1,hui_template@0.0.1,hui_checklabel@0.0.1,hui_boxpanel@0.0.1,hui_label@0.0.1,hui_slider@0.0.1,hui_radiobox@0.0.1,hui_dropdown@0.0.1,hui_validator@0.0.1?debug=true"></script -->
+    <!-- script type="text/javascript" src="http://bpmjs.org/js/??hui@0.0.1/hui.js,hui_validator@0.0.1/hui_validator.js,hui_util@0.0.1/hui_util.js,hui_dropdown@0.0.1/hui_dropdown.js,hui_control@0.0.1/hui_control.js,hui_radiobox@0.0.1/hui_radiobox.js,hui_checkbox@0.0.1/hui_checkbox.js,hui_slider@0.0.1/hui_slider.js,hui_draggable@0.0.1/hui_draggable.js,hui_label@0.0.1/hui_label.js,hui_boxpanel@0.0.1/hui_boxpanel.js,hui_checklabel@0.0.1/hui_checklabel.js,hui_template@0.0.1/hui_template.js,hui_button@0.0.1/hui_button.js,hui_textinput@0.0.1/hui_textinput.js,hui_table@0.0.1/hui_table.js,hui_panel@0.0.1/hui_panel.js,hui_action@0.0.1/hui_action.js,hui_requester@0.0.1/hui_requester.js?debug=true"></script -->
+    <script type="text/javascript" src="src/hui@0.0.1/hui.js"></script>
+    <script type="text/javascript" src="src/hui_validator@0.0.1/hui_validator.js"></script>
+    <script type="text/javascript" src="src/hui_util@0.0.1/hui_util.js"></script>
+    <script type="text/javascript" src="src/hui_dropdown@0.0.1/hui_dropdown.js"></script>
+    <script type="text/javascript" src="src/hui_control@0.0.1/hui_control.js"></script>
+    <script type="text/javascript" src="src/hui_radiobox@0.0.1/hui_radiobox.js"></script>
+    <script type="text/javascript" src="src/hui_checkbox@0.0.1/hui_checkbox.js"></script>
+    <script type="text/javascript" src="src/hui_slider@0.0.1/hui_slider.js"></script>
+    <script type="text/javascript" src="src/hui_draggable@0.0.1/hui_draggable.js"></script>
+    <script type="text/javascript" src="src/hui_label@0.0.1/hui_label.js"></script>
+    <script type="text/javascript" src="src/hui_boxpanel@0.0.1/hui_boxpanel.js"></script>
+    <script type="text/javascript" src="src/hui_mask@0.0.1/hui_mask.js"></script>
+    <script type="text/javascript" src="src/hui_checklabel@0.0.1/hui_checklabel.js"></script>
+    <script type="text/javascript" src="src/hui_template@0.0.1/hui_template.js"></script>
+    <script type="text/javascript" src="src/hui_button@0.0.1/hui_button.js"></script>
+    <script type="text/javascript" src="src/hui_select@0.0.1/hui_select.js"></script>
+    <script type="text/javascript" src="src/hui_textinput@0.0.1/hui_textinput.js"></script>
+    <script type="text/javascript" src="src/hui_table@0.0.1/hui_table.js"></script>
+    <script type="text/javascript" src="src/hui_panel@0.0.1/hui_panel.js"></script>
+    <script type="text/javascript" src="src/hui_action@0.0.1/hui_action.js"></script>
+    <script type="text/javascript" src="src/hui_requester@0.0.1/hui_requester.js"></script>
+    <script type="text/javascript" src="src/hui_taskboard@0.0.1/hui_taskboard.js"></script>
+    <!-- Only for highrchart!!  -->
+    <!--script type="text/javascript" src="src/jquery1.9.1.js         "></script>
+    <script type="text/javascript" src="src/highcharts.js          "></script>
+    <script type="text/javascript" src="src/highcharts-more.js     "></script-->
+    <script type="text/javascript" src="src/ext_dragdrop.js          "></script>
+    <script type="text/javascript" src="src/ext_chart.js             "></script>
+    <script type="text/javascript" src="src/ext_md5.js             "></script>
 </body>
 
 </html>

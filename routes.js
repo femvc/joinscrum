@@ -5,8 +5,8 @@ var product   = require('./routes/product');
 var sprint    = require('./routes/sprint');
 var backlog   = require('./routes/backlog');
 var task      = require('./routes/task');
-// var taskindex = require('./routes/taskindex');
-// var chart     = require('./routes/chart');
+var taskindex = require('./routes/taskindex');
+var chart     = require('./routes/chart');
 
 /*
  * CORS Support in Node.js web app written with Express
@@ -58,10 +58,10 @@ app.get('/ue_api/internal/task_detail',     account.auth, task.detail);
 app.get('/ue_api/internal/task_save',       account.auth, task.save);
 // app.get('/ue_api/internal/task_lastmodify', account.auth, task.lastmodify);
 
-// // Taskindex
-// app.get('/ue_api/internal/taskindex_list',  account.auth, task.indexlist);
-// app.get('/ue_api/internal/taskindex_save',  account.auth, task.indexsave);
+// Taskindex
+app.get('/ue_api/internal/taskindex_list',  account.auth, taskindex.list);
+app.get('/ue_api/internal/taskindex_save',  account.auth, taskindex.save);
 
-// // Burndown
-// app.get('/ue_api/internal/burndown',        account.auth, task.burndown);
-// app.get('/ue_api/internal/burden',          account.auth, task.burden);
+// Burndown
+// app.get('/ue_api/internal/burndown',        account.auth, chart.burndown);
+app.get('/ue_api/internal/burden',          account.auth, chart.burden);

@@ -32,7 +32,7 @@ var page301 = function() {
     /**
      * 初始化数据模型
      */
-    var baseModel = bui.Action.getExtClass('bui.BaseModel'); 
+    var baseModel = bui.Master.getExtClass('bui.BaseModel'); 
     this.model = new baseModel();
     
     
@@ -44,7 +44,7 @@ page301.prototype = {
             +'<p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>'
             +'<p>Please try the following:</p>'
             +'<ul><li>If you typed the page address in the Address bar, make sure that it is spelled correctly.<br/></li>'
-            +'<li>Open the <a href="#/">home page</a>, and then look for links to the information you want.</li>'
+            +'<li>Open the <a href="#!/">home page</a>, and then look for links to the information you want.</li>'
             +'<li>Click the <a href="javascript:history.go(-1)">Back</a> button to try another link. </li>'
             +'</ul><p><br></p>HTTP 404 - File not found<br />Need any help? This service is free.<br /></div>';
         return str;
@@ -96,7 +96,7 @@ function do404() {
 <div id="main">
 </div>
 <button type="button" onclick="do404()">Create Action</button>
-<button type="button" onclick="alert(bui.Action.get() ? 'true' : 'false')">test action</button>
+<button type="button" onclick="alert(bui.Master.get() ? 'true' : 'false')">test action</button>
 </body>
 
 </html>

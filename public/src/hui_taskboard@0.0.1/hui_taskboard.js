@@ -45,7 +45,7 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
                 '</colgroup>' + 
                 '<thead>' + 
                     '<tr class="taskboard-header">' + 
-                        '<th>Backlog Items <button class="link" style="margin-left:40px;margin-right:-20px;" onclick="hui.Action.get().addBacklog()">add</button></th>' + 
+                        '<th>Backlog Items <button class="link" style="margin-left:5px;margin-right:-20px;" onclick="hui.Master.get().addBacklog()">add</button></th>' + 
                         '<th colspan="4">Tasks / Status</th>' + 
                     '</tr>' + 
                     '<tr class="taskstatus">' + 
@@ -64,7 +64,7 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
             var str = 
             '<table>' +
                 '<tr>' +
-                    '<td class="taskboardCell pbiCell" id="pbi_#{backlog_id}">#{pbi_info}</td>' +
+                    '<td class="taskboardCell pbiCell" id="pbi_#{backlog_id}">#{!pbi_info}</td>' +
                     '<td class="taskboardCell" id="notstarted_#{backlog_id}" style="position: relative;"></td>' +
                     '<td class="taskboardCell" id="impeded_#{backlog_id}" style="position: relative;"></td>' +
                     '<td class="taskboardCell" id="inprogress_#{backlog_id}" style="position: relative;"></td>' +
@@ -76,18 +76,18 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
         getBacklogTpl: function () {
             var str = 
             '<div>' +
-                '<span ondblclick="hui.Action.get().editBacklog(\'#{backlog_id}\')">' + 
-                '<span class="pbikey"   id="pbikey_#{backlog_id}">(#{product_key}-#{backlog_id})</span>&nbsp;' +
+                '<span ondblclick="hui.Master.get().editBacklog(\'#{backlog_id}\')">' + 
+                '<span class="pbikey"   id="pbikey_#{backlog_id}">(#{product_key})</span>&nbsp;' +
                 '<span class="pbititle" id="pbititle_#{backlog_id}">#{backlog_name}</span></span><br><br><br>' +
                 '<div  class="pbidesc"  id="pbidesc_#{backlog_id}">#{backlog_desc}</div>' +
             '</div>' +
             '<div style="width: 100%; height: 30px;">' +
                 '<div class="pbiestimate">Estimate: - #{backlog_estimate}</div>' +
-                '<div class="pbidone"><input type="checkbox" id="markdone_#{backlog_id}" onclick="hui.Action.get().doneBacklog(this)" ><label for="markdone_#{backlog_id}">Done</label></div>' +
+                '<div class="pbidone"><input type="checkbox" id="markdone_#{backlog_id}" onclick="hui.Master.get().doneBacklog(this)" ><label for="markdone_#{backlog_id}">Done</label></div>' +
             '</div>' +
-            '<div style="width: 100%; height: 30px;">' +
+            '<div style="width: 100%; height: 30px; text-align: right; padding-top: 6px;">' +
                 '<div id="person_#{backlog_id}"></div>' +
-                '<img title="Add Task" src="vm/img/add-task-active.gif" id="addtask_#{backlog_id}" style="cursor: pointer;" onclick="hui.Action.get().addTask(\'#{backlog_id}\')" class="addtask">' +
+                '<button class="link" id="addtask_#{backlog_id}" style="cursor: pointer; margin-right: 7px;" onclick="hui.Master.get().addTask(\'#{backlog_id}\')">add</button>' +
             '</div>';
             return str;
         },
@@ -99,7 +99,7 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
         },
         getTaskContentTpl: function () {
             var str = 
-                '<div class="tasktitle" ondblclick="hui.Action.get().editTask(\'#{task_id}\')" id="tasktitle_#{task_id}" title="#{task_name}">#{task_name}</div>' +
+                '<div class="tasktitle" ondblclick="hui.Master.get().editTask(\'#{task_id}\')" id="tasktitle_#{task_id}" title="#{task_name}">#{task_name}</div>' +
                 '<div class="draghandle">' +
                     '<div class="taskhours">Hrs: <span id="hours_#{task_id}">#{task_remaining}</span></div>' +
                     '<div class="pointperson" id="pp_#{task_id}" task_person="#{task_person}">#{user_label}</div>' +
@@ -108,9 +108,9 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
                 '<div class="taskmenu_list" style="display:none;" '+
                     ' id="menu_#{task_id}" onmouseover="window.clearTimeout(this.timer)" ' +
                     ' onmouseout="var me=this;me.timer=window.setTimeout(function(){me.style.display=\'none\';}, 500);">' +
-                    '<div class="taskmenu_item" onclick="hui.Action.get().takeTask(\'#{task_id}\')">Take Task</div>' +
-                    '<div class="taskmenu_item" onclick="hui.Action.get().editTask(\'#{task_id}\')">Edit Task</div>' +
-                    '<div class="taskmenu_item" onclick="hui.Action.get().deleteTask(\'#{task_id}\')">Delete Task</div>' +
+                    '<div class="taskmenu_item" onclick="hui.Master.get().takeTask(\'#{task_id}\')">Take Task</div>' +
+                    '<div class="taskmenu_item" onclick="hui.Master.get().editTask(\'#{task_id}\')">Edit Task</div>' +
+                    '<div class="taskmenu_item" onclick="hui.Master.get().deleteTask(\'#{task_id}\')">Delete Task</div>' +
                 '</div>';
             return str;
         },
@@ -129,7 +129,7 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
         addBacklogRow: function (backlogValue) {
             var me = this,
                 taskboard = hui.g('taskboard'),
-                row = hui.dom.createElement('DIV'),
+                row = document.createElement('DIV'),
                 pbi_info,
                 table,
                 tr;
@@ -160,14 +160,14 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
                 status = task.task_status,
                 td,
                 taskElem,
-                tmpContainer = hui.dom.createElement('DIV');
+                tmpContainer = document.createElement('DIV');
             
             // todo
             tmpContainer.innerHTML = hui.Control.format(me.getTaskTpl(), task);
             taskElem = tmpContainer.childNodes[0];
             taskElem = taskElem&&taskElem.tagName ? taskElem : tmpContainer.childNodes[1];
             td = hui.g(status + '_' + backlog_id);
-            td.appendChild(taskElem);
+            td && td.appendChild(taskElem);
 
             me.updateTask(task);
             
@@ -178,16 +178,16 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
                     me.startTime = new Date();
                 },
                 end:function(){
-                    hui.Action.get().moveTask(this);
+                    hui.Master.get().moveTask(this);
                 }
             });
             
         },
         updateTask: function(task){
             var me = this,
-                u = hui.Action.get().getUserItem(task.task_person);
+                u = hui.Master.get().getUserItem(task.task_person);
             task.task_remaining = task.task_remaining === '' ? '-' : task.task_remaining;
-            task.user_label = u.user_name + '(' + u.user_id + ')';
+            task.user_label = u.realname + '(' + u.username + ')';
             
             var taskElem = hui.g('task_'+task.task_id);
             if (taskElem) {

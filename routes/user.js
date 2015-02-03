@@ -1,8 +1,8 @@
 'use strict'; // utf-8编码
-var userModel = require('../models/user').createNew();
+var dataModel = require('../models/user').createNew();
 var userLogic = require('../helpers/user');
 
-
+// user_api
 // app.get('/ue_api/internal/user_list',       account.auth, user.list);
 // app.get('/ue_api/internal/user_info',       account.auth, user.detail);
 // app.get('/ue_api/internal/user_add',        account.auth, user.add);
@@ -11,6 +11,49 @@ var userLogic = require('../helpers/user');
 // app.get('/ue_api/internal/user_logout',     account.auth, user.logout);
 // app.get('/ue_api/internal/user_loginstatus',account.auth, user.loginstatus);
 
+function getDataRecord(req, res, filter, next) {
+    if (filter.uid || filter.username) {
+        dataModel.getItem(filter, function (err, doc) {
+            if (err) {
+                response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
+            }
+            // Output user_detail
+            if (!next) {
+                if (!doc) {
+                    response.err(req, res, 'RECORD_NOT_EXIST', filter);
+                }
+                else {
+                    response.ok(req, res, doc);
+                }
+            }
+            else {
+                next(doc);
+            }
+        });
+    }
+    else {
+        if (!filter.uid) {
+            return response.err(req, res, 'MISSING_PARAMETERS', 'uid');
+        }
+        if (!filter.username) {
+            return response.err(req, res, 'MISSING_PARAMETERS', 'username');
+        }
+    }
+}
+
+exports.detail = function (req, res, next) {
+    var filter = {};
+    if (req.paramlist.uid) {
+        filter.uid = req.paramlist.uid;
+    }
+    if (req.paramlist.username) {
+        filter.username = req.paramlist.username;
+    }
+
+    return getDataRecord(req, res, filter);
+};
+
+var arr = ['username', 'password', 'realname'];
 exports.list = function (req, res, next) {
     // res.end('aaaaaaaaaa');
     var params = req.paramlist,
@@ -21,13 +64,18 @@ exports.list = function (req, res, next) {
             'create_time': -1
         },
         filter = {};
+    for (var i = 0, len = arr.length; i < len; i++) {
+        if (req.paramlist[arr[i]] !== undefined) {
+            filter[arr[i]] = req.paramlist[arr[i]];
+        }
+    }
 
-    if (params.title)
-        filter.title = global.common.likeWith(params.title);
-    if (params.author)
-        filter.author = params.author;
+    if (params.username)
+        filter.username = global.common.likeWith(params.username);
+    if (params.user_desc)
+        filter.user_desc = global.common.likeWith(params.user_desc);
 
-    userModel.getItems(filter, sort, current, count, function (err, doc) {
+    dataModel.getItems(filter, sort, current, count, function (err, doc) {
         if (err) {
             response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
         }
@@ -38,52 +86,7 @@ exports.list = function (req, res, next) {
     });
 };
 
-function get_user (req, res, filter, next) {
-    if (!filter.uid && !filter.username) {
-        if (!filter.uid) {
-            return response.err(req, res, 'MISSING_PARAMETERS', 'uid');
-        }
-        if (!filter.username) {
-            return response.err(req, res, 'MISSING_PARAMETERS', 'username');
-        }
-    }
-    userModel.getItem(filter, function (err, doc) {
-        if (err) {
-            response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
-        }
-        // Output user_detail
-        if (!next) {
-            if (!doc) {
-                response.err(req, res, 'USER_USERNAME_NOT_EXIST');
-            }
-            else {
-                response.ok(req, res, doc);
-            }
-        }
-        else {
-            next(doc);
-        }
-        
-    });
-}
-
-exports.detail = function (req, res, next) {
-    var user = {};
-    if (req.paramlist.uid) {
-        user.uid = req.paramlist.uid;
-    }
-    if (req.paramlist.username) {
-        user.username = req.paramlist.username;
-    }
-    
-    return get_user(req, res, user);
-};
-
-exports.save = function (req, res, next) {
-    var uid = req.paramlist.uid,
-        user = {},
-        callback;
-
+function add(req, res, next) {
     if (!req.paramlist.username) {
         return response.err(req, res, 'MISSING_PARAMETERS', 'username');
     }
@@ -94,52 +97,78 @@ exports.save = function (req, res, next) {
         return response.err(req, res, 'MISSING_PARAMETERS', 'password');
     }
 
-    user.username = req.paramlist.username;
-    user.password = req.paramlist.password;
-
-    callback = function (err, doc) {
-        if (err) {
-            response.send(req, res, 'INTERNAL_DB_OPT_FAIL');
+    var filter = {};
+    for (var i = 0, len = arr.length; i < len; i++) {
+        if (req.paramlist[arr[i]] !== undefined) {
+            filter[arr[i]] = req.paramlist[arr[i]];
         }
-        response.ok(req, res, doc);
-    };
+    }
 
     var now = new Date();
     var date = global.common.formatDate(now, 'yyyy-MM-dd HH:mm:ss');
-    // Update
-    if (uid) {
-        user.update_time = date;
-        user.uid = uid;
-        userModel.update({
-            uid: uid
-        }, {
-            $set: user
-        }, {
-            upsert: false,
-            multi: false
-        }, function (err, doc) {
-            if (err) {
-                callback(err, doc);
-            }
-            else {
-                return get_user(req, res, {uid: req.paramlist.uid});
-            }
-        });
-    }
-    // Add
-    else {
-        get_user(req, res, {username: req.paramlist.username}, function (doc) {
-            if (doc) {
-                response.err(req, res, 'USER_ALREADY_EXIST');
-            }
-            else {
-                user.update_time = date;
-                user.uid = global.common.formatDate(now, 'yyyyMMddHHmmss') + '_' + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 16);
 
-                userModel.insert(user, callback);
-            }
+    getDataRecord(req, res, {
+        username: req.paramlist.username
+    }, function (doc) {
+        if (doc) {
+            response.err(req, res, 'USER_ALREADY_EXIST');
+        }
+        else {
+            filter.update_time = date;
+            filter.uid = '10' +  global.common.formatDate(now, 'yyyyMMddHHmmss') + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 8);
+
+            dataModel.insert(filter, function (err, doc) {
+                if (err) {
+                    response.send(req, res, 'INTERNAL_DB_OPT_FAIL');
+                }
+                response.ok(req, res, doc);
+            });
+        }
+    });
+
+};
+exports.add = add;
+exports.save = function (req, res, next) {
+    if (!req.paramlist.uid) {
+        // return response.err(req, res, 'MISSING_PARAMETERS', 'uid');
+        return add(req, res, next);
+    }
+
+    var filter = {};
+    for (var i = 0, len = arr.length; i < len; i++) {
+        if (req.paramlist[arr[i]] !== undefined) {
+            filter[arr[i]] = req.paramlist[arr[i]];
+        }
+    }
+
+    if (JSON.stringify(filter) === '{}') {
+        return getDataRecord(req, res, {
+            uid: req.paramlist.uid
         });
     }
+
+    var now = new Date();
+    var date = global.common.formatDate(now, 'yyyy-MM-dd HH:mm:ss');
+    filter.update_time = date;
+
+    dataModel.update({
+        uid: req.paramlist.uid
+    }, {
+        $set: filter
+    }, {
+        upsert: false,
+        multi: false
+    }, function (err, doc) {
+        if (err) {
+            response.send(req, res, 'INTERNAL_DB_OPT_FAIL');
+        }
+        else {
+            return getDataRecord(req, res, {
+                uid: req.paramlist.uid
+            });
+        }
+    });
+
 
 };
 
@@ -150,7 +179,7 @@ exports.login = function (req, res, next) {
     if (!req.paramlist.password) {
         return response.err(req, res, 'MISSING_PARAMETERS', 'password');
     }
-    userModel.getItem({
+    dataModel.getItem({
         username: req.paramlist.username,
         password: req.paramlist.password
     }, function (err, resp) {

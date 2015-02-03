@@ -38,7 +38,7 @@ bui.Control = function (options, pending) {
     // parentControl父控件默认为window对象, 不是的话后面会再改回来. 
     // var parentControl = bui.window;
     // Add: 上面这样做静态没问题，动态生成appendSelfTo就会出问题，因此需要加上options.parentControl
-    // Fixme: 第二次执行到这里bui.Action.get()居然是前一个action？
+    // Fixme: 第二次执行到这里bui.Master.get()居然是前一个action？
     var parentControl = options.parentControl || bui.window;
     parentControl.controlMap = parentControl.controlMap || {};
     
@@ -637,8 +637,8 @@ bui.Control.prototype = {
                 }
                 // 未找到直接父控件则将control从bui.window.controlMap移动到action.controlMap中
                 if ('html,body'.indexOf(String(elem.tagName).toLowerCase()) > -1) {
-                    if (bui && bui.Action && bui.Action.get()) {
-                        control = bui.Action.get();
+                    if (bui && bui.Action && bui.Master.get()) {
+                        control = bui.Master.get();
                         bui.Control.appendControl(control, uiObj);
                     }
                     break;
@@ -979,13 +979,13 @@ bui.Control.getById = function(id, parentControl){
     var me = this,
         list,
         result = null;
-    // parentControl || bui.Control.getById(parentControl) || bui.Action.get(parentControl) || bui.Action.get() || window
+    // parentControl || bui.Control.getById(parentControl) || bui.Master.get(parentControl) || bui.Master.get() || window
     if (typeof parentControl == 'string') {
         parentControl = bui.Control.getById(parentControl);
     }
     // 如果传入的parentControl是DOM元素，视为未传入值处理
     parentControl = parentControl && parentControl.getId ? parentControl : 
-        (bui.Action && bui.Action.get ? (bui.Action.get(parentControl) || bui.Action.get()) : bui.window);
+        (bui.Action && bui.Master.get ? (bui.Master.get(parentControl) || bui.Master.get()) : bui.window);
     
     if (id === undefined || id === parentControl.getId()) {
         result = parentControl;

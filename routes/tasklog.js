@@ -63,7 +63,7 @@ exports.saveTasklog = function (req, res, next) {
     }
     else {
         tasklog.update_time = date;
-        tasklog.atcid = global.common.formatDate(now, 'yyyyMMddHHmmss') + '_' + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 16);
+        tasklog.atcid = '60' +  global.common.formatDate(now, 'yyyyMMddHHmmss') + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 8);
         tasklogModel.insert(tasklog, callback);
     }
 };

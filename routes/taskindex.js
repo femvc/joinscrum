@@ -1,89 +1,13 @@
 'use strict'; // utf-8编码
-var taskindexModel = require('../models/taskindex').createNew();
+var dataModel = require('../models/taskindex').createNew();
 
-exports.getTaskIndex = function (req, res, next) {
-    var atcid = req.paramlist.atcid;
-    if (!atcid) {
-        return response.err(req, res, 'MISSING_PARAMETERS', 'atcid');
-    }
-    taskindexModel.getItem({
-        atcid: atcid
-    }, function (err, doc) {
-        if (err) {
-            response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
-        }
-        if (req.paramlist.answer != 'yes' && doc && doc.options) {
-            var list = doc.options;
-            for (var i in list) {
-                delete list[i].correct;
-            }
-        }
-        response.ok(req, res, doc);
-    });
-};
-
-exports.saveTaskIndex = function (req, res, next) {
-    var atcid = req.paramlist.atcid,
-        taskindex = {},
-        callback, date;
-
-    if (!req.paramlist.title) {
-        return response.err(req, res, 'MISSING_PARAMETERS', 'title');
-    }
-    if (!req.paramlist.options) {
-        return response.err(req, res, 'MISSING_PARAMETERS', 'options');
+var arr = ['sprint_id', 'backlog_id', 'task_status', 'taskindex'];
+exports.list = function (req, res, next) {
+    if (!req.paramlist.sprint_id) {
+        return response.err(req, res, 'MISSING_PARAMETERS', 'sprint_id');
     }
 
-    taskindex.major = JSON.parse(req.paramlist.major);
-    taskindex.title = req.paramlist.title;
-    taskindex.level = JSON.parse(req.paramlist.level);
-    taskindex.label = JSON.parse(req.paramlist.label);
-    taskindex.options = JSON.parse(req.paramlist.options);
-
-    callback = function (err, doc) {
-        if (err) {
-            response.send(req, res, 'INTERNAL_DB_OPT_FAIL');
-        }
-        response.ok(req, res, doc);
-    };
-
-    var now = new Date();
-    date = global.common.formatDate(now, 'yyyy-MM-dd HH:mm:ss');
-    if (atcid) {
-        taskindex.update_time = date;
-        taskindex.atcid = atcid;
-        taskindexModel.update({
-            atcid: atcid
-        }, {
-            $set: taskindex
-        }, {
-            upsert: true,
-            multi: false
-        }, callback);
-    }
-    else {
-        taskindex.update_time = date;
-        taskindex.atcid = global.common.formatDate(now, 'yyyyMMddHHmmss') + '_' + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 16);
-        taskindexModel.insert(taskindex, callback);
-    }
-};
-
-exports.removeTaskIndex = function (req, res, next) {
-    var atcid = req.paramlist.atcid;
-    if (!atcid) {
-        return response.err(req, res, 'MISSING_PARAMETERS', 'atcid');
-    }
-    taskindexModel.remove({
-        atcid: atcid
-    }, function (err) {
-        if (err) {
-            response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
-        }
-        response.ok(req, res, null);
-    });
-};
-
-exports.getTaskIndexs = function (req, res, next) {
+    // res.end('aaaaaaaaaa');
     var params = req.paramlist,
         current = params.current || 1,
         count = params.count || 1000,
@@ -92,28 +16,71 @@ exports.getTaskIndexs = function (req, res, next) {
             'create_time': -1
         },
         filter = {};
+    for (var i = 0, len = arr.length; i < len; i++) {
+        if (req.paramlist[arr[i]] !== undefined) {
+            filter[arr[i]] = req.paramlist[arr[i]];
+        }
+    }
 
-    if (params.title)
-        filter.title = global.common.likeWith(params.title);
-    if (params.author)
-        filter.author = params.author;
-
-    taskindexModel.getItems(filter, sort, current, count, function (err, doc) {
+    dataModel.getItems(filter, sort, current, count, function (err, doc) {
         if (err) {
             response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
-        }
-
-        if (req.paramlist.answer != 'yes') {
-            for (var j in doc) {
-                var list = doc[j].options;
-                for (var i in list) {
-                    delete list[i].correct;
-                }
-            }
         }
 
         response.ok(req, res, {
             items: doc
         });
     });
+};
+
+exports.save = function (req, res, next) {
+    if (!req.paramlist.sprint_id) {
+        return response.err(req, res, 'MISSING_PARAMETERS', 'sprint_id');
+    }
+    if (!req.paramlist.backlog_id) {
+        return response.err(req, res, 'MISSING_PARAMETERS', 'backlog_id');
+    }
+    if (!req.paramlist.task_status) {
+        return response.err(req, res, 'MISSING_PARAMETERS', 'task_status');
+    }
+    if (!req.paramlist.taskindex) {
+        return response.err(req, res, 'MISSING_PARAMETERS', 'taskindex');
+    }
+
+    var filter = {};
+    for (var i = 0, len = arr.length; i < len; i++) {
+        if (req.paramlist[arr[i]] !== undefined) {
+            filter[arr[i]] = req.paramlist[arr[i]];
+        }
+    }
+    try {
+        filter.taskindex = JSON.parse(req.paramlist.taskindex);
+    }
+    catch (e) {
+        filter.taskindex = req.paramlist.taskindex;
+    }
+
+    var now = new Date();
+    var date = global.common.formatDate(now, 'yyyy-MM-dd HH:mm:ss');
+    filter.update_time = date;
+
+    dataModel.update({
+        sprint_id: req.paramlist.sprint_id,
+        backlog_id: req.paramlist.backlog_id,
+        task_status: req.paramlist.task_status
+    }, {
+        $set: filter
+    }, {
+        upsert: true,
+        multi: false
+    }, function (err, doc) {
+        if (err) {
+            response.send(req, res, 'INTERNAL_DB_OPT_FAIL');
+        }
+        else {
+            response.ok(req, res, doc ? doc[0] : null);
+        }
+    });
+
+
 };
