@@ -805,11 +805,17 @@
                             var labels = [], 
                                 datasets = [],
                                 u;
+                            var list = [];
                             for (var i in burden) {
-                                if (i) {
-                                    u = me.getUserItem(i);
+                                list.push({uid:i, hrs:burden[i]});
+                            }
+                            list = hui.util.sortBy(list, uid);
+                            
+                            for (var i=0,len=list.length; i<len; i++) {
+                                if (list[i].uid) {
+                                    u = me.getUserItem(list[i].uid);
                                     labels.push(u.realname || u.username);
-                                    datasets.push(Number(burden[i]));
+                                    datasets.push(Number(list[i].hrs));
                                 }
                             }
                             var barChartData = {
