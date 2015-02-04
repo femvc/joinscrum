@@ -619,8 +619,6 @@
                                     me.switchSprintCallback();
                                 }
                             });
-                            
-                            
                         },
                         switchSprintCallback: function () {
                             var me = this,
@@ -630,6 +628,8 @@
                                 task_list = me.model.get('task_list');
                                 taskboard.taskList = me.sortTask(); 
                                 me.repaintTaskboard();
+
+                                me.repaintBurden();
 
                             }
                         },
@@ -826,7 +826,7 @@
                                 
                             }
 
-                            me.burdenChart = new Chart(document.getElementById('chartBurden').getContext('2d')).Bar(barChartData);
+                            var myLine = new Chart(document.getElementById('chartBurden').getContext('2d')).Bar(barChartData);
                         },
                         
                         /**
