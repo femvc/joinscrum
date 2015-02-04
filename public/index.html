@@ -809,7 +809,7 @@
                             for (var i in burden) {
                                 list.push({uid:i, hrs:burden[i]});
                             }
-                            list = hui.util.sortBy(list, uid);
+                            list = hui.util.sortBy(list, 'uid');
                             
                             for (var i=0,len=list.length; i<len; i++) {
                                 if (list[i].uid) {
