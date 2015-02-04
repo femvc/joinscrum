@@ -783,7 +783,25 @@
                             taskboard.setTaskList();
 
                             me.highlightTask();
+
+                            me.repaintBurden();
                             
+                            
+                        },
+                        repaintBurden: function () {
+                            var me = this,
+                                sprint_id = me.getByFormname('sprint_list').getValue() || '';
+                            var include_deleted = hui.getCookie('include_deleted') === 'true' ? '' : '&task_deleted=0';
+
+                            Requester.get('/ue_api/internal/burden?sprint_id=' + sprint_id + include_deleted, {
+                                onsuccess: function (data) {
+                                    //me.model.set('task_list'   , hui.sortBy(data[1], 'task_index'));
+                                    me.model.set('burden'   , data[1]);
+                                    me.repaintBurdenCallback
+                                }
+                            });
+                        },
+                        repaintBurdenCallback: function () {
                             var burden = me.model.get('burden');
                             var labels = [], 
                                 datasets = [],
@@ -965,6 +983,9 @@
                                 
                                 // 新增任务需保存上下次序
                                 isAdd && me.saveTaskIndex(taskValue);
+
+                                // 任务负载情况
+                                me.repaintBurden();
                             }
                         },
                         saveTaskIndex: function (taskValue) {
