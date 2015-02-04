@@ -800,7 +800,8 @@
                             });
                         },
                         repaintBurdenCallback: function () {
-                            var burden = me.model.get('burden');
+                            var me = this,
+                                burden = me.model.get('burden');
                             var labels = [], 
                                 datasets = [],
                                 u;
