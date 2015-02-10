@@ -541,9 +541,10 @@
                                 me.getByFormname('product_list').setValue(hui.getCookie('taskboard_product'));
                                 me.getByFormname('user_list'   ).setValue(hui.getCookie('taskboard_user'));
                                 
+                                me.switchProduct();
+                                
                                 hui.g('welcome_user').innerHTML = me.getUserItem(hui.getCookie('mid')).username;
                                 
-                                me.switchProduct();
                             });
                             //me.switchProduct();
                             
