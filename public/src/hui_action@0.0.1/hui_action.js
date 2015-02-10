@@ -955,8 +955,10 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
         doRoute: function (loc) {
             var me = this;
             // 权限判断以及转向
-            me.authorize(loc);
-
+            me.applyFilter(loc, me.doRouteCallback);
+        },
+        doRouteCallback: function () {
+            var me = this;
             // ie下使用中间iframe作为中转控制
             // 其他浏览器直接调用控制器方法
             var ie = /msie (\d+\.\d+)/i.test(navigator.userAgent) ? (document.documentMode || +RegExp['\x241']) : undefined;
@@ -1121,7 +1123,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
          * @name 增加权限验证器
          * @method
          * @public
-         * @param {Function} authorizer 验证器，验证失败时验证器返回转向地址
+         * @param {Function} applyFilterr 验证器，验证失败时验证器返回转向地址
          */
         addFilter: function (rule, target) {
             var me = this;
@@ -1135,24 +1137,141 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
          * @private
          * @return {String} 验证失败时验证器返回转向地址
          */
-        authorize: function (url) {
-            var result;
-            var target;
+        applyFilter: function (url, finish) {
+            var filters = [];
             var list = hui.Locator.filters;
-            //匹配所有符合表达式的路径[正则表达式]
-            for (var i=0,ilen=list.length; i<ilen; i++) {
-                if (list[i] && list[i].rule instanceof RegExp && list[i].rule.test(url)) {
-                    result = list[i].target(url);
-                    if (result === 'skip') break;
-                }
-            }
             //[优先]匹配单独具体路径
             for (var i=0,ilen=list.length; i<ilen; i++) {
                 if (list[i] && !(list[i].rule instanceof RegExp) && list[i].rule === url) {
-                    result = list[i].target(url);
-                    if (result === 'skip') break;
+                    filters.unshift(list[i].target);
                 }
             }
+            //匹配所有符合表达式的路径[正则表达式]
+            for (var i=list.length-1; i>-1; i--) {
+                if (list[i] && list[i].rule instanceof RegExp && list[i].rule.test(url)) {
+                    filters.push(list[i].target);
+                }
+            }
+            
+            this.applyFilterCallback(filters, finish);            
+        },
+        applyFilterCallback: function (filters, finish) {
+            if (filters.length) {
+                var me = this;
+                var filter = filters.shift();
+                if (typeof (filter) === 'function') {
+                    filter(function () {
+                        me.applyFilterCallback(filters, finish);
+                    }, finish);
+                }
+                else {
+                    me.applyFilterCallback(filters, finish);
+                }
+            }
+            else {
+                finish && finish();
+            }
+        },
+        isEqual: function (a, b, aStack, bStack) {
+            // Identical objects are equal. `0 === -0`, but they aren't identical.
+            // See the Harmony `egal` proposal: http://wiki.ecmascript.org/doku.php?id=harmony:egal.
+            if (a === b) {
+                return a !== 0 || 1 / a == 1 / b;
+            }
+            // A strict comparison is necessary because `null == undefined`.
+            if (a == null || b == null) {
+                return a === b;
+            }
+            if (aStack == undefined || bStack == undefined) {
+                aStack = [];
+                bStack = [];
+            }
+            // Compare `[[Class]]` names.
+            var className = Object.prototype.toString.call(a);
+            if (className != Object.prototype.toString.call(b)) {
+                return false;
+            }
+            switch (className) {
+                // Strings, numbers, dates, and booleans are compared by value.
+            case '[object String]':
+                // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
+                // equivalent to `new String("5")`.
+                return a == String(b);
+            case '[object Number]':
+                // `NaN`s are equivalent, but non-reflexive. An `egal` comparison is performed for
+                // other numeric values.
+                return a != +a ? b != +b : (a == 0 ? 1 / a == 1 / b : a == +b);
+            case '[object Date]':
+            case '[object Boolean]':
+                // Coerce dates and booleans to numeric primitive values. Dates are compared by their
+                // millisecond representations. Note that invalid dates with millisecond representations
+                // of `NaN` are not equivalent.
+                return +a == +b;
+                // RegExps are compared by their source patterns and flags.
+            case '[object RegExp]':
+                return a.source == b.source &&
+                    a.global == b.global &&
+                    a.multiline == b.multiline &&
+                    a.ignoreCase == b.ignoreCase;
+            }
+            if (typeof a != 'object' || typeof b != 'object') return false;
+            // Assume equality for cyclic structures. The algorithm for detecting cyclic
+            // structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.
+            var length = aStack.length;
+            while (length--) {
+                // Linear search. Performance is inversely proportional to the number of
+                // unique nested structures.
+                if (aStack[length] == a) return bStack[length] == b;
+            }
+            // Add the first object to the stack of traversed objects.
+            aStack.push(a);
+            bStack.push(b);
+
+            var size = 0,
+                result = true;
+            // Recursively compare objects and arrays.
+            if (className == '[object Array]') {
+                // Compare array lengths to determine if a deep comparison is necessary.
+                size = a.length;
+                result = size == b.length;
+                if (result) {
+                    // Deep compare the contents, ignoring non-numeric properties.
+                    while (size--) {
+                        if (!(result = hui.util.isEqual(a[size], b[size], aStack, bStack))) break;
+                    }
+                }
+            }
+            else {
+                // Objects with different constructors are not equivalent, but `Object`s
+                // from different frames are.
+                var aCtor = a.constructor,
+                    bCtor = b.constructor;
+                if (aCtor !== bCtor && !(Object.prototype.toString.call(aCtor) == '[object Function]' && (aCtor instanceof aCtor) &&
+                    Object.prototype.toString.call(bCtor) == '[object Function]' && (bCtor instanceof bCtor))) {
+                    return false;
+                }
+                // Deep compare objects.
+                for (var key in a) {
+                    if (Object.prototype.hasOwnProperty.call(a, key)) {
+                        // Count the expected number of properties.
+                        size++;
+                        // Deep compare each member.
+                        if (!(result = Object.prototype.hasOwnProperty.call(b, key) && hui.util.isEqual(a[key], b[key], aStack, bStack))) break;
+                    }
+                }
+                // Ensure that both objects contain the same number of properties.
+                if (result) {
+                    for (key in b) {
+                        if (Object.prototype.hasOwnProperty.call(b, key) && !(size--)) break;
+                    }
+                    result = !size;
+                }
+            }
+            // Remove the first object from the stack of traversed objects.
+            aStack.pop();
+            bStack.pop();
+
+            return result;
         }
     };
 

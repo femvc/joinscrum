@@ -1194,12 +1194,15 @@
                     hui.Router.setRule('/', 'pageTaskboard');
                     hui.window.pageTaskboard = pageTaskboard;
 
-                    hui.Locator.addFilter('/', function(){
+                    hui.Locator.addFilter('/', function(next, finish){
                         if (!hui.getCookie('mid')) {
                             // window.location.href = '#!/login';
                             hui.Locator.redirect('#!/login');
                         }
-                        return 'skip';
+                        else {
+                            next();
+                        }
+                        
                     })
                 }
             </script>
