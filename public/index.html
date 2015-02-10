@@ -486,9 +486,7 @@
                         initModel: function(callback){
                             var me = this;
                             //me.getSprintData(callback);
-                            if (!hui.getCookie('mid')) {
-                                window.location.href = '#!/login';
-                            }
+
                             callback&&callback();
                         },
                         getSprintData: function (callback) {
@@ -1195,6 +1193,13 @@
                     hui.inherits(pageTaskboard, hui.Action);
                     hui.Router.setRule('/', 'pageTaskboard');
                     hui.window.pageTaskboard = pageTaskboard;
+
+                    hui.Locator.addFilter('/', function(){
+                        if (!hui.getCookie('mid')) {
+                            window.location.href = '#!/login';
+                        }
+                        return 'skip';
+                    })
                 }
             </script>
             <div class="page_body" id="history" style="background-color: white;display: none;">

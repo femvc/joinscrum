@@ -439,7 +439,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                 pathRules = me.pathRules,
                 i, len, matches, rule,
                 action = null;
-            //匹配所有符合表达式的路径
+            //匹配所有符合表达式的路径[正则表达式]
             for (i = 0, len = pathRules.length; i < len; i++) {
                 rule = pathRules[i].location;
                 if (rule && (rule instanceof RegExp) && (matches = rule.exec(loc)) !== null) {
@@ -955,11 +955,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
         doRoute: function (loc) {
             var me = this;
             // 权限判断以及转向
-            var loc302 = me.authorize(loc);
-            if (loc302) {
-                me.redirect(loc302);
-                return;
-            }
+            me.authorize(loc);
 
             // ie下使用中间iframe作为中转控制
             // 其他浏览器直接调用控制器方法
@@ -1120,17 +1116,17 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
          * @default []
          * @public
          */
-        authorizers: [],
+        filters: [],
         /**
          * @name 增加权限验证器
          * @method
          * @public
          * @param {Function} authorizer 验证器，验证失败时验证器返回转向地址
          */
-        addAuthorizer: function (authorizer) {
+        addFilter: function (rule, target) {
             var me = this;
-            if ('function' == typeof authorizer) {
-                me.authorizers.push(authorizer);
+            if ('function' == typeof target) {
+                me.filters.push({rule: rule, target: target});
             }
         },
         /**
@@ -1139,16 +1135,22 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
          * @private
          * @return {String} 验证失败时验证器返回转向地址
          */
-        authorize: function (currLoc) {
-            var me = this,
-                loc,
-                i,
-                len = me.authorizers.length;
-
-            for (i = 0; i < len; i++) {
-                loc = me.authorizers[i](currLoc);
-                if (loc) {
-                    return loc;
+        authorize: function (url) {
+            var result;
+            var target;
+            var list = hui.Locator.filters;
+            //匹配所有符合表达式的路径[正则表达式]
+            for (var i=0,ilen=list.length; i<ilen; i++) {
+                if (list[i] && list[i].rule instanceof RegExp && list[i].rule.test(url)) {
+                    result = list[i].target(url);
+                    if (result === 'skip') break;
+                }
+            }
+            //[优先]匹配单独具体路径
+            for (var i=0,ilen=list.length; i<ilen; i++) {
+                if (list[i] && !(list[i].rule instanceof RegExp) && list[i].rule === url) {
+                    result = list[i].target(url);
+                    if (result === 'skip') break;
                 }
             }
         }

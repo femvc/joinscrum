@@ -887,12 +887,13 @@ function doit() {
         find: function (url) {
             var target;
             var list = hui.Mockup.rules;
+            //匹配所有符合表达式的路径[正则表达式]
             for (var i=0,ilen=list.length; i<ilen; i++) {
                 if (list[i] && list[i].rule instanceof RegExp && list[i].rule.test(url)) {
                     target = list[i].target;
                 }
             }
-
+            //[优先]匹配单独具体路径
             for (var i=0,ilen=list.length; i<ilen; i++) {
                 if (list[i] && !(list[i].rule instanceof RegExp) && list[i].rule === url) {
                     target = list[i].target;
