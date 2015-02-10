@@ -955,7 +955,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
         doRoute: function (loc) {
             var me = this;
             // 权限判断以及转向
-            me.applyFilter(loc, me.doRouteCallback);
+            me.applyFilter(loc, hui.fn(me.doRouteCallback, me));
         },
         doRouteCallback: function () {
             var me = this;
