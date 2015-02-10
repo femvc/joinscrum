@@ -613,20 +613,12 @@
                                     me.switchSprintCallback();
                                 }
                             });
-
-                            Requester.get('/ue_api/internal/burden?sprint_id=' + sprint_id + include_deleted, {
-                                onsuccess: function (data) {
-                                    //me.model.set('task_list'   , hui.sortBy(data[1], 'task_index'));
-                                    me.model.set('burden'   , data[1]);
-                                    me.switchSprintCallback();
-                                }
-                            });
                         },
                         switchSprintCallback: function () {
                             var me = this,
                                 taskboard = me.getByFormname('taskboard'),
                                 task_list;
-                            if (me.model.get('backlog_list') && me.model.get('task_list') && me.model.get('taskindex_list') && me.model.get('burden')) { //
+                            if (me.model.get('backlog_list') && me.model.get('task_list') && me.model.get('taskindex_list')) { //
                                 task_list = me.model.get('task_list');
                                 taskboard.taskList = me.sortTask(); 
                                 me.repaintTaskboard();
