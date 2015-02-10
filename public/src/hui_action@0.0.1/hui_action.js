@@ -827,7 +827,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
          * @default '/'
          * @public
          */
-        DEFAULT_INDEX: '!/',
+        DEFAULT_INDEX: '/',
         /**
          * @name 当前路径.
          * @public
@@ -887,7 +887,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
             // opera下，相同的hash重复写入会在历史堆栈中重复记录
             // 所以需要getLocation来判断
             if (me.currentLocation != loc && me.getLocation() != loc) {
-                location.hash = loc;
+                window.location.hash = '!' + loc;
             }
 
             me.currentLocation = loc;
