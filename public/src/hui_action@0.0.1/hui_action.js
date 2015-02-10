@@ -955,9 +955,9 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
         doRoute: function (loc) {
             var me = this;
             // 权限判断以及转向
-            me.applyFilter(loc, hui.fn(me.doRouteCallback, me));
+            me.applyFilter(loc, hui.fn(me.doRouteCallback, me, loc));
         },
-        doRouteCallback: function () {
+        doRouteCallback: function (loc) {
             var me = this;
             // ie下使用中间iframe作为中转控制
             // 其他浏览器直接调用控制器方法
