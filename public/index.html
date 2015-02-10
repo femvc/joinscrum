@@ -502,13 +502,13 @@
                             });
                             Requester.get('/ue_api/internal/product_list', {
                                 onsuccess: function (data) {
-                                    me.model.set('product_list'   , hui.sortBy(data[1].items, 'product_id'));
+                                    me.model.set('product_list'   , hui.sortBy(data[1].items, 'product_index'));
                                     me.getSprintDataCallback(callback);
                                 }
                             });
                             Requester.get('/ue_api/internal/sprint_list', {
                                 onsuccess: function (data) {
-                                    me.model.set('sprint_list'   , hui.sortBy(data[1].items, 'sprint_id', 'desc'));
+                                    me.model.set('sprint_list'   , hui.sortBy(data[1].items, 'sprint_index', 'desc'));
                                     me.getSprintDataCallback(callback);
                                 }
                             });
