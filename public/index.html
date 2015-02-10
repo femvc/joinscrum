@@ -486,6 +486,9 @@
                         initModel: function(callback){
                             var me = this;
                             //me.getSprintData(callback);
+                            if (!hui.getCookie('mid')) {
+                                window.location.href = '#!/login';
+                            }
                             callback&&callback();
                         },
                         getSprintData: function (callback) {
@@ -555,9 +558,7 @@
                             var me = this;
                             showTab('index');
 
-                            if (!hui.getCookie('mid')) {
-                                window.location.href = '#!/login';
-                            }
+                            
                         },
                         switchUser: function () {
                             var me = this;
