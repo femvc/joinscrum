@@ -1196,7 +1196,8 @@
 
                     hui.Locator.addFilter('/', function(){
                         if (!hui.getCookie('mid')) {
-                            window.location.href = '#!/login';
+                            // window.location.href = '#!/login';
+                            hui.Locator.redirect('#!/login');
                         }
                         return 'skip';
                     })
