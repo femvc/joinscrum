@@ -423,7 +423,7 @@ hui.define('hui_control', [], function () {
                     if (formname && paramMap.hasOwnProperty(formname)) {
                         value = Object.prototype.toString.call(paramMap[formname]) !== '[object Array]' ?
                             [paramMap[formname]] : paramMap[formname];
-                        ctr = me.getById(formname);
+                        ctr = me.getByFormname(formname);
                         list = ctr ? [ctr] : me.getByFormnameAll(formname, false);
                         if (list.length < 1) {
                             continue;
@@ -491,7 +491,7 @@ hui.define('hui_control', [], function () {
                     if (formname && paramMap.hasOwnProperty(formname)) {
                         value = Object.prototype.toString.call(paramMap[formname]) !== '[object Array]' ?
                             [paramMap[formname]] : paramMap[formname];
-                        ctr = me.getById(formname);
+                        ctr = me.getByFormname(formname);
                         list = ctr ? [ctr] : me.getByFormnameAll(formname, false);
                         if (list.length < 1) {
                             continue;
@@ -572,6 +572,7 @@ hui.define('hui_control', [], function () {
                     }
 
                 }
+                // 注：默认都用数组包装，此处还原为值
                 for (var i in paramMap) {
                     if (paramMap[i] && paramMap[i].length < 2) {
                         paramMap[i] = paramMap[i][0] !== undefined ? paramMap[i][0] : '';
@@ -593,10 +594,6 @@ hui.define('hui_control', [], function () {
         getByFormnameAll: function (formname, all) {
             var me = this;
             return hui.Control.getByFormnameAll(formname, me, all);
-        },
-        getById: function (id) {
-            var me = this;
-            return hui.Control.getById(id, me);
         },
         /**
          * @name 显示控件
@@ -1496,24 +1493,27 @@ hui.define('hui_control', [], function () {
     /**
      * @name 根据控件formname找到对应控件
      * @static
-     * @param {String} 控件formname
+     * @param {String} formname 控件formname
+     * @param {Control} parentNode 父控件
+     * @param {Boolean} all 仅查找直接子级，默认所有子级
      */
     hui.Control.getByFormnameAll = function (formname, parentNode, all) {
         var list = [],
             childNodes,
             item,
-            /* 强制确认parentControl: 如果传入是parentControl的id，则找出其对应的Control */
-            parentControl = hui.Control.getById(undefined, parentNode) || hui.window;
+            /* 强制确认parentControl */
+            parentControl = parentNode && typeof parentNode == 'object' ? parentNode : hui.window;
 
         if (formname) {
             formname = String(formname);
-
-            // 先查找自身
-            childNodes = parentControl && parentControl.controlMap ? parentControl.controlMap : [];
-            //childNodes.unshift(parentControl);
-            if (parentControl.getFormname && parentControl.getFormname() === formname) {
-                list.push(parentControl);
-            }
+            
+            // 注掉原因：不应该找自身！！
+            // // 先查找自身 
+            // childNodes = parentControl && parentControl.controlMap ? parentControl.controlMap : [];
+            // //childNodes.unshift(parentControl);
+            // if (parentControl.getFormname && parentControl.getFormname() === formname) {
+            //     list.push(parentControl);
+            // }
 
             // 再遍历控件树
             childNodes = parentControl && parentControl.controlMap ?
@@ -1529,27 +1529,33 @@ hui.define('hui_control', [], function () {
         return list;
     };
     /**
-     * @name 根据控件formname找到对应控件
+     * @name 根据控件formname找到对应控件，只返回一个结果
      * @static
-     * @param {String} 控件formname
+     * @param {String} formname 控件formname
+     * @param {Control} parentNode 父控件
      */
     hui.Control.getByFormname = function (formname, parentNode) {
         var result = null,
-            list;
-        if (typeof parentNode == 'string') {
-            parentNode = hui.Control.getById(parentNode) || hui.Control.getByFormname(parentNode);
-        }
+            list,
+            min = Number.MAX_VALUE,
+            deep,
+            ctr;
+        
+        parentNode = parentNode && typeof parentNode === 'object' ? parentNode : hui.window;
+        
         list = hui.Control.getByFormnameAll(formname, parentNode);
-        if (parentNode && parentNode.parentNode && parentNode.childNodes) {
-            for (var i = 0, len = list.length; i < len; i++) {
-                if (hui.Control.checkParentNode(list[i], parentNode)) {
-                    result = list[i];
-                    break;
-                }
+        // 注：默认返回直接子级第一个,直接子级没有才会返回最近子级的第一个
+        for (var i = 0, len = list.length; i < len && min > 0; i++) {
+            deep = 0;
+            ctr = list[i];
+            while (ctr.parentControl && ctr.parentControl !== parentNode) {
+                deep++;
+                ctr = ctr.parentControl;
             }
-        }
-        else {
-            result = list[0];
+            if (deep < min) {
+                min = deep;
+                result = list[i];
+            }
         }
 
         return result;
@@ -1568,31 +1574,7 @@ hui.define('hui_control', [], function () {
             }
         }
     };
-    /**
-     * @name 判断控件是否在某父元素下
-     * @static
-     * @param {Control} control 控件
-     * @param {HTMLElement} parentNode DOM元素
-     */
-    hui.Control.checkParentNode = function (control, parentNode) {
-        var main,
-            result = false;
-        // 判断控件是否在parentNode元素下
-        if (parentNode && result.getMain) {
-            main = result.getMain();
-            while (main) {
-                if (main.parentNode === parentNode) {
-                    result = true;
-                    main = null;
-                }
-                else {
-                    main = main.parentNode;
-                }
-            }
-        }
-        return result;
-    };
-
+    
     /**
      * @name 为目标元素添加className
      * @public

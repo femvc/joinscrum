@@ -886,7 +886,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
             // 存储当前信息
             // opera下，相同的hash重复写入会在历史堆栈中重复记录
             // 所以需要getLocation来判断
-            if (me.currentLocation != loc && me.getLocation() != loc) {
+            if (me.currentLocation != loc && me.getLocation() != loc || window.location.hash !== '#!' + loc ) {
                 window.location.hash = '!' + loc;
             }
 
@@ -1368,7 +1368,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
         hui.Action.call(this);
         /**
          * @name Action索引ID
-         * @comment 主要用于控件中通过onclick="hui.Control.getById('listTable','login');
+         * @comment 主要用于控件中通过onclick="hui.Control.getById('listTable', 'login');
          */
         this.id = 'page404';
         // 初始化数据模型
