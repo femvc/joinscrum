@@ -72,8 +72,16 @@ exports.list = function (req, res, next) {
             response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
         }
 
+        var uid = req.sessionStore.user[req.sessionID];
+        var result = [];
+        for (var i=0,len=doc.length; i<len; i++) {
+            if (doc && doc[i] && doc[i].member && doc[i].member.indexOf && doc[i].member.indexOf(uid)) {
+                result.push(doc[i]);
+            }
+        }
+
         response.ok(req, res, {
-            items: doc
+            items: result
         });
     });
 };
@@ -111,8 +119,7 @@ function add(req, res, next) {
             });
         }
     });
-
-};
+}
 exports.add = add;
 exports.save = function (req, res, next) {
     if (!req.paramlist.product_id) {
