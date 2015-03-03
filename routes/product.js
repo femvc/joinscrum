@@ -74,8 +74,8 @@ exports.list = function (req, res, next) {
 
         var uid = req.sessionStore.user[req.sessionID];
         var result = [];
-        for (var i=0,len=doc.length; i<len; i++) {
-            if (doc && doc[i] && doc[i].member && doc[i].member.indexOf && doc[i].member.indexOf(uid) !== -1) {
+        for (var i = 0, len = doc.length; i < len; i++) {
+            if (doc && doc[i] && doc[i].member && doc[i].member.indexOf && (',' + doc[i].member.join(',') + ',').indexOf(',' + uid + ',') !== -1) {
                 result.push(doc[i]);
             }
         }
@@ -110,7 +110,7 @@ function add(req, res, next) {
         }
         else {
             filter.update_time = date;
-            filter.product_id = '20' +  global.common.formatDate(now, 'yyyyMMddHHmmss') + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 8);
+            filter.product_id = '20' + global.common.formatDate(now, 'yyyyMMddHHmmss') + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 8);
 
             dataModel.insert(filter, function (err, doc) {
                 if (err) {
