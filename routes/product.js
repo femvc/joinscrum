@@ -111,6 +111,7 @@ function add(req, res, next) {
         else {
             filter.update_time = date;
             filter.product_id = '20' + global.common.formatDate(now, 'yyyyMMddHHmmss') + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 8);
+            filter.member = [req.sessionStore.user[req.sessionID]];
 
             dataModel.insert(filter, function (err, doc) {
                 if (err) {
