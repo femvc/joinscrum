@@ -63,7 +63,7 @@
 //     });
 // };
 
-exports.auth = function (req, res, next) { return next();
+exports.auth = function (req, res, next) { 
     // console.log('============' + req.sessionID + '===============');
     req.sessionStore.user = req.sessionStore.user || {};
     // req.sessionStore.question = req.sessionStore.question || {};
@@ -79,6 +79,7 @@ exports.auth = function (req, res, next) { return next();
     //     req.sessionStore.user[req.sessionID] = req.sessionID;
     //     next();
     // }
+    return next();
 };
 
 // exports.getUid = function (req, res, next) {
