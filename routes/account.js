@@ -65,7 +65,7 @@
 
 exports.auth = function (req, res, next) { return next();
     // console.log('============' + req.sessionID + '===============');
-    // req.sessionStore.user = req.sessionStore.user || {};
+    req.sessionStore.user = req.sessionStore.user || {};
     // req.sessionStore.question = req.sessionStore.question || {};
     // req.sessionStore.questionIndex = req.sessionStore.questionIndex || {};
     // req.sessionStore.paper = req.sessionStore.paper || {};
