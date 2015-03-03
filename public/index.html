@@ -531,6 +531,11 @@
                             sprintList.onchange  = hui.fn(me.switchSprint, me);
                             userList.onchange    = hui.fn(me.switchUser, me);
 
+                        },
+                        finish: function () {
+                            var me = this;
+                            showTab('index');
+
                             if (hui.getCookie('include_deleted') === 'true') {
                                 hui.g('include_deleted').checked = 'checked';
                             }
@@ -551,12 +556,6 @@
                             
                             hui.setCookie('task_lastmodify', ''); 
                             me.checkTaskModify();
-                        },
-                        finish: function () {
-                            var me = this;
-                            showTab('index');
-
-                            
                         },
                         switchUser: function () {
                             var me = this;
