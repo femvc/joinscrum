@@ -75,12 +75,13 @@ exports.list = function (req, res, next) {
         var uid = req.sessionStore.user[req.sessionID];
         var result = [];
         for (var i=0,len=doc.length; i<len; i++) {
-            if (doc && doc[i] && doc[i].member && doc[i].member.indexOf && doc[i].member.indexOf(uid)) {
+            if (doc && doc[i] && doc[i].member && doc[i].member.indexOf && doc[i].member.indexOf(uid) !== -1) {
                 result.push(doc[i]);
             }
         }
 
         response.ok(req, res, {
+            uid: uid,
             items: result
         });
     });
