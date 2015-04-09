@@ -28,7 +28,8 @@ exports.list = function (req, res, next) {
         }
 
         response.ok(req, res, {
-            items: doc
+            items: doc,
+            sprint_id: req.paramlist.sprint_id
         });
     });
 };

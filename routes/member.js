@@ -1,18 +1,18 @@
 'use strict'; // utf-8编码
-var dataModel = require('../models/backlog').createNew();
+var dataModel = require('../models/member').createNew();
 
-// backlog_api
-// app.get('/ue_api/internal/backlog_list',     account.auth, backlog.list);
-// app.get('/ue_api/internal/backlog_detail',   account.auth, backlog.detail);
-// app.get('/ue_api/internal/backlog_save',     account.auth, backlog.save);
+// member_api
+// app.get('/ue_api/internal/member_list',     account.auth, member.list);
+// app.get('/ue_api/internal/member_detail',   account.auth, member.detail);
+// app.get('/ue_api/internal/member_save',     account.auth, member.save);
 
 function getDataRecord(req, res, filter, next) {
-    if (filter.backlog_id || filter.backlog_name) {
+    if (filter.member_id || filter.member_name) {
         dataModel.getItem(filter, function (err, doc) {
             if (err) {
                 response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
             }
-            // Output backlog_detail
+            // Output member_detail
             if (!next) {
                 if (!doc) {
                     response.err(req, res, 'RECORD_NOT_EXIST', filter);
@@ -27,25 +27,25 @@ function getDataRecord(req, res, filter, next) {
         });
     }
     else {
-        if (!filter.backlog_id) {
-            return response.err(req, res, 'MISSING_PARAMETERS', 'backlog_id');
+        if (!filter.member_id) {
+            return response.err(req, res, 'MISSING_PARAMETERS', 'member_id');
         }
-        if (!filter.backlog_name) {
-            return response.err(req, res, 'MISSING_PARAMETERS', 'backlog_name');
+        if (!filter.member_name) {
+            return response.err(req, res, 'MISSING_PARAMETERS', 'member_name');
         }
     }
 }
 
 exports.detail = function (req, res, next) {
     var filter = {};
-    if (req.paramlist.backlog_id) {
-        filter.backlog_id = req.paramlist.backlog_id;
+    if (req.paramlist.member_id) {
+        filter.member_id = req.paramlist.member_id;
     }
 
     return getDataRecord(req, res, filter);
 };
 
-var arr = ['backlog_name', 'backlog_desc', 'backlog_index', 'sprint_id', 'backlog_deleted', 'user_id', 'edit_time'];
+var arr = ['member_name', 'member_desc', 'member_key', 'member_index'];
 exports.list = function (req, res, next) {
     // res.end('aaaaaaaaaa');
     var params = req.paramlist,
@@ -62,10 +62,10 @@ exports.list = function (req, res, next) {
         }
     }
 
-    if (params.backlog_name)
-        filter.backlog_name = global.common.likeWith(params.backlog_name);
-    if (params.backlog_desc)
-        filter.backlog_desc = global.common.likeWith(params.backlog_desc);
+    if (params.member_name)
+        filter.member_name = global.common.likeWith(params.member_name);
+    if (params.member_desc)
+        filter.member_desc = global.common.likeWith(params.member_desc);
 
     dataModel.getItems(filter, sort, current, count, function (err, doc) {
         if (err) {
@@ -73,15 +73,14 @@ exports.list = function (req, res, next) {
         }
 
         response.ok(req, res, {
-            items: doc,
-            sprint_id: req.paramlist.sprint_id
+            items: doc
         });
     });
 };
 
 function add(req, res, next) {
-    if (!req.paramlist.backlog_name) {
-        return response.err(req, res, 'MISSING_PARAMETERS', 'backlog_name');
+    if (!req.paramlist.member_name) {
+        return response.err(req, res, 'MISSING_PARAMETERS', 'member_name');
     }
 
     var filter = {};
@@ -95,14 +94,14 @@ function add(req, res, next) {
     var date = global.common.formatDate(now, 'yyyy-MM-dd HH:mm:ss');
 
     getDataRecord(req, res, {
-        backlog_name: req.paramlist.backlog_name
+        member_name: req.paramlist.member_name
     }, function (doc) {
         if (doc) {
             response.err(req, res, 'USER_ALREADY_EXIST');
         }
         else {
             filter.update_time = date;
-            filter.backlog_id = '40' +  global.common.formatDate(now, 'yyyyMMddHHmmss') + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 8);
+            filter.member_id = '20' +  global.common.formatDate(now, 'yyyyMMddHHmmss') + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 8);
 
             dataModel.insert(filter, function (err, doc) {
                 if (err) {
@@ -116,8 +115,8 @@ function add(req, res, next) {
 };
 exports.add = add;
 exports.save = function (req, res, next) {
-    if (!req.paramlist.backlog_id) {
-        // return response.err(req, res, 'MISSING_PARAMETERS', 'backlog_id');
+    if (!req.paramlist.member_id) {
+        // return response.err(req, res, 'MISSING_PARAMETERS', 'member_id');
         return add(req, res, next);
     }
 
@@ -130,7 +129,7 @@ exports.save = function (req, res, next) {
 
     if (JSON.stringify(filter) === '{}') {
         return getDataRecord(req, res, {
-            backlog_id: req.paramlist.backlog_id
+            member_id: req.paramlist.member_id
         });
     }
 
@@ -139,7 +138,7 @@ exports.save = function (req, res, next) {
     filter.update_time = date;
 
     dataModel.update({
-        backlog_id: req.paramlist.backlog_id
+        member_id: req.paramlist.member_id
     }, {
         $set: filter
     }, {
@@ -151,7 +150,7 @@ exports.save = function (req, res, next) {
         }
         else {
             return getDataRecord(req, res, {
-                backlog_id: req.paramlist.backlog_id
+                member_id: req.paramlist.member_id
             });
         }
     });
