@@ -37,27 +37,28 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
          * @private
          */
         getTaskboardTpl: function () {
-            var str = 
-            '<table cellspacing="0" cellpadding="0" class="taskboard">' + 
-                '<colgroup>' + 
-                    '<col class="fixedWidth" id="pbiCol">' + 
-                    '<col span="4" class="fixedWidth">' + 
-                '</colgroup>' + 
-                '<thead>' + 
-                    '<tr class="taskboard-header">' + 
-                        '<th>Backlog Items <button class="link" style="margin-left:5px;margin-right:-20px;" onclick="hui.Master.get().addBacklog()">add</button></th>' + 
-                        '<th colspan="4">Tasks / Status</th>' + 
-                    '</tr>' + 
-                    '<tr class="taskstatus">' + 
-                        '<th>&nbsp;</th>' + 
-                        '<th><div class="taskStatus">Not Started</div><div class="taskStatusCount"><span id="notStartedCount">21</span> Tasks</div></th>' + 
-                        '<th><div class="taskStatus">Impeded</div><div class="taskStatusCount"><span id="impededCount">6</span> Tasks</div></th>' + 
-                        '<th><div class="taskStatus">In Progress</div><div class="taskStatusCount"><span id="inProgressCount">8</span> Tasks</div></th>' + 
-                        '<th><div class="taskStatus">Done</div><div class="taskStatusCount"><span id="doneCount">22</span> Tasks</div></th>' + 
-                    '</tr>' + 
-                '</thead>' + 
-                '<tbody id="taskboard"></tbody>' +
-            '</table>';
+            var str = [
+                '<h3>#{sprint_name}:#{sprint_id} V</h3>',
+                '<table cellspacing="0" cellpadding="0" class="taskboard">',
+                '    <colgroup>',
+                '        <col class="fixedWidth" id="pbiCol">',
+                '        <col span="4" class="fixedWidth">',
+                '    </colgroup>',
+                '    <thead>',
+                '        <tr class="taskboard-header">',
+                '            <th>Backlog Items <button class="link" style="margin-left:5px;margin-right:-20px;" onclick="hui.Master.get().addBacklog(\'#{sprint_id}\')">add</button></th>',
+                '            <th colspan="4">Tasks / Status</th>',
+                '        </tr>',
+                '        <tr class="taskstatus">',
+                '            <th>&nbsp;</th>',
+                '            <th><div class="taskStatus">Not Started</div><div class="taskStatusCount"><span id="notStartedCount">21</span> Tasks</div></th>',
+                '            <th><div class="taskStatus">Impeded</div><div class="taskStatusCount"><span id="impededCount">6</span> Tasks</div></th>',
+                '            <th><div class="taskStatus">In Progress</div><div class="taskStatusCount"><span id="inProgressCount">8</span> Tasks</div></th>',
+                '            <th><div class="taskStatus">Done</div><div class="taskStatusCount"><span id="doneCount">22</span> Tasks</div></th>',
+                '        </tr>',
+                '    </thead>',
+                '    <tbody id="taskboard#{sprint_id}"></tbody>',
+                '</table>'].join('');
             return str;
         },
         getTaskboardRowTpl: function () {
@@ -76,7 +77,7 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
         getBacklogTpl: function () {
             var str = 
             '<div>' +
-                '<span ondblclick="hui.Master.get().editBacklog(\'#{backlog_id}\')">' + 
+                '<span ondblclick="hui.Master.get().editBacklog(\'#{sprint_id}\', \'#{backlog_id}\')">' + 
                 '<span class="pbikey"   id="pbikey_#{backlog_id}">(#{product_key})</span>&nbsp;' +
                 '<span class="pbititle" id="pbititle_#{backlog_id}">#{backlog_name}</span></span><br><br><br>' +
                 '<div  class="pbidesc"  id="pbidesc_#{backlog_id}">#{backlog_desc}</div>' +
@@ -99,7 +100,7 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
         },
         getTaskContentTpl: function () {
             var str = 
-                '<div class="tasktitle" ondblclick="hui.Master.get().editTask(\'#{task_id}\')" id="tasktitle_#{task_id}" title="#{task_name}">#{task_name}</div>' +
+                '<div class="tasktitle" ondblclick="hui.Master.get().editTask(\'#{sprint_id}\', \'#{task_id}\')" id="tasktitle_#{task_id}" title="#{task_name}">#{task_name}</div>' +
                 '<div class="draghandle">' +
                     '<div class="taskhours">Hrs: <span id="hours_#{task_id}">#{task_remaining}</span></div>' +
                     '<div class="pointperson" id="pp_#{task_id}" task_person="#{task_person}">#{user_label}</div>' +
@@ -109,7 +110,7 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
                     ' id="menu_#{task_id}" onmouseover="window.clearTimeout(this.timer)" ' +
                     ' onmouseout="var me=this;me.timer=window.setTimeout(function(){me.style.display=\'none\';}, 500);">' +
                     '<div class="taskmenu_item" onclick="hui.Master.get().takeTask(\'#{task_id}\')">Take Task</div>' +
-                    '<div class="taskmenu_item" onclick="hui.Master.get().editTask(\'#{task_id}\')">Edit Task</div>' +
+                    '<div class="taskmenu_item" onclick="hui.Master.get().editTask(\'#{sprint_id}\', \'#{task_id}\')">Edit Task</div>' +
                     '<div class="taskmenu_item" onclick="hui.Master.get().deleteTask(\'#{task_id}\')">Delete Task</div>' +
                 '</div>';
             return str;
@@ -124,16 +125,17 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
                 main = me.getMain(),
                 innerDiv;
             
-            me.setInnerHTML(me.getTaskboardTpl());
+            me.setInnerHTML(hui.format(me.getTaskboardTpl(), me.sprint_data));
         },
         addBacklogRow: function (backlogValue) {
             var me = this,
-                taskboard = hui.g('taskboard'),
+                taskboard = hui.g('taskboard'+me.sprint_id),
                 row = document.createElement('DIV'),
                 pbi_info,
                 table,
                 tr;
             backlogValue.product_key = me.product_key;
+            backlogValue.sprint_id = me.sprint_id;
             pbi_info = hui.Control.format(me.getBacklogTpl(), backlogValue);
             
             row.innerHTML = hui.Control.format(me.getTaskboardRowTpl(), {
@@ -154,7 +156,7 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
             Droppables.add(hui.g('inprogress_' + backlogValue.backlog_id));
             Droppables.add(hui.g('done_'        + backlogValue.backlog_id));
         },
-        addTask: function(task){
+        addTaskRow: function(task){
             var me = this,
                 backlog_id = task.backlog_id,
                 status = task.task_status,
@@ -214,13 +216,13 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
             var me = this;
             var taskList = me.taskList;
             for (var i=0,len=taskList.length; i<len; i++) {
-                me.addTask(taskList[i]);
+                me.addTaskRow(taskList[i]);
             }
         },
         removeBacklogRow: function (list) {
             var me = this,
-                taskboard = hui.g('taskboard');
-            if (list == 'all') {
+                taskboard = hui.g('taskboard'+me.sprint_id);
+            if (taskboard && list == 'all') {
                 taskboard.innerHTML = '';
             }
         }

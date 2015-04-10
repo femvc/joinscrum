@@ -1,10 +1,10 @@
 'use strict'; // utf-8编码
 var dataModel = require('../models/taskindex').createNew();
 
-var arr = ['sprint_id', 'backlog_id', 'task_status', 'taskindex'];
+var arr = ['product_id', 'sprint_id', 'backlog_id', 'task_status', 'taskindex'];
 exports.list = function (req, res, next) {
-    if (!req.paramlist.sprint_id) {
-        return response.err(req, res, 'MISSING_PARAMETERS', 'sprint_id');
+    if (!req.paramlist.product_id) {
+        return response.err(req, res, 'MISSING_PARAMETERS', 'product_id');
     }
 
     // res.end('aaaaaaaaaa');
@@ -29,12 +29,15 @@ exports.list = function (req, res, next) {
 
         response.ok(req, res, {
             items: doc,
-            sprint_id: req.paramlist.sprint_id
+            product_id: req.paramlist.product_id
         });
     });
 };
 
 exports.save = function (req, res, next) {
+    if (!req.paramlist.product_id) {
+        return response.err(req, res, 'MISSING_PARAMETERS', 'product_id');
+    }
     if (!req.paramlist.sprint_id) {
         return response.err(req, res, 'MISSING_PARAMETERS', 'sprint_id');
     }

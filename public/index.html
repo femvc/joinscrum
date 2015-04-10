@@ -524,9 +524,9 @@
                             
                             // hui.Master.get().controlMap.vModal2.show();
                             // me.controlMap.submit.onclick = hui.fn(me.onSubmit, me);
-                            var productList = me.getByFormname('product_list');
-                            var sprintList  = me.getByFormname('sprint_list' );
-                            var userList    = me.getByFormname('user_list' );
+                            var productList = hui.Control.getByFormname('product_list');
+                            var sprintList  = hui.Control.getByFormname('sprint_list' );
+                            var userList    = hui.Control.getByFormname('user_list' );
                             productList.onchange = hui.fn(me.switchProduct, me);
                             // sprintList.onchange  = hui.fn(me.switchSprint, me);
                             userList.onchange    = hui.fn(me.switchUser, me);
@@ -541,11 +541,11 @@
                             }
                             
                             me.getSprintData(function(){
-                                me.getByFormname('product_list').setOptions(me.model.get('product_list'));
-                                me.getByFormname('user_list'   ).setOptions(me.getUserList());
+                                hui.Control.getByFormname('product_list').setOptions(me.model.get('product_list'));
+                                hui.Control.getByFormname('user_list'   ).setOptions(me.getUserList());
                                 
-                                me.getByFormname('product_list').setValue(hui.getCookie('taskboard_product'));
-                                me.getByFormname('user_list'   ).setValue(hui.getCookie('taskboard_user'));
+                                hui.Control.getByFormname('product_list').setValue(hui.getCookie('taskboard_product'));
+                                hui.Control.getByFormname('user_list'   ).setValue(hui.getCookie('taskboard_user'));
                                 
                                 me.switchProduct();
                                 
@@ -562,77 +562,75 @@
                             me.highlightTask();
                         },
                         switchProduct: function(){
-                            var me = this,
-                                sprint_all = me.model.get('sprint_list'),
-                                sprint_list = [],
-                                product_id = me.getByFormname('product_list').getValue();
-                            for (var i=0,len=sprint_all.length; i<len; i++) {
-                                if (sprint_all[i].product_id == product_id) {
-                                    sprint_list.push(sprint_all[i]);
-                                }
-                            }
-                            me.getByFormname('sprint_list').setOptions(sprint_list);
-                            if (hui.getCookie('selected_sprint')) {
-                                me.getByFormname('sprint_list').setValue(hui.getCookie('selected_sprint'));
-                            }
-                            
-                            hui.setCookie('taskboard_product', product_id);
-                            for (var i=0,len=sprint_all.length; i<len; i++) {
-                                me.switchSprint(sprint_all[i].sprint_id);
-                            }
-                            
-                        },
-                        switchSprint: function (sprint_id) {
                             var me = this;
-                            // var sprint_id = me.getByFormname('sprint_list').getValue() || '';
-                            
-                            hui.setCookie('selected_sprint', sprint_id);
-                            
+                            var product_id = hui.Control.getByFormname('product_list').getValue();
+                            hui.setCookie('taskboard_product', product_id);
+
                             me.model.remove('backlog_list');
                             me.model.remove('task_list');
-                            
-                            Requester.get('/ue_api/internal/backlog_list?sprint_id='+sprint_id, {
+                            me.model.remove('taskindex_list');
+
+                            Requester.get('/ue_api/internal/backlog_list?product_id='+product_id, {
                                 onsuccess: function (data) {
                                     me.model.set('backlog_list'   , hui.sortBy(data[1].items, 'backlog_index', 'desc'));
-                                    me.switchSprintCallback(data[1].sprint_id);
+                                    me.switchProductCallback();
                                 }
                             });
                             var include_deleted = hui.getCookie('include_deleted') === 'true' ? '' : '&task_deleted=0';
-                            Requester.get('/ue_api/internal/task_list?sprint_id='+ sprint_id + include_deleted, {
+                            Requester.get('/ue_api/internal/task_list?product_id='+ product_id + include_deleted, {
                                 onsuccess: function (data) {
                                     //me.model.set('task_list'   , hui.sortBy(data[1].items, 'task_index'));
                                     me.model.set('task_list'   , data[1].items);
-                                    me.switchSprintCallback(data[1].sprint_id);
+                                    me.switchProductCallback();
                                 }
                             });
                             
-                            Requester.get('/ue_api/internal/taskindex_list?sprint_id=' + sprint_id, {
+                            Requester.get('/ue_api/internal/taskindex_list?product_id=' + product_id, {
                                 onsuccess: function (data) {
                                     //me.model.set('task_list'   , hui.sortBy(data[1].items, 'task_index'));
                                     me.model.set('taskindex_list'   , data[1].items);
-                                    me.switchSprintCallback(data[1].sprint_id);
+                                    me.switchProductCallback();
                                 }
                             });
+
+
+
+                            // for (var i=0,len=sprint_list.length; i<len; i++) {
+                            //     me.switchSprint(sprint_list[i].sprint_id);
+                            // }
+                            
                         },
-                        switchSprintCallback: function (sprint_id) {
+                        switchProductCallback: function (sprint_id) {
                             var me = this,
                                 task_list;
                             if (me.model.get('backlog_list') && me.model.get('task_list') && me.model.get('taskindex_list')) { //
-                                var taskboard = hui.Control.getByFormname('taskboard' + sprint_id) || 
-                                	hui.Control.create('Taskboard', {formname:'taskboard' + sprint_id});
-                                var task_list = me.model.get('task_list');
-                                
-                                taskboard.taskList = me.sortTask(); 
-                                me.repaintTaskboard(taskboard);
 
-                                me.repaintBurden();
+                                var product_id = hui.Control.getByFormname('product_list').getValue();
+                                var sprint_list = _.filter(me.model.get('sprint_list'), function(item){
+                                        return item.product_id == product_id
+                                    });
+                                for (var i=0,len=sprint_list.length; i<len; i++) {
+                                    var taskboard = 
+                                        hui.Control.getByFormname('taskboard' + sprint_list[i].sprint_id) || 
+                                        hui.Control.create('Taskboard', {
+                                            formname:'taskboard' + sprint_list[i].sprint_id, 
+                                            sprint_id: sprint_list[i].sprint_id, 
+                                            sprint_data: sprint_list[i]
+                                        });
+                                    
+                                  
+                                    taskboard.taskList = me.sortTask(sprint_list[i].sprint_id); 
+                                    me.repaintTaskboard(taskboard);
+
+                                    //me.repaintBurden();
+                                }
 
                             }
                         },
-                        sortTask: function () {
+                        sortTask: function (sprint_id) {
                             var me = this,
-                                task_list = me.model.get('task_list'),
-                                taskindex_list = me.model.get('taskindex_list'),
+                                task_list = _.filter(me.model.get('task_list'), function(a){ return a.sprint_id == sprint_id; }),
+                                taskindex_list = _.filter(me.model.get('taskindex_list'), function(a){ return a.sprint_id == sprint_id; }),
                                 taskList = {},
                                 item,
                                 index = 1;
@@ -700,18 +698,18 @@
                          * @name 新增backlog
                          * @public
                          */
-                        addBacklog: function () {
-                            this.editBacklog();
+                        addBacklog: function (sprint_id) {
+                            this.editBacklog(sprint_id);
                         },
                         /**
                          * @name 修改backlog
                          * @public
                          * @param {string} [backlog_id] 
                          */
-                        editBacklog: function (backlog_id) {
+                        editBacklog: function (sprint_id, backlog_id) {
                             var me = this,
                                 nc = hui.Control.getById('editBacklog', me),
-                                sprint_id = me.getByFormname('sprint_list').getValue(),
+                                //sprint_id = hui.Control.getByFormname('sprint_list').getValue(),
                                 backlogValue,
                                 backlogItem;
                             
@@ -739,15 +737,15 @@
                             });
                             this.appendControl(nc);
                             // 绑定事件
-                            nc.getByFormname('submit').onclick = new Function('hui.Master.get().saveBacklog()');
+                            nc.getByFormname('submit').onclick = new Function('hui.Master.get().saveBacklog(\''+backlogValue.sprint_id+'\', \''+backlog_id+'\')');
                             
                             nc.setValueByTree(backlogValue);
                             nc.show();
                         },
-                        saveBacklog: function () {
+                        saveBacklog: function (sprint_id, backlog_id) {
                             var me = this;
                             var nc = hui.Control.getById('editBacklog', me),
-                                taskboard = me.getByFormname('taskboard');
+                                taskboard = hui.Control.getByFormname('taskboard'+sprint_id);
                             
                             if (nc && nc.validate()) {
                                 var backlogValue = nc.getParamMap();
@@ -770,11 +768,12 @@
                         },
                         repaintTaskboard: function (taskboard) {
                             var me = this;
-                            //var taskboard = me.getByFormname('taskboard');
+                            //var taskboard = hui.Control.getByFormname('taskboard');
                             taskboard.removeBacklogRow('all');
                             
-                            taskboard.product_key = me.getProduct(me.getByFormname('product_list').getValue()).product_key;
-                            taskboard.backlogList = me.model.get('backlog_list');
+                            taskboard.product_key = me.getProduct(hui.Control.getByFormname('product_list').getValue()).product_key;
+                            taskboard.backlogList = _.filter(me.model.get('backlog_list'), function(a){
+                                return a.sprint_id == taskboard.sprint_id});
                             
                             taskboard.setBacklogList();
                             taskboard.setTaskList();
@@ -784,7 +783,7 @@
                         },
                         repaintBurden: function () {
                             var me = this,
-                                sprint_id = me.getByFormname('sprint_list').getValue() || '';
+                                sprint_id = hui.Control.getByFormname('sprint_list').getValue() || '';
                             var include_deleted = hui.getCookie('include_deleted') === 'true' ? '' : '&task_deleted=0';
 
                             Requester.get('/ue_api/internal/burden?sprint_id=' + sprint_id + include_deleted, {
@@ -837,7 +836,7 @@
                          */
                         takeTask: function (task_id) {
                             var me = this,
-                                uid = me.getByFormname('user_list').getValue(),
+                                uid = hui.Control.getByFormname('user_list').getValue(),
                                 taskItem = me.getTaskItem(task_id);
                             taskItem.task_person    = uid;
                             taskItem.task_deleted   = '0';
@@ -858,7 +857,7 @@
                         },
                         deleteTask: function (task_id) {
                             var me = this,
-                                uid = me.getByFormname('user_list').getValue(),
+                                uid = hui.Control.getByFormname('user_list').getValue(),
                                 taskItem = me.getTaskItem(task_id);
                             taskItem.task_deleted   = 'deleted';
                             
@@ -871,19 +870,20 @@
                         addTask: function(backlog_id) {
                             var me = this,
                                 users = me.model.get('user_list'),
-                                sprint_id = me.getByFormname('sprint_list').getValue(),
+                                //sprint_id = hui.Control.getByFormname('sprint_list').getValue(),
                                 taskItem = {};
+                            var sprint_id = _.find(me.model.get('backlog_list'), function(a){return a.backlog_id == backlog_id}).sprint_id;
                             taskItem.sprint_id  = sprint_id;
                             taskItem.backlog_id = backlog_id;
                             //alert(objId);
-                            me.editTask(taskItem);
+                            me.editTask(sprint_id, taskItem);
                         },
                         /**
                          * @name 修改task
                          * @public
                          * @param {string} [task_id] 
                          */
-                        editTask: function (taskItem) {
+                        editTask: function (sprint_id, taskItem) {
                             var me = this;
                             
                             taskItem = !taskItem.sprint_id ? me.getTaskItem(taskItem) : taskItem;
@@ -944,7 +944,7 @@
                         saveTaskCallback: function (data) {
                             var me = this;
                             if (!data[0] && data[1]) {
-                                var taskboard = me.getByFormname('taskboard'),
+                                var taskboard = hui.Control.getByFormname('taskboard'+data[1].sprint_id),
                                     list = me.model.get('task_list'),
                                     isAdd = true,
                                     taskValue = data[1];
@@ -971,7 +971,7 @@
                                     hui.removeClass(hui.g('task_'+taskValue.task_id), 'deleted');
                                 }
                                 else {
-                                    taskboard.addTask(taskValue);
+                                    taskboard.addTaskRow(taskValue);
                                 }
                                 
                                 // 销毁对话框
@@ -996,7 +996,7 @@
                                 str = backlogItem.id.split('_'),
                                 task_status = str[0],
                                 backlog_id = str[1],
-                                sprint_id = me.getByFormname('sprint_list').getValue(),
+                                sprint_id = hui.Control.getByFormname('sprint_list').getValue(),
                                 list = backlogItem.childNodes,
                                 taskindex = [];
                             for (var i=0,len=list.length; i<len; i++) {
@@ -1018,7 +1018,7 @@
                         },
                         highlightTask: function () {
                             var me = this,
-                                uid = me.getByFormname('user_list').getValue(),
+                                uid = hui.Control.getByFormname('user_list').getValue(),
                                 list = hui.c('task'),
                                 task_person;
                             for (var i=0,len=list.length; i<len; i++) {
@@ -1067,7 +1067,7 @@
                         editProduct: function (isNew) {
                             var me = this,
                                 nc = hui.Control.getById('editProduct', me),
-                                product_id = me.getByFormname('product_list').getValue(),
+                                product_id = hui.Control.getByFormname('product_list').getValue(),
                                 productValue,
                                 productItem;
                             
@@ -1134,8 +1134,8 @@
                         editSprint: function (isNew) {
                             var me = this,
                                 nc = hui.Control.getById('editSprint', me),
-                                product_id = me.getByFormname('product_list').getValue(),
-                                sprint_id  = me.getByFormname('sprint_list').getValue(),
+                                product_id = hui.Control.getByFormname('product_list').getValue(),
+                                sprint_id  = hui.Control.getByFormname('sprint_list').getValue(),
                                 sprintValue,
                                 sprintItem;
                             
@@ -1638,6 +1638,7 @@
     <script type="text/javascript" src="src/ext_dragdrop.js          "></script>
     <script type="text/javascript" src="src/ext_chart.js             "></script>
     <script type="text/javascript" src="src/ext_md5.js             "></script>
+    <script type="text/javascript" src="src/underscore.js             "></script>
 </body>
 
 </html>
