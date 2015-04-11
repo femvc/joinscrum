@@ -71,15 +71,24 @@ exports.auth = function (req, res, next) {
     // req.sessionStore.paper = req.sessionStore.paper || {};
     // req.sessionStore.paperContent = req.sessionStore.paperContent || {};
 
-    // if (req.sessionStore.user[req.sessionID]) {
-    //     next();
-    // }
-    // else {
-    //     //response.err(req, res, 'USER_TOKEN_EXPIRE');
-    //     req.sessionStore.user[req.sessionID] = req.sessionID;
-    //     next();
-    // }
-    return next();
+    if (req.sessionStore.user[req.sessionID]) {
+        return next();
+    }
+    else {
+        response.err(req, res, 'USER_TOKEN_EXPIRE');
+        // req.sessionStore.user[req.sessionID] = req.sessionID;
+        // next();
+    }
+    // return next();
+};
+
+exports.loginstatus = function (req, res, next) {
+    if (req.sessionStore.user && req.sessionStore.user[req.sessionID]) {
+        return response.ok(req, res, 'ok');
+    }
+    else {
+        return response.ok(req, res, 'logout');
+    }
 };
 
 // exports.getUid = function (req, res, next) {

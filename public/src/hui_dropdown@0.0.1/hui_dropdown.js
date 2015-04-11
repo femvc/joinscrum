@@ -230,6 +230,8 @@ hui.define('hui_dropdown', ['hui_util', 'hui_control'], function () {
             me.renderOptions();
 
             me.resetDefaultValue();
+
+            return me;
         },
         setMainValue: function(value){
             var me = this;
@@ -243,6 +245,9 @@ hui.define('hui_dropdown', ['hui_util', 'hui_control'], function () {
             }
             if (value !== c && c !== undefined) {
                 me.onchange(value, c);
+            }
+            else if (value !== c && c === undefined) {
+                me.onassignvalue(value);
             }
         },
         resetDefaultValue: function () {
@@ -321,7 +326,8 @@ hui.define('hui_dropdown', ['hui_util', 'hui_control'], function () {
             return selected;
         },
 
-        onchange: function () {}
+        onchange: function () {},
+        onassignvalue: function () {},
     };
 
     /* hui.Dropdown 继承了 hui.Control */

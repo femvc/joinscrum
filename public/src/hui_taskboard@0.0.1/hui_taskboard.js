@@ -38,7 +38,7 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
          */
         getTaskboardTpl: function () {
             var str = [
-                '<h3>#{sprint_name}:#{sprint_id} V</h3>',
+                '<div class="taskboard-title"><b ondblclick="hui.Master.get().editSprint(\'#{sprint_id}\')">#{sprint_name} </b></div>',
                 '<table cellspacing="0" cellpadding="0" class="taskboard">',
                 '    <colgroup>',
                 '        <col class="fixedWidth" id="pbiCol">',
@@ -187,7 +187,7 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
         },
         updateTask: function(task){
             var me = this,
-                u = hui.Master.get().getUserItem(task.task_person);
+                u = hui.Master.get().getUserItem(task.task_person) || {};
             task.task_remaining = task.task_remaining === '' ? '-' : task.task_remaining;
             task.user_label = u.realname + '(' + u.username + ')';
             

@@ -6,6 +6,7 @@ var sprint    = require('./routes/sprint');
 var backlog   = require('./routes/backlog');
 var task      = require('./routes/task');
 var taskindex = require('./routes/taskindex');
+var tasklog   = require('./routes/tasklog');
 var chart     = require('./routes/chart');
 
 /*
@@ -33,9 +34,9 @@ app.get('/hello', function (req, res) {
 app.get('/ue_api/internal/user_list'       ,account.auth, user.list);
 app.get('/ue_api/internal/user_detail'     ,account.auth, user.detail);
 app.get('/ue_api/internal/user_save'       ,account.auth, user.save);
-app.get('/ue_api/internal/user_login'      ,account.auth, user.login);
+app.get('/ue_api/internal/user_login'      ,user.login);
 app.get('/ue_api/internal/user_logout'     ,account.auth, user.logout);
-app.get('/ue_api/internal/user_loginstatus',account.auth, user.loginstatus);
+app.get('/ue_api/internal/user_loginstatus',account.loginstatus);
 
 // Product
 app.get('/ue_api/internal/product_list'    ,account.auth, product.list);
@@ -62,6 +63,9 @@ app.get('/ue_api/internal/task_save',       account.auth, task.save);
 app.get('/ue_api/internal/taskindex_list',  account.auth, taskindex.list);
 app.get('/ue_api/internal/taskindex_save',  account.auth, taskindex.save);
 
+// Task log
+app.get('/ue_api/internal/tasklog_list',    account.auth, tasklog.getTasklogs);
+
 // Burndown
-// app.get('/ue_api/internal/burndown',        account.auth, chart.burndown);
-app.get('/ue_api/internal/burden',          account.auth, chart.burden);
+// app.get('/ue_api/internal/burndown',     account.auth, chart.burndown);
+//app.get('/ue_api/internal/burden',        account.auth, chart.burden);

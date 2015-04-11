@@ -3,9 +3,9 @@ var dataModel = require('../models/taskindex').createNew();
 
 var arr = ['product_id', 'sprint_id', 'backlog_id', 'task_status', 'taskindex'];
 exports.list = function (req, res, next) {
-    if (!req.paramlist.product_id) {
-        return response.err(req, res, 'MISSING_PARAMETERS', 'product_id');
-    }
+    // if (!req.paramlist.product_id) {
+    //     return response.err(req, res, 'MISSING_PARAMETERS', 'product_id');
+    // }
 
     // res.end('aaaaaaaaaa');
     var params = req.paramlist,

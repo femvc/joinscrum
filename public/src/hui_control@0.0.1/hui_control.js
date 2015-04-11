@@ -958,6 +958,9 @@ hui.define('hui_control', [], function () {
             if (!wrap) {
                 wrap = document.body || document.documentElement;
             }
+            if (me.parentElement) {
+                wrap = typeof me.parentElement === 'string' ? document.getElementById(me.parentElement) : me.parentElement;
+            }
 
             wrap.appendChild(main);
 

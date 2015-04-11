@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Highcharts Example</title>
+
+<script src="jquery1.8.3.min.js"></script>
+<script src="highcharts.js"></script>
+<script type="text/javascript">
+$(function () {
+    $('#container').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Team Member Load'
+        },
+        xAxis: {
+            categories: ['袁头', '姚乾', '李江', '丁必贵', '时伟', '建涛', '姚乾', '李江', '丁必贵', '时伟', '建涛', '姚乾', '李江', '丁必贵', '时伟', '建涛']
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Hours remaining'
+            },
+            stackLabels: {
+                enabled: true,
+                style: {
+                    fontWeight: 'bold',
+                    color: 'gray'
+                }
+            }
+        },
+        legend: {
+            align: 'right',
+            x: 0,
+            verticalAlign: 'top',
+            y: 0,
+            floating: true,
+            backgroundColor: 'white',
+            borderColor: '#0CC',
+            borderWidth: 1,
+            shadow: false
+        },
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.x + '</b><br/>' +
+                    this.series.name + ': ' + this.y + '<br/>' +
+                    'Total: ' + this.point.stackTotal;
+            }
+        },
+        plotOptions: {
+            column: {
+                stacking: 'normal',
+                dataLabels: {
+                    enabled: true,
+                    color: 'white',
+                    style: {
+                        textShadow: '0 0 3px black'
+                    }
+                }
+            }
+        },
+        series: [{
+            name: 'wechat',
+            data: [5, 3, 4, 7, 2, 2, 3, 4, 7, 2, 2, 3, 4, 7, 2, 2, 3, 4, 7, 2, 2]
+        }, {
+            name: 'search',
+            data: [2, 2, 3, 2, 1]
+        }, {
+            name: 'tuan',
+            data: [3, 4, 4, 2, 5]
+        }]
+    });
+});
+</script>
+</head>
+<body>
+<script src="highcharts.js"></script>
+
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+	</body>
+</html>

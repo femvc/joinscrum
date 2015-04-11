@@ -64,7 +64,7 @@
 
 <body style="" onload123="initForTest()">
     <!--.page>.page_head>.logo^+.page_banner>h1.test_title{你想知道自己前端技术实力排名吗？}+.test_desc{2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，想知道你自己技术实力的排名吗}+.test_btn{立即测试}^+.page_foot{2014-10-17}-->
-    <div class="page" style="width: 980px; margin: auto;">
+    <div class="page" style="width: 980px;">
         <div id="main" style="min-height: 750px;">
             <!-- Login -->
             <div class="page_body" id="login" style="display:none">
@@ -274,47 +274,6 @@
                         You don&#39;t have access to view any tasks for this product.
                     </div>
 
-                    <style type="text/css">
-                        div#displayMode { width: 930px; }
-                        .contentf { background: #ddd; }
-                        table#displayMode { width: 100%; }
-                        span#displayMode { font-weight: bold; vertical-align: bottom; }
-                        input { vertical-align: middle; }
-                        table#displayMode label { vertical-align: bottom; }
-                        div#todaysDate { font-size: 12pt; text-align: right; }
-                        .contentf div { margin-left: 5px; }
-                    </style>
-                    <div id="displayMode">
-                        <b class="b1f"></b><b class="b2f"></b><b class="b3f"></b><b class="b4f"> </b>
-                        <div style="padding: 10px;" class="contentf">
-                            <table id="displayMode" width="100%">
-                                <tbody>
-                                    <tr>
-                                        <td><span id="displayMode">Taskboard View:</span>
-                                            <input type="radio" checked="true" class="displaymode" value="teamview" name="displaymode" id="teamview">
-                                            <label for="teamview">All Tasks</label>
-                                            <!--input type="radio" class="displaymode" value="mytasksview" name="displaymode" id="mytasksview">
-                                            <label for="mytasksview">My Tasks</label-->
-                                        </td>
-                                        <td>
-                                            <div id="todaysDate">
-                                                Today's Date: <span id="today">11/26/13</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <b class="b4f"></b><b class="b3f"></b><b class="b2f"></b><b class="b1f">  </b>
-                    </div>
-
-                    <style type="text/css">
-                        #selectors { margin-top: 20px; margin-bottom: 20px; }
-                        #productSelector { width: 250px; }
-                        #sprintSelector { width: 250px; }
-                        #filterSprints { margin-left: 30px; }
-                        input { vertical-align: middle; }
-                    </style>
                     <div id="selectors">
                         <table class="selectors">
                             <tr>
@@ -323,148 +282,42 @@
                                     <button class="link" style="margin-left: 0px;" onclick="hui.Master.get().addProduct()">add</button><i>/</i>
                                     <button class="link" style="margin-left:0px;" onclick="hui.Master.get().editProduct()">edit</button>
                                 </td>
-                                <td>
-                                    <span>View Sprint:</span>
-                                    <button class="link" style="" onclick="hui.Master.get().addSprint()">add</button><i>/</i>
-                                    <button class="link" style="margin-left:0px;" onclick="hui.Master.get().editSprint()">edit</button>
-                                </td>
                             </tr>
                             <tr>
-                                <td>
+                                <td width="170">
                                     <div ui="type:'Dropdown',formname:'product_list',data_value:'product_id',data_text:'product_name',default_select:true" style="width:150px;"></div>
                                 </td>
-                                <td>
-                                    <div ui="type:'Dropdown',formname:'sprint_list',data_value:'sprint_id',data_text:'sprint_name',default_select:true" style="width:450px;"></div>
+                                <td width="200">
+                                    Sprint: <button class="link" style="" onclick="hui.Master.get().addSprint()">add </button>
                                 </td>
-                                <td>
-                                    <input id="filterSprints" name="filterSprints" type="checkbox" />
-                                    <label for="filterSprints">Show Sprints only for Teams to which I belong</label>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-
-
-                    <div class="sectionHeader" id="taskboardSectionHeader">
-                        <table class="sectionHeader_table">
-                            <tbody>
-                                <tr>
-                                    <td class="sectionHeader_w"></td>
-                                    <td class="sectionHeader_n">
-                                        <div class="sectionHeaderText">
-                                            Taskboard: All Tasks</div>
-                                    </td>
-                                    <td class="sectionHeader_e"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <style type="text/css">
-                        table#displayPrefs { border: 0px; width: 930px; table-layout: fixed; margin-bottom: 6px; }
-                        table#displayPrefs td { border: 0px; white-space: nowrap; vertical-align: middle; }
-                        input { vertical-align: middle; }
-                        #colorSelector { vertical-align: top; border: 1px solid black; white-space: nowrap; margin-left: 12px; margin-right: 26px; padding: 2px; padding-bottom: 3px; padding-top: 1px; }
-                        #colorSelector img { vertical-align: middle; }
-                        div.myTaskColorMenu { position: absolute; z-index: 1000; border: 1px solid #888; background-color: white; margin: 0px 0px 0px 34px; padding: 0px; }
-                        div.myTaskColorMenu ul { list-style-type: none; margin: 0px; padding: 0px; }
-                        div.myTaskColorMenu ul li { list-style-type: none; display: block; margin: 0px; padding: 2px; }
-                    </style>
-                    <table id="displayPrefs">
-                        <tr>
-                            <td>
-                                <input id="include_deleted" name="include_deleted" type="checkbox" onclick="hui.setCookie('include_deleted', String(this.checked));hui.Master.get().switchSprint()" />
+                                <td width="200">
+                                    <input id="include_deleted" name="include_deleted" type="checkbox" onclick="hui.setCookie('include_deleted', String(this.checked));hui.Master.get().switchProduct()" />
                                 <label for="include_deleted">Show deleted task</label>
-                            </td>
-                            <td>
-                                <div ui="type:'Dropdown',formname:'user_list',data_value:'uid',data_text:'user_label'" style="width:230px; float: right;">
-                                    <!--option value="Aaron.lu (aaron.lu)">Aaron.lu (aaron.lu)</option-->
-                                </div>
-                                <label style="float: right;margin-top: 5px;margin-right: 10px;">Highlight Tasks</label>
-                            </td>
-                        </tr>
-                    </table>
-                    <!--div ui="type:'Taskboard',formname:'taskboard'"></div-->
-
-
-                    <div class="sectionHeader nextSection">
-                        <table class="sectionHeader_table">
-                            <tr>
-                                <td class="sectionHeader_w"></td>
-                                <td class="sectionHeader_n">
-                                    <div class="sectionHeaderText">
-                                        Sprint Burndown</div>
                                 </td>
-                                <td class="sectionHeader_e"></td>
+                                <td>
+                                    <div ui="type:'Dropdown',formname:'user_list',data_value:'uid',data_text:'user_label'" style="width:230px; float: right;">
+                                        <!--option value="Aaron.lu (aaron.lu)">Aaron.lu (aaron.lu)</option-->
+                                    </div>
+                                    <label style="float: right;margin-top: 5px;margin-right: 10px;">Highlight Tasks</label>
+                                </td>
                             </tr>
                         </table>
                     </div>
-                    <div id="burndownChart">
-                        <!--img src="vm/img/-270223436412208026.png" id="burndownImg" alt="Sprint Burndown" /-->
-                    </div>
 
-                    <div class="sectionHeader nextSection">
-                        <table class="sectionHeader_table">
-                            <tr>
-                                <td class="sectionHeader_w"></td>
-                                <td class="sectionHeader_n">
-                                    <div class="sectionHeaderText">
-                                        Team Member Loeded</div>
-                                </td>
-                                <td class="sectionHeader_e"></td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div>
-                        <!--img src="vm/img/-270223436412208026.png" id="burndownImg" alt="Sprint Burndown" /-->
-                        <canvas id="chartBurden" height="450" width="800"></canvas>
+
+                    <div class="">
+                        <h3>Taskboard: All Tasks</h3>
+                        <div id="taskboard" ui="type:'Panel',formname:'taskboard'"></div>
                     </div>
 
 
                     <div class="error" id="noBurndown" style="display: none">
                         You either do not have permission to view tasks or there are no sprints for this product.
                     </div>
-                    <div class="sectionHeader nextSection" id="impedimentsSectionHeader">
-                        <table class="sectionHeader_table">
-                            <tr>
-                                <td class="sectionHeader_w"></td>
-                                <td class="sectionHeader_n">
-                                    <div class="sectionHeaderText">
-                                        Impediments</div>
-                                </td>
-                                <td class="sectionHeader_e"></td>
-                            </tr>
-                        </table>
-                    </div>
-                    <img class="newImpediment" style="cursor: pointer;" id="newImpediment" src="vm/img/new-impediment.gif" alt="New Impediment" />
-                    <table id="impedimentsTable" style="display: none">
-                        <colgroup>
-                            <col id="entered" />
-                            <col id="lastmodified" />
-                            <col id="title" />
-                            <col id="description" />
-                            <col id="reporter" />
-                        </colgroup>
-                        <thead>
-                            <tr>
-                                <th class="impedimentattribute">Entered</th>
-                                <th class="impedimentattribute">Last Modified</th>
-                                <th class="impedimentattribute">Title</th>
-                                <th class="impedimentattribute">Description</th>
-                                <th class="impedimentattribute">Reporter</th>
-                            </tr>
-                        </thead>
-                        <tbody id="impediments">
-                    </table>
-                    <div class="error" id="noImpedimentsAccess" style="display: none; padding-bottom: 12px;">
-                        You don&#39;t have access to view impediments.
-                    </div>
-                    <div class="error" id="noImpedimentsTeam" style="display: none; padding-bottom: 12px;">
-                        A sprint must be selected to view impediments.
-                    </div>
-                    <div class="error" id="noImpediments" style="padding-bottom: 12px;">
-                        There are no impediments for this team.
-                    </div>
+
                 </div>
+                <br /><br />
+                <hr style="  border: 1px solid #eee;" />
                 <div style="color: #AAAAAA; margin: 20px 20px 0px; padding-bottom:20px; text-align: center; width: 970px;">Copyright &copy; 2015 JoinScrum, Inc. All rights reserved.</div>
             </div>
             <script>
@@ -491,30 +344,23 @@
                         },
                         getSprintData: function (callback) {
                             var me = this;
-                            me.count = 3;
                             Requester.get('/ue_api/internal/user_list', {
                                 onsuccess: function (data) {
-                                    me.model.set('user_list'   , hui.sortBy(data[1].items, '_id'));
+                                    me.model.set('user_list'   , _.sortBy(data[1].items, '_id').reverse());
                                     me.getSprintDataCallback(callback);
                                 }
                             });
                             Requester.get('/ue_api/internal/product_list', {
                                 onsuccess: function (data) {
-                                    me.model.set('product_list'   , hui.sortBy(data[1].items, 'product_index'));
+                                    me.model.set('product_list'   , _.sortBy(data[1].items, 'product_index').reverse());
                                     me.getSprintDataCallback(callback);
                                 }
                             });
-                            Requester.get('/ue_api/internal/sprint_list', {
-                                onsuccess: function (data) {
-                                    me.model.set('sprint_list'   , hui.sortBy(data[1].items, 'sprint_index', 'desc'));
-                                    me.getSprintDataCallback(callback);
-                                }
-                            });
+                            
                         },
                         getSprintDataCallback: function (callback) {
-                            this.count--;
-                            if (this.count<1) {
-                                this.count = 2;
+                            var me = this;
+                            if (me.model.get('user_list') && me.model.get('product_list')) {
                                 callback&&callback();
                                 //this.getTaskData(callback)
                             }
@@ -524,12 +370,7 @@
                             
                             // hui.Master.get().controlMap.vModal2.show();
                             // me.controlMap.submit.onclick = hui.fn(me.onSubmit, me);
-                            var productList = hui.Control.getByFormname('product_list');
-                            var sprintList  = hui.Control.getByFormname('sprint_list' );
-                            var userList    = hui.Control.getByFormname('user_list' );
-                            productList.onchange = hui.fn(me.switchProduct, me);
-                            // sprintList.onchange  = hui.fn(me.switchSprint, me);
-                            userList.onchange    = hui.fn(me.switchUser, me);
+                              
 
                         },
                         finish: function () {
@@ -541,14 +382,18 @@
                             }
                             
                             me.getSprintData(function(){
-                                hui.Control.getByFormname('product_list').setOptions(me.model.get('product_list'));
-                                hui.Control.getByFormname('user_list'   ).setOptions(me.getUserList());
+                                var productList = hui.Control.getByFormname('product_list');
+                                productList.setOptions(me.model.get('product_list'));
+                                productList.setValue(hui.getCookie('taskboard_product'));
+                                productList.onchange = hui.fn(me.switchProduct, me);
                                 
-                                hui.Control.getByFormname('product_list').setValue(hui.getCookie('taskboard_product'));
-                                hui.Control.getByFormname('user_list'   ).setValue(hui.getCookie('taskboard_user'));
+                                var userList    = hui.Control.getByFormname('user_list' );
+                                userList.setOptions(me.getUserList());
+                                userList.setValue(hui.getCookie('taskboard_user'));
+                                userList.onassignvalue = userList.onchange    = hui.fn(me.switchUser, me);  
                                 
                                 me.switchProduct();
-                                
+
                                 hui.g('welcome_user').innerHTML = me.getUserItem(hui.getCookie('mid')).username;
                                 
                             });
@@ -566,20 +411,27 @@
                             var product_id = hui.Control.getByFormname('product_list').getValue();
                             hui.setCookie('taskboard_product', product_id);
 
+                            me.model.remove('sprint_list');
                             me.model.remove('backlog_list');
                             me.model.remove('task_list');
                             me.model.remove('taskindex_list');
 
+                            Requester.get('/ue_api/internal/sprint_list?product_id=' + product_id, {
+                                onsuccess: function (data) {
+                                    me.model.set('sprint_list'   , _.sortBy(data[1].items, 'sprint_index'));
+                                    me.switchProductCallback();
+                                }
+                            });
                             Requester.get('/ue_api/internal/backlog_list?product_id='+product_id, {
                                 onsuccess: function (data) {
-                                    me.model.set('backlog_list'   , hui.sortBy(data[1].items, 'backlog_index', 'desc'));
+                                    me.model.set('backlog_list'   , _.sortBy(data[1].items, 'backlog_index'));
                                     me.switchProductCallback();
                                 }
                             });
                             var include_deleted = hui.getCookie('include_deleted') === 'true' ? '' : '&task_deleted=0';
                             Requester.get('/ue_api/internal/task_list?product_id='+ product_id + include_deleted, {
                                 onsuccess: function (data) {
-                                    //me.model.set('task_list'   , hui.sortBy(data[1].items, 'task_index'));
+                                    //me.model.set('task_list'   , _.sortBy(data[1].items, 'task_index').reverse());
                                     me.model.set('task_list'   , data[1].items);
                                     me.switchProductCallback();
                                 }
@@ -587,43 +439,91 @@
                             
                             Requester.get('/ue_api/internal/taskindex_list?product_id=' + product_id, {
                                 onsuccess: function (data) {
-                                    //me.model.set('task_list'   , hui.sortBy(data[1].items, 'task_index'));
+                                    //me.model.set('task_list'   , _.sortBy(data[1].items, 'task_index').reverse());
                                     me.model.set('taskindex_list'   , data[1].items);
                                     me.switchProductCallback();
                                 }
                             });
-
-
-
-                            // for (var i=0,len=sprint_list.length; i<len; i++) {
-                            //     me.switchSprint(sprint_list[i].sprint_id);
-                            // }
                             
                         },
                         switchProductCallback: function (sprint_id) {
                             var me = this,
                                 task_list;
-                            if (me.model.get('backlog_list') && me.model.get('task_list') && me.model.get('taskindex_list')) { //
+                            if (me.model.get('sprint_list') && me.model.get('backlog_list') && me.model.get('task_list') && me.model.get('taskindex_list')) { //
 
+                                hui.Control.getByFormname('taskboard').disposeChild();
+
+                                                              
+                                
                                 var product_id = hui.Control.getByFormname('product_list').getValue();
                                 var sprint_list = _.filter(me.model.get('sprint_list'), function(item){
                                         return item.product_id == product_id
                                     });
                                 for (var i=0,len=sprint_list.length; i<len; i++) {
-                                    var taskboard = 
-                                        hui.Control.getByFormname('taskboard' + sprint_list[i].sprint_id) || 
-                                        hui.Control.create('Taskboard', {
+                                    var taskboard = hui.Control.create('Taskboard', {
                                             formname:'taskboard' + sprint_list[i].sprint_id, 
                                             sprint_id: sprint_list[i].sprint_id, 
-                                            sprint_data: sprint_list[i]
+                                            sprint_data: sprint_list[i],
+                                            parentElement: document.getElementById('taskboard')
                                         });
                                     
-                                  
                                     taskboard.taskList = me.sortTask(sprint_list[i].sprint_id); 
                                     me.repaintTaskboard(taskboard);
+                                    // me.repaintBurden(sprint_list[i].sprint_id);
 
-                                    //me.repaintBurden();
+                                    var memberload = hui.Control.create('Burndown', {
+                                        formname:'burndown', 
+                                        parentElement: document.getElementById('taskboard'),
+                                        sprint_id: sprint_list[i].sprint_id,
+                                        product_id: product_id
+                                    });
                                 }
+
+                                var datasource = {}; //{'sprint01': {'user01': 20, 'user02': 30},'sprint02': {'user01': 10, 'user02': 10}};
+                                var member = [];
+                                var taskList = me.model.get('task_list');
+                                for (var i=0,len=taskList.length; i<len; i++) {
+                                    var item = taskList[i];
+                                    datasource[item.sprint_id] = datasource[item.sprint_id] || {};
+                                    datasource[item.sprint_id][item.task_person] = datasource[item.sprint_id][item.task_person] || 0;
+                                    datasource[item.sprint_id][item.task_person] += Number(item.task_remaining);
+                                    member.push(item.task_person);
+                                }
+                                member = _.uniq(member).sort().reverse();
+
+                                var hours = [];
+                                // [{
+                                //     name: 'wechat',
+                                //     data: [5, 3, 4, 7, 2, 2, 3, 4, 7, 2, 2, 3, 4, 7, 2, 2, 3, 4, 7, 2, 2]
+                                // }, {
+                                //     name: 'search',
+                                //     data: [2, 2, 3, 2, 1]
+                                // }]  
+                                var colors = ['#FF9900','#99CC00','#CC9900','#99CC00','#0099CC','#00CC99','#CC5599','#FE8463','#9BCA63','#FAD860','#F3A43B','#60C0DD','#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'];
+                                var barcolor;
+                                var lefthours;
+                                for (var i in datasource) {
+                                    barcolor = colors.shift();
+                                    colors.push(barcolor);
+                                    lefthours = {name: me.getSprintItem(i).sprint_name, data: [], color: barcolor}; 
+                                    for (var j=0,len2=member.length; j<len2; j++) {
+                                        lefthours.data.push(datasource[i][member[j]] || 0);
+                                    }
+                                    hours.push(lefthours);
+                                }
+                                var username = [];
+                                var user;
+                                for (var j=0,len2=member.length; j<len2; j++) {
+                                    user = me.getUserItem(member[j]) || {};
+                                    username.push(user.realname + '(' + user.username + ')');
+                                }
+
+                                var memberload = hui.Control.create('Memberload', {
+                                        formname:'memberload', 
+                                        parentElement: document.getElementById('taskboard'),
+                                        member: username,
+                                        hours: hours
+                                    });
 
                             }
                         },
@@ -646,13 +546,13 @@
                                 task_list[i].task_index = taskList[task_list[i].task_id];
                             }
                             
-                            return hui.sortBy(task_list, 'task_index', 'ASC');
+                            return _.sortBy(task_list, 'task_index').reverse();
                         },
                         getUserList: function () {
                             var me = this,
                                 list = me.model.get('user_list');
                             for (var i=0,len=list.length; i<len; i++) {
-                                list[i].user_label = (list[i].realname || list[i].username) + ' (' + list[i].username + ')';
+                                list[i].user_label = (list[i].realname !== undefined ? list[i].realname : list[i].username) + ' (' + list[i].username + ')';
                             }
                             return list;        
                         },
@@ -685,7 +585,7 @@
                         getProduct: function (id) {
                             return this.getDataItem('product', id);        
                         },
-                        getSprint: function (id) {
+                        getSprintItem: function (id) {
                             return this.getDataItem('sprint', id);      
                         },
                         getBacklogItem: function (id) {
@@ -709,7 +609,6 @@
                         editBacklog: function (sprint_id, backlog_id) {
                             var me = this,
                                 nc = hui.Control.getById('editBacklog', me),
-                                //sprint_id = hui.Control.getByFormname('sprint_list').getValue(),
                                 backlogValue,
                                 backlogItem;
                             
@@ -725,6 +624,7 @@
                                     backlogValue.sprint_id      = backlogItem.sprint_id;      
                                 }
                             }
+                            backlogValue.sprint_name = me.getSprintItem(backlogValue.sprint_id).sprint_name;
                             // 弹出对话框
                             if (nc) {
                                 nc.dispose();
@@ -749,6 +649,7 @@
                             
                             if (nc && nc.validate()) {
                                 var backlogValue = nc.getParamMap();
+                                backlogValue.product_id = me.getSprintItem(sprint_id).product_id;
                                 
                                 Requester.get('/ue_api/internal/backlog_save', {
                                     data: backlogValue,
@@ -780,54 +681,6 @@
 
                             me.highlightTask();                            
                             
-                        },
-                        repaintBurden: function () {
-                            var me = this,
-                                sprint_id = hui.Control.getByFormname('sprint_list').getValue() || '';
-                            var include_deleted = hui.getCookie('include_deleted') === 'true' ? '' : '&task_deleted=0';
-
-                            Requester.get('/ue_api/internal/burden?sprint_id=' + sprint_id + include_deleted, {
-                                onsuccess: function (data) {
-                                    //me.model.set('task_list'   , hui.sortBy(data[1], 'task_index'));
-                                    me.model.set('burden'   , data[1]);
-                                    me.repaintBurdenCallback();
-                                }
-                            });
-                        },
-                        repaintBurdenCallback: function () {
-                            var me = this,
-                                burden = me.model.get('burden');
-                            var labels = [], 
-                                datasets = [],
-                                u;
-                            var list = [];
-                            for (var i in burden) {
-                                list.push({uid:i, hrs:burden[i]});
-                            }
-                            list = hui.util.sortBy(list, 'uid');
-                            
-                            for (var i=0,len=list.length; i<len; i++) {
-                                if (list[i].uid) {
-                                    u = me.getUserItem(list[i].uid);
-                                    labels.push(u.realname || u.username);
-                                    datasets.push(Number(list[i].hrs));
-                                }
-                            }
-                            var barChartData = {
-                                animation: false,
-                                labels : labels, //['January','February','March','April','May','June','July'],
-                                datasets : [
-                                    {
-                                        fillColor   : 'rgba(242,91,8,1)',
-                                        strokeColor : 'rgba(242,91,8,1)',
-                                        data : datasets //[65,59,90,81,56,55,20]
-                                    }
-                                ],
-                                scaleStartValue: 0
-                                
-                            }
-
-                            var myLine = new Chart(document.getElementById('chartBurden').getContext('2d')).Bar(barChartData);
                         },
                         
                         /**
@@ -870,7 +723,6 @@
                         addTask: function(backlog_id) {
                             var me = this,
                                 users = me.model.get('user_list'),
-                                //sprint_id = hui.Control.getByFormname('sprint_list').getValue(),
                                 taskItem = {};
                             var sprint_id = _.find(me.model.get('backlog_list'), function(a){return a.backlog_id == backlog_id}).sprint_id;
                             taskItem.sprint_id  = sprint_id;
@@ -911,6 +763,7 @@
                             nc.getByFormname('task_person').setValue(hui.getCookie('taskboard_user'));
                             // 默认解除deleted状态
                             taskItem.task_deleted = '0';
+                            taskItem.backlog_name = me.getBacklogItem(taskItem.backlog_id).backlog_name;
                             nc.setValueByTree(taskItem);
                             nc.show();
                             
@@ -929,6 +782,7 @@
                                 if (!hui.util.isEqual(taskValue, me.getTaskItem(taskValue.task_id))) {
                                     // 自己修改的，无需显示刷新提示
                                     hui.setCookie('task_lastmodify', '');
+                                    taskValue.product_id = me.getSprintItem(taskValue.sprint_id).product_id;
                                     
                                     Requester.get('/ue_api/internal/task_save', {
                                         data: taskValue,
@@ -959,7 +813,7 @@
                                 }
                                 isAdd && list.push(taskValue);
                                 
-                                //me.model.set('task_list'   , hui.sortBy(list, 'task_index', 'desc'));
+                                //me.model.set('task_list'   , _.sortBy(list, 'task_index'));
                                 me.model.set('task_list'   , list);
                                 
                                 // 添加到任务板上
@@ -986,7 +840,7 @@
                                 isAdd && me.saveTaskIndex(taskValue);
 
                                 // 任务负载情况
-                                me.repaintBurden();
+                                me.switchProduct();
                             }
                         },
                         saveTaskIndex: function (taskValue) {
@@ -996,7 +850,6 @@
                                 str = backlogItem.id.split('_'),
                                 task_status = str[0],
                                 backlog_id = str[1],
-                                sprint_id = hui.Control.getByFormname('sprint_list').getValue(),
                                 list = backlogItem.childNodes,
                                 taskindex = [];
                             for (var i=0,len=list.length; i<len; i++) {
@@ -1009,7 +862,8 @@
                                 data: { 
                                     backlog_id: backlog_id,
                                     task_status: task_status,
-                                    sprint_id: sprint_id,
+                                    sprint_id: me.getBacklogItem(backlog_id).sprint_id,
+                                    product_id: me.getSprintItem(me.getBacklogItem(backlog_id).sprint_id).product_id,
                                     taskindex: JSON.stringify(taskindex)
                                 },  
                                 onsuccess: new Function()
@@ -1023,7 +877,7 @@
                                 task_person;
                             for (var i=0,len=list.length; i<len; i++) {
                                 task_person = hui.c('pointperson', list[i])[0];
-                                if (task_person.getAttribute('task_person') == uid) {
+                                if (task_person && task_person.getAttribute('task_person') == uid) {
                                     hui.addClass(list[i], 'taskofuser0');
                                 }
                                 else {
@@ -1031,7 +885,7 @@
                                 }
                             }
                             
-                            hui.setCookie('taskboard_user', uid);
+                            uid && hui.setCookie('taskboard_user', uid);
                             
                         },
                         checkTaskModify: function () {
@@ -1129,20 +983,19 @@
                          * @param {string} [sprint_id] 
                          */
                         addSprint: function () {
-                            this.editSprint('new');
+                            this.editSprint('', 'new');
                         },
-                        editSprint: function (isNew) {
+                        editSprint: function (sprint_id, isNew) {
                             var me = this,
                                 nc = hui.Control.getById('editSprint', me),
                                 product_id = hui.Control.getByFormname('product_list').getValue(),
-                                sprint_id  = hui.Control.getByFormname('sprint_list').getValue(),
                                 sprintValue,
                                 sprintItem;
                             
                             // 确定sprintItem的值
                             sprintValue = {product_id: product_id};
                             if (isNew != 'new') {
-                                sprintItem = me.getSprint(sprint_id);
+                                sprintItem = me.getSprintItem(sprint_id);
                                 if (sprintItem) {
                                     sprintValue.sprint_id     = sprintItem.sprint_id;
                                     sprintValue.sprint_name   = sprintItem.sprint_name;   
@@ -1301,6 +1154,15 @@
                         </td>
                     </tr>
                     <tr>
+                        <td align="right" valign="top">Sprint:</td>
+                        <td>
+                            <span style="font-weight123:bold;" ui="type:'Label',formname:'sprint_name'"></span>
+                        </td>
+                        <td rowspan="6" style="vertical-align: top; padding-left:20px;">
+
+                        </td>
+                    </tr>
+                    <tr>
                         <td class="inputLabel" style="vertical-align: top;">Description:</td>
                         <td style="vertical-align: top;">
                             <textarea ui="type:'TextInput',formname:'backlog_desc'" cols="40" rows="9"></textarea>
@@ -1359,6 +1221,15 @@
                                         </td>
                                     </tr>
                                 </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top">Backlog:</td>
+                            <td>
+                                <span style="font-weight123:bold;" ui="type:'Label',formname:'backlog_name'"></span>
+                            </td>
+                            <td rowspan="6" style="vertical-align: top; padding-left:20px;">
+
                             </td>
                         </tr>
                         <tr>
@@ -1610,6 +1481,8 @@
     <!-- script type="text/javascript" src="http://bpmjs.org/bpm_api/combo??hui_requester@0.0.1,hui_action@0.0.1,hui_panel@0.0.1,hui_table@0.0.1,hui_checkbox@0.0.1,hui_textinput@0.0.1,hui_button@0.0.1,hui_template@0.0.1,hui_checklabel@0.0.1,hui_boxpanel@0.0.1,hui_label@0.0.1,hui_slider@0.0.1,hui_radiobox@0.0.1,hui_dropdown@0.0.1,hui_validator@0.0.1?debug=true"></script -->
     <!-- script type="text/javascript" src="http://bpmjs.org/js/??hui@0.0.1/hui.js,hui_validator@0.0.1/hui_validator.js,hui_util@0.0.1/hui_util.js,hui_dropdown@0.0.1/hui_dropdown.js,hui_control@0.0.1/hui_control.js,hui_radiobox@0.0.1/hui_radiobox.js,hui_checkbox@0.0.1/hui_checkbox.js,hui_slider@0.0.1/hui_slider.js,hui_draggable@0.0.1/hui_draggable.js,hui_label@0.0.1/hui_label.js,hui_boxpanel@0.0.1/hui_boxpanel.js,hui_checklabel@0.0.1/hui_checklabel.js,hui_template@0.0.1/hui_template.js,hui_button@0.0.1/hui_button.js,hui_textinput@0.0.1/hui_textinput.js,hui_table@0.0.1/hui_table.js,hui_panel@0.0.1/hui_panel.js,hui_action@0.0.1/hui_action.js,hui_requester@0.0.1/hui_requester.js?debug=true"></script -->
     <script type="text/javascript" src="src/hui@0.0.1/hui.js"></script>
+    <script type="text/javascript" src="src/jquery1.8.3.js"></script>
+    <script type="text/javascript" src="src/highcharts.js"></script>   
     <script type="text/javascript" src="src/hui_validator@0.0.1/hui_validator.js"></script>
     <script type="text/javascript" src="src/hui_util@0.0.1/hui_util.js"></script>
     <script type="text/javascript" src="src/hui_dropdown@0.0.1/hui_dropdown.js"></script>
@@ -1631,6 +1504,8 @@
     <script type="text/javascript" src="src/hui_action@0.0.1/hui_action.js"></script>
     <script type="text/javascript" src="src/hui_requester@0.0.1/hui_requester.js"></script>
     <script type="text/javascript" src="src/hui_taskboard@0.0.1/hui_taskboard.js"></script>
+    <script type="text/javascript" src="src/hui_burndown@0.0.1/hui_burndown.js"></script>
+    <script type="text/javascript" src="src/hui_memberload@0.0.1/hui_memberload.js"></script>
     <!-- Only for highrchart!!  -->
     <!--script type="text/javascript" src="src/jquery1.9.1.js         "></script>
     <script type="text/javascript" src="src/highcharts.js          "></script>
@@ -1639,6 +1514,7 @@
     <script type="text/javascript" src="src/ext_chart.js             "></script>
     <script type="text/javascript" src="src/ext_md5.js             "></script>
     <script type="text/javascript" src="src/underscore.js             "></script>
+
 </body>
 
 </html>

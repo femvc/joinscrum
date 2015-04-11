@@ -13,11 +13,12 @@ body {
 	min-height: 100%;
   letter-spacing: .075px;
    
-	background-color: #AFB3BA;
-	background-image: url(img/page_bg.gif);
+	background-color: #fff;
+	/*background-image: url(img/page_bg.gif);*/
 	background-position: center top;
 	background-repeat: repeat-y;
 	overflow-y: scroll;
+  padding: 20px;
 }
 
 textarea {
@@ -204,6 +205,10 @@ div#burndownChart {
     height:480px;
 }
 
+.taskboard-title {
+  padding: 40px 0px 5px;
+  font-size: 18px;
+}
 
 table.taskboard {
     border-spacing: 0px;

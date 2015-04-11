@@ -106,7 +106,7 @@ function add(req, res, next) {
         product_name: req.paramlist.product_name
     }, function (doc) {
         if (doc) {
-            response.err(req, res, 'USER_ALREADY_EXIST');
+            response.err(req, res, 'PRODUCT_ALREADY_EXIST');
         }
         else {
             filter.update_time = date;

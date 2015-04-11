@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Highcharts Example</title>
+
+<script type="text/javascript" src="jquery1.8.3.min.js"></script>
+<script type="text/javascript">
+$(function () {
+    $('#container').highcharts({
+        title: {
+            text: 'Burndown Chart',
+            x: -20 //center
+        },
+        xAxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        },
+        yAxis:[
+            {
+                lineWidth : 1,
+                title:{
+                    text :'Tasks remaining'
+                },
+                max: 100
+            },
+            {
+                title:{text :'Hours remaining'},
+                lineWidth : 1,
+                opposite:true,
+                max: 800
+            }
+        ],
+        series: [{
+            data: [20,45,60,50,40,30,20,10],
+            name: 'Tasks remaining',
+            yAxis:0,
+            color: 'blue'
+        }, {
+            data: [120,400,600,500,400,300,200,100],
+            yAxis:1,
+            name: 'Hours remaining',
+            color: 'red',
+            dataLabels: {
+                enabled: true
+            }
+        }]
+
+    });
+});
+</script>
+</head>
+<body>
+<script src="highcharts.js"></script>
+
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+	</body>
+</html>

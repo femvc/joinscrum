@@ -97,7 +97,7 @@ function add(req, res, next) {
         sprint_name: req.paramlist.sprint_name
     }, function (doc) {
         if (doc) {
-            response.err(req, res, 'USER_ALREADY_EXIST');
+            response.err(req, res, 'SPRINT_ALREADY_EXIST');
         }
         else {
             filter.update_time = date;

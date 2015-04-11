@@ -32,7 +32,10 @@ var err_map = {
     USER_ALREADY_EXIST: '用户已存在',
     USER_ROOM_IS_EMPTY: '该room里没有人',
     INDEX_OUT_RANGE: '索引值超出范围',
-    INVALIDE_VALIDATECODE: '无效验证码'
+    INVALIDE_VALIDATECODE: '无效验证码',
+    PRODUCT_ALREADY_EXIST: 'Product已存在',
+    BACKLOG_ALREADY_EXIST: 'Backlog已存在',
+    TASK_ALREADY_EXIST: 'Task已存在'
 };
 
 exports.err = function (req, res, errcode, extra_msg) {

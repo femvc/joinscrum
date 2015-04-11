@@ -200,11 +200,3 @@ exports.logout = function (req, res, next) {
     return response.ok(req, res, 'ok');
 };
 
-exports.loginstatus = function (req, res, next) {
-    if (req.sessionStore.user && req.sessionStore.user[req.sessionID]) {
-        return response.ok(req, res, 'ok');
-    }
-    else {
-        return response.ok(req, res, 'logout');
-    }
-};

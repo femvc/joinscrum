@@ -45,7 +45,7 @@ exports.detail = function (req, res, next) {
     return getDataRecord(req, res, filter);
 };
 
-var arr = ['backlog_name', 'backlog_desc', 'backlog_index', 'sprint_id', 'backlog_deleted', 'user_id', 'edit_time'];
+var arr = ['backlog_name', 'backlog_desc', 'backlog_index', 'sprint_id', 'product_id', 'backlog_deleted', 'user_id', 'edit_time'];
 exports.list = function (req, res, next) {
     // res.end('aaaaaaaaaa');
     var params = req.paramlist,
@@ -98,7 +98,7 @@ function add(req, res, next) {
         backlog_name: req.paramlist.backlog_name
     }, function (doc) {
         if (doc) {
-            response.err(req, res, 'USER_ALREADY_EXIST');
+            response.err(req, res, 'BACKLOG_ALREADY_EXIST');
         }
         else {
             filter.update_time = date;

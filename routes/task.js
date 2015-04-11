@@ -1,5 +1,6 @@
 'use strict'; // utf-8编码
 var dataModel = require('../models/task').createNew();
+var tasklog = require('./tasklog');
 
 // task_api
 // app.get('/ue_api/internal/task_list',     account.auth, task.list);
@@ -47,7 +48,7 @@ exports.detail = function (req, res, next) {
 
 var arr = [
     'task_name', 'task_desc', 'task_index', 'backlog_id', 'task_deleted', 'user_id', 'edit_time',
-    'task_person', 'task_status', 'task_remaining', 'task_estimate', 'sprint_id'
+    'task_person', 'task_status', 'task_remaining', 'task_estimate', 'sprint_id', 'product_id'
 ];
 exports.list = function (req, res, next) {
     // res.end('aaaaaaaaaa');
@@ -101,7 +102,7 @@ function add(req, res, next) {
         task_name: req.paramlist.task_name
     }, function (doc) {
         if (doc) {
-            response.err(req, res, 'USER_ALREADY_EXIST');
+            response.err(req, res, 'TASK_ALREADY_EXIST');
         }
         else {
             filter.update_time = date;
@@ -112,7 +113,8 @@ function add(req, res, next) {
                 if (err) {
                     response.send(req, res, 'INTERNAL_DB_OPT_FAIL');
                 }
-                response.ok(req, res, doc[0]);
+                
+                tasklog.saveTasklog(req, res, doc[0]);
             });
         }
     });
@@ -156,6 +158,9 @@ exports.save = function (req, res, next) {
         else {
             return getDataRecord(req, res, {
                 task_id: req.paramlist.task_id
+            }, function (doc) {
+                
+                tasklog.saveTasklog(req, res, doc);
             });
         }
     });
