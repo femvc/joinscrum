@@ -1,0 +1,2 @@
+{ "_id" : { "$oid" : "552889ce9ef365081bb7364d" }, "product_name" : "xlobo", "product_desc" : "", "product_key" : "XLOBO", "product_index" : "", "update_time" : "2015-04-12 14:03:24", "product_id" : "202015041110411877876218", "member" : [ "102015020212261643548426" ] }
+{ "_id" : { "$oid" : "552889e69ef365081bb7364e" }, "product_name" : "ymatou", "product_desc" : "", "product_key" : "YMT", "product_index" : "", "update_time" : "2015-04-11 10:41:42", "product_id" : "202015041110414254955482", "member" : [ "102015020212261643548426" ] }
