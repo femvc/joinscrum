@@ -93,6 +93,9 @@ hui.define('hui_memberload', ['hui_util', 'hui_control', 'highcharts', 'jquery']
                                     return '<b>' + (this.y === 0 ? '' : this.y) + '</b>';
                                 }
                             }
+                        },
+                        series: {
+                            pointWidth: 30
                         }
                     },
                     series: me.hours || [] /*[{

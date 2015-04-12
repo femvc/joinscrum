@@ -98,25 +98,16 @@ function add(req, res, next) {
     var now = new Date();
     var date = global.common.formatDate(now, 'yyyy-MM-dd HH:mm:ss');
 
-    getDataRecord(req, res, {
-        task_name: req.paramlist.task_name
-    }, function (doc) {
-        if (doc) {
-            response.err(req, res, 'TASK_ALREADY_EXIST');
-        }
-        else {
-            filter.update_time = date;
-            filter.task_id = '50' +  global.common.formatDate(now, 'yyyyMMddHHmmss') + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 8);
-            filter.task_deleted = '0';
+    filter.update_time = date;
+    filter.task_id = '50' +  global.common.formatDate(now, 'yyyyMMddHHmmss') + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 8);
+    filter.task_deleted = '0';
 
-            dataModel.insert(filter, function (err, doc) {
-                if (err) {
-                    response.send(req, res, 'INTERNAL_DB_OPT_FAIL');
-                }
-                
-                tasklog.saveTasklog(req, res, doc[0]);
-            });
+    dataModel.insert(filter, function (err, doc) {
+        if (err) {
+            response.send(req, res, 'INTERNAL_DB_OPT_FAIL');
         }
+        
+        tasklog.saveTasklog(req, res, doc[0]);
     });
 
 };

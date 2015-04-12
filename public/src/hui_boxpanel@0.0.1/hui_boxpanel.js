@@ -80,16 +80,17 @@ hui.define('hui_boxpanel', ['hui_util', 'hui_control'], function () {
             var me = this,
                 main = me.getMain();
             me.onresizeTimer = null;
-
-            var top = Math.round(Math.max(0, (document.documentElement.clientHeight - main.clientHeight) * (me.top || 0.3)));
-            var left = Math.round(Math.max(0, (document.documentElement.clientWidth - main.clientWidth) * (me.left || 0.5)));
-            // IE6
-            if (hui.window.ActiveXObject && !hui.window.XMLHttpRequest) {
-                main.style.setExpression('top', 'eval(document.documentElement.scrollTop  + Math.max(0, (document.documentElement.clientHeight - 500)*0.4))');
-                main.style.setExpression('left', 'eval(document.documentElement.scrollLeft + Math.max(0, (document.documentElement.clientWidth - 427))/2)');
-            }
-            else {
-                hui.util.importCssString('.' + me.getClass() + '{top:' + top + 'px;left:' + left + 'px; margin-left:0px;}', me.getClass('7181549444794655'));
+            if (main) {
+                var top = Math.round(Math.max(0, (document.documentElement.clientHeight - main.clientHeight) * (me.top || 0.3)));
+                var left = Math.round(Math.max(0, (document.documentElement.clientWidth - main.clientWidth) * (me.left || 0.5)));
+                // IE6
+                if (hui.window.ActiveXObject && !hui.window.XMLHttpRequest) {
+                    main.style.setExpression('top', 'eval(document.documentElement.scrollTop  + Math.max(0, (document.documentElement.clientHeight - 500)*0.4))');
+                    main.style.setExpression('left', 'eval(document.documentElement.scrollLeft + Math.max(0, (document.documentElement.clientWidth - 427))/2)');
+                }
+                else {
+                    hui.util.importCssString('.' + me.getClass() + '{top:' + top + 'px;left:' + left + 'px; margin-left:0px;}', me.getClass('7181549444794655'));
+                }
             }
 
             hui.Mask && hui.Mask.repaintMask();

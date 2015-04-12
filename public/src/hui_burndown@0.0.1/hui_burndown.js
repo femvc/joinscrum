@@ -87,9 +87,10 @@ hui.define('hui_burndown', ['hui_util', 'hui_control', 'hui_requester', 'highcha
 
                     uniq = uniq;
                     var leftTask;
-                    var leftTaskList = [];
                     var leftHour;
+                    var leftTaskList = [];
                     var leftHourList = [];
+                    var referHourList = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
                     for (var i=0,len=day.length; i<len; i++) {
                         leftTask = 0;
@@ -104,8 +105,12 @@ hui.define('hui_burndown', ['hui_util', 'hui_control', 'hui_requester', 'highcha
                         leftTaskList.push(leftTask);
                         leftHourList.push(leftHour);
                     }
+
+                    for (var i = 1,len = Math.max(referHourList.length - day.length + 1, 2); i < len; i++) {
+                        day.push(hui.util.formatDate(hui.util.parseDate(new Date().getTime()+i*24*60*60*1000), 'yyyy-MM-dd'));
+                    };
                     
-                    me.getTasklogCallback({day: day, leftTaskList: leftTaskList, leftHourList: leftHourList});
+                    me.getTasklogCallback({day: day, leftTaskList: leftTaskList, leftHourList: leftHourList, referHourList: referHourList});
                 }
             });
         },
@@ -126,15 +131,20 @@ hui.define('hui_burndown', ['hui_util', 'hui_control', 'hui_requester', 'highcha
                         title:{
                             text :'Tasks remaining'
                         },
-                        max123: 100
+                        max123: 100,
+                        min: 0
                     },
                     {
                         title:{text :'Hours remaining'},
                         lineWidth : 1,
                         opposite:true,
-                        max123: 800
+                        max123: 800,
+                        min: 0
                     }
                 ],
+                tooltip: {
+                    enabled: false
+                },
                 series: [{
                     data: doc.leftTaskList, //[20,45,60,50,40,30,20,10],
                     name: 'Tasks remaining',
@@ -147,6 +157,14 @@ hui.define('hui_burndown', ['hui_util', 'hui_control', 'hui_requester', 'highcha
                     color: 'red',
                     dataLabels: {
                         enabled: true
+                    }
+                }, {
+                    data: doc.referHourList, //[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    yAxis:1,
+                    name: 'refer',
+                    color: 'transparent',
+                    dataLabels: {
+                        enabled: false
                     }
                 }]
 

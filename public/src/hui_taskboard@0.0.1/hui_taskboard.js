@@ -16,7 +16,7 @@
  * @date 2014-11-15 19:53
  * @param {Object} options 控件初始化参数.
  */
-hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
+hui.define('hui_taskboard', ['hui_util', 'hui_control', 'hui_draggable'], function () {
 
     hui.Taskboard = function (options, pending) {
         hui.Taskboard.superClass.call(this, options, 'pending');
@@ -51,10 +51,10 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
                 '        </tr>',
                 '        <tr class="taskstatus">',
                 '            <th>&nbsp;</th>',
-                '            <th><div class="taskStatus">Not Started</div><div class="taskStatusCount"><span id="notStartedCount">21</span> Tasks</div></th>',
-                '            <th><div class="taskStatus">Impeded</div><div class="taskStatusCount"><span id="impededCount">6</span> Tasks</div></th>',
-                '            <th><div class="taskStatus">In Progress</div><div class="taskStatusCount"><span id="inProgressCount">8</span> Tasks</div></th>',
-                '            <th><div class="taskStatus">Done</div><div class="taskStatusCount"><span id="doneCount">22</span> Tasks</div></th>',
+                '            <th><div class="taskStatus">Not Started</div><div class="taskStatusCount"><span id="notStartedCount"></span> Tasks</div></th>',
+                '            <th><div class="taskStatus">Impeded</div><div class="taskStatusCount"><span id="impededCount"></span> Tasks</div></th>',
+                '            <th><div class="taskStatus">In Progress</div><div class="taskStatusCount"><span id="inProgressCount"></span> Tasks</div></th>',
+                '            <th><div class="taskStatus">Done</div><div class="taskStatusCount"><span id="doneCount"></span> Tasks</div></th>',
                 '        </tr>',
                 '    </thead>',
                 '    <tbody id="taskboard#{sprint_id}"></tbody>',
@@ -121,9 +121,9 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
          */
         render: function () {
             hui.Taskboard.superClass.prototype.render.call(this);
-            var me   = this,
-                main = me.getMain(),
-                innerDiv;
+            var me   = this;
+            // var main = me.getMain();
+            // var innerDiv;
             
             me.setInnerHTML(hui.format(me.getTaskboardTpl(), me.sprint_data));
         },
@@ -151,16 +151,13 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
             taskboard.appendChild(tr);
             taskboard.insertBefore(tr, taskboard.rows[0]);
             
-            Droppables.add(hui.g('notstarted_' + backlogValue.backlog_id));
-            Droppables.add(hui.g('impeded_'     + backlogValue.backlog_id));
-            Droppables.add(hui.g('inprogress_' + backlogValue.backlog_id));
-            Droppables.add(hui.g('done_'        + backlogValue.backlog_id));
+            hui.Droppables.add(hui.g('notstarted_' + backlogValue.backlog_id));
+            hui.Droppables.add(hui.g('impeded_'     + backlogValue.backlog_id));
+            hui.Droppables.add(hui.g('inprogress_' + backlogValue.backlog_id));
+            hui.Droppables.add(hui.g('done_'        + backlogValue.backlog_id));
         },
         addTaskRow: function(task){
             var me = this,
-                backlog_id = task.backlog_id,
-                status = task.task_status,
-                td,
                 taskElem,
                 tmpContainer = document.createElement('DIV');
             
@@ -168,12 +165,11 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
             tmpContainer.innerHTML = hui.Control.format(me.getTaskTpl(), task);
             taskElem = tmpContainer.childNodes[0];
             taskElem = taskElem&&taskElem.tagName ? taskElem : tmpContainer.childNodes[1];
-            td = hui.g(status + '_' + backlog_id);
-            td && td.appendChild(taskElem);
+            document.documentElement.appendChild(taskElem);
 
             me.updateTask(task);
             
-            Draggable('task_'+task.task_id, {
+            hui.Draggable('task_'+task.task_id, {
                 //preventDefault: true,
                 start: function(){
                     var me = this;
@@ -187,7 +183,10 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
         },
         updateTask: function(task){
             var me = this,
-                u = hui.Master.get().getUserItem(task.task_person) || {};
+                u = hui.Master.get().getUserItem(task.task_person) || {},
+                backlog_id = task.backlog_id,
+                status = task.task_status,
+                td;
             task.task_remaining = task.task_remaining === '' ? '-' : task.task_remaining;
             task.user_label = u.realname + '(' + u.username + ')';
             
@@ -195,9 +194,12 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
             if (taskElem) {
                 taskElem.innerHTML = hui.Control.format(me.getTaskContentTpl(), task);
             }
+
+            td = hui.g(status + '_' + backlog_id);
+            td && td.appendChild(taskElem);
         },
         deleteTask: function(task){
-            var me = this;
+            // var me = this;
             // todo
             var taskElem = hui.g('task_'+task.task_id);
             if (taskElem) {
@@ -231,6 +233,33 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control'], function () {
     /* hui.Taskboard 继承了 hui.Control */
     hui.inherits(hui.Taskboard, hui.Control);
 
+hui.util.importCssString([
+    '.taskboard {border-spacing: 0px; border: 2px solid #cccccc; width: 927px; table-layout: fixed;}',
+    '.taskboard th {text-align: left; vertical-align: top; padding: 5px; border: 2px solid #cccccc; margin: 0px;font-size: 9pt; color: black; font-weight: bold;}',
+    '.taskboard .draghandle {position: absolute; bottom: 0px; left: 0px; height: 16px; width: 146px;}',
+    '.taskboard .fixedWidth {width: 180px;}',
+    '.taskboard .link {border: 0px; color: #008000; display: inline; background-color: transparent; font-weight: bold; text-decoration: underline; cursor: pointer; padding: 0px 1px 0px 0px;}',
+    '.taskboard .pbiCell {background-color: #e6e6e6; color: #999999; font-size: 1pt; }',
+    '.taskboard .pbidesc {font-size: 8pt; color: #4d4d4d;overflow: hidden;}',
+    '.taskboard .pbidone {font-size: 8pt; color: #4d4d4d;padding-top: 1em;float: right; text-align: right;}',
+    '.taskboard .pbiestimate {font-size: 8pt; color: #4d4d4d;font-weight: bold;padding-top: 1em;float: left; text-align: left;}',
+    '.taskboard .pbikey {font-size: 8pt; color: #4d4d4d;font-weight: bold;cursor: pointer;float: left;}',
+    '.taskboard .pbititle {font-size: 8pt; color: #4d4d4d;font-weight: bold;overflow: hidden;cursor: pointer;}',
+    '.taskboard .pointperson {bottom: 3px; color: #444444; overflow: hidden; position: absolute; text-overflow: ellipsis; white-space: nowrap; width: 74px;right: 1px;}',
+    '.taskboard .task {width: 168px; height: 39px; margin-top: 4px; font-size: 9pt; position: relative; background-repeat: no-repeat; padding-left: 5px; cursor: move;background-image: url(vm/images/taskboxes/Task_box.gif);}',
+    '.taskboard .taskStatus {float: left;}',
+    '.taskboard .taskStatusCount {float: right;}',
+    '.taskboard .taskboard-title {padding: 40px 0px 5px; font-size: 18px;}',
+    '.taskboard .taskboardCell {padding-top: 3px; padding-bottom: 5px; padding-left: 4px; padding-right: 4px; font-size: 1px;}',
+    '.taskboard .taskboardCell {text-align: left; vertical-align: top; padding: 5px; border: 2px solid #cccccc; margin: 0px;}',
+    '.taskboard .taskhours {bottom: 3px; color: #444444; overflow: hidden; position: absolute; text-overflow: ellipsis; white-space: nowrap; width: 74px;left: 5px;}',
+    '.taskboard .taskmenu_list .taskmenu_item {padding: 2px; cursor: pointer;}',
+    '.taskboard .taskmenu_list .taskmenu_item:hover {background-color: #ececec; }',
+    '.taskboard .taskmenu_list {border: 1px solid #888888; background-color: #ffffff; position: absolute; z-index: 3; left: 157px; top: 30px; width: 90px;}',
+    '.taskboard .taskmenutrap {bottom: 3px; color: #444444; overflow: hidden; position: absolute; text-overflow: ellipsis; white-space: nowrap; width: 74px;cursor: pointer; width: 12px; height: 12px; right: 10px;}',
+    '.taskboard .taskofuser0 {width: 168px; height: 39px; margin-top: 4px; font-size: 9pt; position: relative; background-repeat: no-repeat; padding-left: 5px; cursor: move;background-image: url(vm/images/taskboxes/Task_box_0.gif);}',
+    '.taskboard .tasktitle {padding-top: 3px; position: absolute; cursor: pointer; color: white; white-space: nowrap; word-break: normal; width: 94%; overflow: hidden;}'
+].join(''));
 
 });
     

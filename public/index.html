@@ -3,25 +3,21 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>JoinScrum haiyang</title>
+    <title>Ymatou Scrumwork</title>
     <style type="text/css">
     html {padding: 0px; margin: 0px;}
-    body {padding: 0px; margin: 0px; font-family: Microsoft YaHei; }
+    body {padding: 0px; margin: 0px; font-family: 'Microsoft YaHei'; }
     img {border: 0px;}
     a {border: 0px; color: green; }
     a:hover {color: #f60;}
     .clearfix {clear: both; font-size: 1px; height: 1px; line-height: 1px; margin-top: -1px; overflow: hidden;}
-    .link { border:0px; color: #008000; display: inline; background-color: transparent; font-weight: bold; text-decoration: underline; cursor: pointer; padding: 0px 1px 0px 0px; }
+    .link { border:0px; color: #008000; display: inline; background-color: transparent; font-weight: bold; text-decoration: underline; cursor: pointer; padding: 0px 1px 0px 0px; font-size: 14px; }
     .link:hover { color: #FF6600; }
     .validate-text {color:red;}
 
     </style>
 
-    <link rel="stylesheet" type="text/css" href="vm/m.css">
-    <link rel="stylesheet" type="text/css" href="vm/taskboard.css">
-    <link rel="stylesheet" type="text/css" href="vm/webclient.css">
 
-    <link rel="stylesheet" type="text/css" href="vm/css/bootstrap-btn.css">
     <script type="text/javascript">
         'use strict';
 
@@ -40,8 +36,6 @@
             
             initPageLogin();
             initPageIndex();
-            initPageAddTask();
-            initPageComment();
 
             hui.Template.parseTemplate(hui.g('history').innerHTML);
 
@@ -50,7 +44,6 @@
         function showTab(tab, main) {
             hui.g('login'    ).style.display = 'none';
             hui.g('index'    ).style.display = 'none';
-            hui.g('industry' ).style.display = 'none';
             hui.g('history'  ).style.display = 'none';
             
 
@@ -64,27 +57,24 @@
 
 <body style="" onload123="initForTest()">
     <!--.page>.page_head>.logo^+.page_banner>h1.test_title{你想知道自己前端技术实力排名吗？}+.test_desc{2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，想知道你自己技术实力的排名吗}+.test_btn{立即测试}^+.page_foot{2014-10-17}-->
-    <div class="page" style="width: 980px;">
+    <div class="page" style="width: 927px; margin-left: 20px;">
         <div id="main" style="min-height: 750px;">
             <!-- Login -->
-            <div class="page_body" id="login" style="display:none">
+            <div class="page_login" id="login" style="display:none">
                 <!-- target: login -->
                 <style type="text/css">
-                    div.loginboxtitle { font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; border: 1px solid #c0c0c0; margin-left: 70px; margin-right: 70px; padding-left: 11px; padding-right: 11px; width: 830px; }
-                    div.loginboxtitle { background: #c0c0c0; font-size: 10pt; font-weight: bold; line-height: 21px; margin-top: 30px; margin-bottom: 0px; }
-                    div.loginbox { font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; border: 1px solid #c0c0c0; margin-left: 70px; margin-right: 70px; padding-left: 11px; padding-right: 11px; width: 830px; }
-                    div.loginbox { margin-top: 0px; font-size: 8pt; padding-top: 20px; color: #808080; }
-                    div.logintable { margin-top: 20px; }
-                    input { vertical-align: middle; }
-                    table.center { display: inline; text-align: center; }
-                    td.loginprompt { font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; text-align: right; color: #808080; font-size: 8pt; vertical-align: top; }
-                    input.loginprompt { font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; color: #252525; font-size: 10pt; border: 1px solid; margin-bottom: 11px; }
-                    .header { width: 970px; height: 61px; font-size: 8pt; display: block; background-image: url('vm/img/webclient-header.gif'); background-repeat: no-repeat; position: relative; top: 0px; left: 0px; color: white; margin-bottom: 12px; }
-                    .header .headertext { position: absolute; bottom: 12px; left: 21px; color: white; }
-                    .header a { text-decoration: underline; color: white; }
+                    .page_login  {}
+                    .page_login .loginboxtitle { font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; border: 1px solid #c0c0c0; margin-left: 70px; margin-right: 70px; padding-left: 11px; padding-right: 11px; width: 830px; background: #c0c0c0; font-weight: bold; line-height: 21px; margin-top: 30px; margin-bottom: 0px; }
+                    .page_login .loginbox { font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; border: 1px solid #c0c0c0; margin-left: 70px; margin-right: 70px; padding-left: 11px; padding-right: 11px; width: 830px; margin-top: 0px; padding-top: 20px; color: #808080; }
+                    .page_login .logintable { margin-top: 20px; }
+                    .page_login .center { display: inline; text-align: center; }
+                    .page_login .loginprompt { font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; text-align: right; vertical-align: top; color: #252525; border: 1px solid; margin-bottom: 11px; }
+                    .page_login .header { width: 970px; height: 61px; display: block; background-image: url('vm/img/webclient-header.gif'); background-repeat: no-repeat; position: relative; top: 0px; left: 0px; color: white; margin-bottom: 12px; }
+                    .page_login .header .headertext { position: absolute; bottom: 12px; left: 21px; color: white; }
+                    .page_login .header a { text-decoration: underline; color: white; }
                 </style>
                 <div class="header">
-                    <h1 class="header_title">JoinScrum</h1>
+                    <h1 class="header_title">Ymatou</h1>
                     <div class="headertext">
                         <a href="#">Home</a> | <a href="#!/help" target="_blank">Help</a>
                     </div>
@@ -93,7 +83,7 @@
                     <div class="loginboxtitle" style="width:890px;margin-left:30px;">Web Client Login</div>
                     <div class="loginbox" style="width:890px;margin-left:30px;">
                         <div>
-                            The JoinScrum provides a personalized view and limited updating of scrum data such as your task status and remaining hours.
+                            The Ymatou provides a personalized view and limited updating of scrum data such as your task status and remaining hours.
                         </div>
                         <div class="logintable" style="line-height: 30px;">
                             <form method="post" action="/">
@@ -124,7 +114,7 @@
                         </div>
                     </div>
                 </div>
-                <div style="color: #AAAAAA; margin: 20px 20px 0px; padding-bottom:20px; text-align: center; width: 970px;">Copyright © 2015 JoinScrum, Inc. All rights reserved.</div>
+                <div style="color: #AAAAAA; margin: 20px 20px 0px; padding-bottom:20px; text-align: center; width: 970px;">Copyright © 2015 Ymatou, Inc. All rights reserved.</div>
             </div>
             <script>
                 function initPageLogin() {
@@ -223,37 +213,12 @@
             </script>
             <div class="page_body" id="index" style="display: none;">
                 <!-- target: taskboard_layout -->
-                <style type="text/css">
-                    .content { margin-left: 20px; margin-right: 20px; }
-                    #needsUpdate { cursor: pointer; /* see: http://www.mandarindesign.com/opacity.html */; opacity: .85; filter: alpha(opacity=85); position: absolute; left: 57px; /* centered in the taskboard table: left margin + half of the diff between the table width and the image width */; z-index: 9999; }
-                    .error { font-size: 8pt; font-weight: bold; color: black; padding-left: 8px; margin-bottom: 12px; }
-                    .sectionHeader.nextSection { margin-top: 40px; }
-                    .sectionHeader { width: 930px; font-size: 12pt; color: white; text-align: left; background: transparent; margin-bottom: 12px; line-height: 21px; /* using line-height so that the text is vertically centered. */ }
-                    .sectionHeader_table { border-collapse: collapse; border-spacing: 0; width: 100%; margin: 0px; padding: 0px; }
-                    .sectionHeader_w { width: 2px; height: 28px; background: url('vm/img/taskboard-header-left.gif') no-repeat 0 0; }
-                    .sectionHeader_n { height: 28px; background: url('vm/img/taskboard-header-slice.gif') repeat-x 0 0; }
-                    .sectionHeaderText { color: white; margin-left: 5px; }
-                    .sectionHeader_e { width: 4px; height: 28px; background: url('vm/img/taskboard-header-right.gif') no-repeat 0 0; }
-                    .burndownChart { margin-top: 20px; }
-                    #burndownImg { border-width: 0px; padding-left: 8px; height: 480px; }
-                    #newImpediment { margin-bottom: 10px; }
-                    #impedimentsTable { border: none; font-size: 9pt; width: 900px; }
-                    col#entered { width: 100px; }
-                    col#lastmodified { width: 100px; }
-                    col#title { width: 200px; }
-                    col#description { width: 350px; }
-                    col#reporter { width: 150px; }
-                    th.impedimentattribute { font-size: 9pt; color: black; font-weight: bold; text-align: left; border: none; padding-bottom: 12px; padding-left: 8px; }
-                    .header { width: 970px; height: 61px; font-size: 8pt; display: block; background-image: url('vm/img/webclient-header.gif'); background-repeat: no-repeat; position: relative; top: 0px; left: 0px; color: white; margin-bottom: 12px; }
-                    .header .headertext { position: absolute; bottom: 12px; left: 21px; color: white; }
-                    .header a { text-decoration: underline; color: white; }
-                </style>
-
-                <div class="header">
-                    <h1 class="header_title">JoinScrum</h1>
-                    <div class="headertext">
+                
+                <div class="header" style="height: 100px;border-bottom: 3px  solid #f50;">
+                    <h1 class="header_title" style="float: left;padding:0px;margin:0px;"><img src="vm/img/logo-scrum.png" alt="" /></h1>
+                    <div class="headertext" style="float: left;margin-top:20px;width: 616px;text-align: right;">
                         Welcome: <span id="welcome_user">andy.wang</span>
-                        <span style="padding-left: 20px; font-size: 8pt;">
+                        <span style="padding-left: 20px;">
                             <a href="#!/login~logout=true">Log out</a> |
                             <a href="#">Home</a> |
                             <a href="#!/help" target="_blank">Help</a>
@@ -275,39 +240,60 @@
                     </div>
 
                     <div id="selectors">
-                        <table class="selectors">
+                        <table class="selectors" width="100%">
                             <tr>
-                                <td>
-                                    <span>View Product:</span>
+                                <td colspan="2">
+                                    <span>Product:</span>
                                     <button class="link" style="margin-left: 0px;" onclick="hui.Master.get().addProduct()">add</button><i>/</i>
                                     <button class="link" style="margin-left:0px;" onclick="hui.Master.get().editProduct()">edit</button>
                                 </td>
+                                <td> </td>
+                                <td><label style="float: right;margin-top: 5px;margin-right: 10px;">Highlight Tasks</label> </td>
                             </tr>
                             <tr>
                                 <td width="170">
                                     <div ui="type:'Dropdown',formname:'product_list',data_value:'product_id',data_text:'product_name',default_select:true" style="width:150px;"></div>
                                 </td>
-                                <td width="200">
+                                <td width="100">
                                     Sprint: <button class="link" style="" onclick="hui.Master.get().addSprint()">add </button>
                                 </td>
-                                <td width="200">
+                                <td>
+                                    <input id="include_burndown" name="include_burndown" type="checkbox" onclick="hui.setCookie('include_burndown', String(this.checked));hui.Master.get().switchProduct()" />
+                                    <label for="include_deleted">Show burndown chart</label>
                                     <input id="include_deleted" name="include_deleted" type="checkbox" onclick="hui.setCookie('include_deleted', String(this.checked));hui.Master.get().switchProduct()" />
-                                <label for="include_deleted">Show deleted task</label>
+                                    <label for="include_deleted">Show deleted task</label>
                                 </td>
                                 <td>
                                     <div ui="type:'Dropdown',formname:'user_list',data_value:'uid',data_text:'user_label'" style="width:230px; float: right;">
                                         <!--option value="Aaron.lu (aaron.lu)">Aaron.lu (aaron.lu)</option-->
                                     </div>
-                                    <label style="float: right;margin-top: 5px;margin-right: 10px;">Highlight Tasks</label>
+                                    
                                 </td>
                             </tr>
                         </table>
                     </div>
 
-
-                    <div class="">
-                        <h3>Taskboard: All Tasks</h3>
+                    <style>
+                    .sectionHeader_n {
+                        padding: 0px;
+                        margin: 0px;
+                        height: 28px;
+                        color: white;
+                        background: url('vm/img/taskboard-header-slice.gif') repeat-x 0 0;
+                        font-size: 14px;
+                        border-radius: 5px;
+                        padding-top: 3px;
+                        padding-left: 10px;
+                        margin-top: 16px;
+                    }
+                    .taskboard-title {padding: 10px 1px 8px;}
+                    .taskboard-title b {  border-left: 4px solid #f50;padding-left: 5px;}
+                    </style>
+                    <div class="" style="width123:927px;">
+                        <h3 class="sectionHeader_n">Taskboard: All Tasks</h3>
                         <div id="taskboard" ui="type:'Panel',formname:'taskboard'"></div>
+                        <h3 class="sectionHeader_n" style="margin-bottom: 25px;">Team Member Load</h3>
+                        <div id="memberload" ui="type:'Panel',formname:'memberload'" style="min-height: 410px;"></div>
                     </div>
 
 
@@ -318,7 +304,7 @@
                 </div>
                 <br /><br />
                 <hr style="  border: 1px solid #eee;" />
-                <div style="color: #AAAAAA; margin: 20px 20px 0px; padding-bottom:20px; text-align: center; width: 970px;">Copyright &copy; 2015 JoinScrum, Inc. All rights reserved.</div>
+                <div style="color: #AAAAAA; margin: 20px 20px 0px; padding-bottom:20px; text-align: center; width: 970px;">Copyright &copy; 2015 Ymatou, Inc. All rights reserved.</div>
             </div>
             <script>
                 function initPageIndex() {
@@ -380,6 +366,9 @@
                             if (hui.getCookie('include_deleted') === 'true') {
                                 hui.g('include_deleted').checked = 'checked';
                             }
+                            if (hui.getCookie('include_burndown') === 'true') {
+                                hui.g('include_burndown').checked = 'checked';
+                            }
                             
                             me.getSprintData(function(){
                                 var productList = hui.Control.getByFormname('product_list');
@@ -394,7 +383,8 @@
                                 
                                 me.switchProduct();
 
-                                hui.g('welcome_user').innerHTML = me.getUserItem(hui.getCookie('mid')).username;
+                                var user = me.getUserItem(hui.getCookie('mid'));
+                                hui.g('welcome_user').innerHTML = user.realname;
                                 
                             });
                             //me.switchProduct();
@@ -453,8 +443,6 @@
 
                                 hui.Control.getByFormname('taskboard').disposeChild();
 
-                                                              
-                                
                                 var product_id = hui.Control.getByFormname('product_list').getValue();
                                 var sprint_list = _.filter(me.model.get('sprint_list'), function(item){
                                         return item.product_id == product_id
@@ -470,60 +458,17 @@
                                     taskboard.taskList = me.sortTask(sprint_list[i].sprint_id); 
                                     me.repaintTaskboard(taskboard);
                                     // me.repaintBurden(sprint_list[i].sprint_id);
-
-                                    var memberload = hui.Control.create('Burndown', {
-                                        formname:'burndown', 
-                                        parentElement: document.getElementById('taskboard'),
-                                        sprint_id: sprint_list[i].sprint_id,
-                                        product_id: product_id
-                                    });
-                                }
-
-                                var datasource = {}; //{'sprint01': {'user01': 20, 'user02': 30},'sprint02': {'user01': 10, 'user02': 10}};
-                                var member = [];
-                                var taskList = me.model.get('task_list');
-                                for (var i=0,len=taskList.length; i<len; i++) {
-                                    var item = taskList[i];
-                                    datasource[item.sprint_id] = datasource[item.sprint_id] || {};
-                                    datasource[item.sprint_id][item.task_person] = datasource[item.sprint_id][item.task_person] || 0;
-                                    datasource[item.sprint_id][item.task_person] += Number(item.task_remaining);
-                                    member.push(item.task_person);
-                                }
-                                member = _.uniq(member).sort().reverse();
-
-                                var hours = [];
-                                // [{
-                                //     name: 'wechat',
-                                //     data: [5, 3, 4, 7, 2, 2, 3, 4, 7, 2, 2, 3, 4, 7, 2, 2, 3, 4, 7, 2, 2]
-                                // }, {
-                                //     name: 'search',
-                                //     data: [2, 2, 3, 2, 1]
-                                // }]  
-                                var colors = ['#FF9900','#99CC00','#CC9900','#99CC00','#0099CC','#00CC99','#CC5599','#FE8463','#9BCA63','#FAD860','#F3A43B','#60C0DD','#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'];
-                                var barcolor;
-                                var lefthours;
-                                for (var i in datasource) {
-                                    barcolor = colors.shift();
-                                    colors.push(barcolor);
-                                    lefthours = {name: me.getSprintItem(i).sprint_name, data: [], color: barcolor}; 
-                                    for (var j=0,len2=member.length; j<len2; j++) {
-                                        lefthours.data.push(datasource[i][member[j]] || 0);
+                                    if (hui.getCookie('include_burndown') === 'true') {
+                                        var burndown = hui.Control.create('Burndown', {
+                                            formname:'burndown', 
+                                            parentElement: document.getElementById('taskboard'),
+                                            sprint_id: sprint_list[i].sprint_id,
+                                            product_id: product_id
+                                        });
                                     }
-                                    hours.push(lefthours);
-                                }
-                                var username = [];
-                                var user;
-                                for (var j=0,len2=member.length; j<len2; j++) {
-                                    user = me.getUserItem(member[j]) || {};
-                                    username.push(user.realname + '(' + user.username + ')');
                                 }
 
-                                var memberload = hui.Control.create('Memberload', {
-                                        formname:'memberload', 
-                                        parentElement: document.getElementById('taskboard'),
-                                        member: username,
-                                        hours: hours
-                                    });
+                                me.repaintMemberloadCallback();
 
                             }
                         },
@@ -534,6 +479,7 @@
                                 taskList = {},
                                 item,
                                 index = 1;
+                            
                             for (var i=0,len=taskindex_list.length; i<len; i++) {
                                 item = taskindex_list[i].taskindex;
                                 for (var j=0,len2=item.length; j<len2; j++) {
@@ -546,7 +492,7 @@
                                 task_list[i].task_index = taskList[task_list[i].task_id];
                             }
                             
-                            return _.sortBy(task_list, 'task_index').reverse();
+                            return _.sortBy(task_list, 'task_index');
                         },
                         getUserList: function () {
                             var me = this,
@@ -554,7 +500,7 @@
                             for (var i=0,len=list.length; i<len; i++) {
                                 list[i].user_label = (list[i].realname !== undefined ? list[i].realname : list[i].username) + ' (' + list[i].username + ')';
                             }
-                            return list;        
+                            return _.sortBy(list, 'realname');        
                         },
                         getUserItem: function (id) {
                             var me = this,
@@ -723,7 +669,9 @@
                         addTask: function(backlog_id) {
                             var me = this,
                                 users = me.model.get('user_list'),
-                                taskItem = {};
+                                taskItem = {
+                                    task_name: ''
+                                };
                             var sprint_id = _.find(me.model.get('backlog_list'), function(a){return a.backlog_id == backlog_id}).sprint_id;
                             taskItem.sprint_id  = sprint_id;
                             taskItem.backlog_id = backlog_id;
@@ -752,7 +700,7 @@
                                 contentView: 'taskboard_addtask', 
                                 size: { width:'750px', height: '500px', bottom: '8%'}
                             });
-                            this.appendControl(nc);
+                            me.appendControl(nc);
                             // 绑定事件
                             nc.getByFormname('submit').onclick = new Function('hui.Master.get().saveTask()');
                             
@@ -840,7 +788,8 @@
                                 isAdd && me.saveTaskIndex(taskValue);
 
                                 // 任务负载情况
-                                me.switchProduct();
+                                // me.switchProduct();
+                                me.repaintMemberloadCallback();
                             }
                         },
                         saveTaskIndex: function (taskValue) {
@@ -1001,8 +950,14 @@
                                     sprintValue.sprint_name   = sprintItem.sprint_name;   
                                     sprintValue.sprint_desc   = sprintItem.sprint_desc;  
                                     sprintValue.sprint_index  = sprintItem.sprint_index; 
-                                    sprintValue.product_id    = sprintItem.product_id;      
+                                    sprintValue.product_id    = sprintItem.product_id;  
+                                    sprintValue.sprint_start  = sprintItem.sprint_start;
+                                    sprintValue.sprint_finish = sprintItem.sprint_finish;
                                 }
+                            }
+                            else {
+                                sprintValue.sprint_start  = hui.util.formatDate(new Date(), 'yyyy-MM-dd');  
+                                sprintValue.sprint_finish = hui.util.formatDate(hui.util.parseDate(new Date().getTime() + 12*24*60*60*1000), 'yyyy-MM-dd');    
                             }
                             // 弹出对话框
                             if (nc) {
@@ -1044,6 +999,63 @@
                                 // hui.Locator.reload();
                                 window.location.reload();
                             }
+                        },
+                        repaintMemberload: function () {
+                            var me = this;
+                        },
+                        repaintMemberloadCallback: function () {
+                            var me = this;
+                            
+                            hui.Control.getByFormname('memberload').disposeChild();
+                            
+                            var taskList = me.model.get('task_list');
+                            var datasource = {}; //{'sprint01': {'user01': 20, 'user02': 30},'sprint02': {'user01': 10, 'user02': 10}};
+                            var member = [];
+                            for (var i=0,len=taskList.length; i<len; i++) {
+                                var item = taskList[i];
+                                datasource[item.sprint_id] = datasource[item.sprint_id] || {};
+                                datasource[item.sprint_id][item.task_person] = datasource[item.sprint_id][item.task_person] || 0;
+                                datasource[item.sprint_id][item.task_person] += Number(item.task_remaining);
+                                member.push(item.task_person);
+                            }
+                            member = _.uniq(member).sort().reverse();
+
+                            var hours = [];
+                            // [{
+                            //     name: 'wechat',
+                            //     data: [5, 3, 4, 7, 2, 2, 3, 4, 7, 2, 2, 3, 4, 7, 2, 2, 3, 4, 7, 2, 2]
+                            // }, {
+                            //     name: 'search',
+                            //     data: [2, 2, 3, 2, 1]
+                            // }]  
+                            var colors = ['#FF9900','#99CC00','#CC9900','#99CC00','#0099CC','#00CC99','#CC5599','#FE8463','#9BCA63','#FAD860','#F3A43B','#60C0DD','#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'];
+                            var barcolor;
+                            var lefthours;
+                            for (var i in datasource) {
+                                barcolor = colors.shift();
+                                colors.push(barcolor);
+                                lefthours = {
+                                    name: me.getSprintItem(i).sprint_name, 
+                                    data: [], color: barcolor
+                                }; 
+                                for (var j=0,len2=member.length; j<len2; j++) {
+                                    lefthours.data.push(datasource[i][member[j]] || 0);
+                                }
+                                hours.push(lefthours);
+                            }
+                            var username = [];
+                            var user;
+                            for (var j=0,len2=member.length; j<len2; j++) {
+                                user = me.getUserItem(member[j]) || {};
+                                username.push(user.realname + '(' + user.username + ')');
+                            }
+
+                            var memberload = hui.Control.create('Memberload', {
+                                    formname:'memberload', 
+                                    parentElement: document.getElementById('memberload'),
+                                    member: username,
+                                    hours: hours
+                                });
                         }
                     };
 
@@ -1057,7 +1069,16 @@
                             hui.Locator.redirect('#!/login');
                         }
                         else {
-                            next();
+                            Requester.get('/ue_api/internal/user_loginstatus', {
+                                onsuccess: function(data){
+                                    if (data && data[1] && data[1] === 'ok') {
+                                        next();
+                                    }
+                                    else {
+                                         hui.Locator.redirect('#!/login');
+                                    }
+                                }
+                            });
                         }
                         
                     })
@@ -1088,6 +1109,13 @@
                         <td class="inputLabel" style="vertical-align: top;">Index:</td>
                         <td style="vertical-align: top;">
                             <input type="text" size="16" ui="type:'TextInput',formname:'sprint_index'" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="inputLabel" style="vertical-align: top;">Date Span:</td>
+                        <td style="vertical-align: top;">
+                            <input type="text" size="8" ui="type:'TextInput',formname:'sprint_start'" /> - 
+                            <input type="text" size="8" ui="type:'TextInput',formname:'sprint_finish'" />
                         </td>
                     </tr>
                     <tr>
@@ -1200,7 +1228,15 @@
                                 <input type="hidden" ui="type:'TextInput',formname:'sprint_id'" />
                                 <input type="hidden" ui="type:'TextInput',formname:'backlog_id'" />
                                 <input type="hidden" ui="type:'TextInput',formname:'task_id'" />
-                                <input type="text" ui="type:'TextInput',formname:'task_name',rule:'required'" style="width: 267px;" />
+                                <input type="text" list="occupation" ui="type:'TextInput',formname:'task_name',rule:'required'" style="width: 267px;" />
+                                <datalist id="occupation">
+                                    <option value="[FE]">
+                                    <option value="[RD]">
+                                    <option value="[QA]">
+                                    <option value="[PM]">
+                                    <option value="[IOS]">
+                                    <option value="[Android]">
+                                </datalist>
                             </td>
                             <td rowspan="6" style="vertical-align: top; padding-left:20px;">
                                 <table cellspacing="0px">
@@ -1280,187 +1316,6 @@
                     </table>
                 </div>
             </div>
-            <script>
-                function initPageAddTask() {
-                    // pageHistory
-                    var pageHistory;
-                    pageHistory = function () {
-                        hui.Action.call(this);
-                        this.id = 'pageHistory';
-                        this.main = 'history';
-                    };
-                    pageHistory.prototype = {
-                        initBehavior: function () {
-                            var me = this;
-                            me.showTestHistory();
-                        },
-                        finish: function () {
-                            var me = this;
-                            showTab('history');
-                        },
-                        showTestHistory: function () {
-                            hui.Mockup.setRule('/ue_api/internal/get_test_history', [
-                                null, [{
-                                    user: 'a001',
-                                    time: '30 m',
-                                    score: '35',
-                                    date: '2015-01-05 16:40'
-                                }, {
-                                    user: 'a001',
-                                    time: '30 m',
-                                    score: '35',
-                                    date: '2015-01-05 16:40'
-                                }, {
-                                    user: 'a001',
-                                    time: '30 m',
-                                    score: '35',
-                                    date: '2015-01-05 16:40'
-                                }, {
-                                    user: 'a001',
-                                    time: '30 m',
-                                    score: '35',
-                                    date: '2015-01-05 16:40'
-                                }, {
-                                    user: 'a001',
-                                    time: '30 m',
-                                    score: '35',
-                                    date: '2015-01-05 16:40'
-                                }, {
-                                    user: 'a001',
-                                    time: '30 m',
-                                    score: '35',
-                                    date: '2015-01-05 16:40'
-                                }]
-                            ]);
-                            Requester.get('/ue_api/internal/get_test_history?rand=' + Math.random(), {
-                                onsuccess: function (result) {
-                                    if (result && !result[0] && result[1]) {
-                                        var tpl = [
-                                            '<li class="item_row">',
-                                            '    <span class="t_user">#{user}</span>',
-                                            '    <span class="t_time">#{time}</span>',
-                                            '    <span class="t_score">#{score}</span>',
-                                            '    <span class="t_date">#{date}</span>',
-                                            '</li>'
-                                        ].join('');
-
-                                        var list = result[1];
-                                        var html = '';
-                                        for (var i = 0, len = list.length; i < len; i++) {
-                                            html += hui.util.format(tpl, list[i]);
-                                        }
-                                        hui.g('history_list').innerHTML = html;
-                                    }
-                                }
-                            });
-                        },
-
-                    };
-
-                    hui.inherits(pageHistory, hui.Action);
-                    hui.Router.setRule('/history', 'pageHistory');
-                    hui.window.pageHistory = pageHistory;
-                }
-            </script>
-            <div class="page_body" id="industry" style="background-color: white;display: none;">
-                <!-- target: taskboard_impediment -->
-                <style type="text/css">
-                #editImpedimentTable { margin: 5px; }
-                #editImpedimentDiv td { padding-bottom: 2px; padding-right: 2px; }
-                .inputLabel { width: 100px; text-align: right; font-size: 9pt; color: black; }
-                #impediment_Title { width: 250px; }
-                input { vertical-align: middle; }
-                #impediment_Description { width: 250px; }
-                textarea { font-size: 10pt; font-family: Arial, Helvetica, sans-serif; }
-                #impediment_Reporter { width: 150px; }
-                </style>
-                <div id="editImpedimentDiv">
-                    <table id="editImpedimentTable">
-                        <tr>
-                            <td class="inputLabel">Title:</td>
-                            <td>
-                                <input id="impediment_Title" type="text" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="inputLabel" style="vertical-align: top;">Description:</td>
-                            <td>
-                                <textarea id="impediment_Description" cols="40" rows="6" name="S1"></textarea>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="inputLabel">Reporter:</td>
-                            <td>
-                                <select id="impediment_Reporter" name="D1">
-                                    <option value="">(unspecified)</option>
-                                    <option value="Aaron.lu (aaron.lu)">Aaron.lu (aaron.lu)</option>
-                                    <option value="Ada.yang (ada.yang)">Ada.yang (ada.yang)</option>
-                                    <option value="Andy.wang (andy.wang)">Andy.wang (andy.wang)</option>
-                                    <option value="Blanche.xu (blanche.xu)">Blanche.xu (blanche.xu)
-                                    </option>
-                                    <option value="Chloe.yang (chloe.yang)">Chloe.yang (chloe.yang)
-                                    </option>
-                                    <option value="Cindy.liu (cindy.liu)">Cindy.liu (cindy.liu)</option>
-                                    <option value="Colin.zhang (colin.zhang)">Colin.zhang (colin.zhang)
-                                    </option>
-                                    <option value="Daini.xu (daini.xu)">Daini.xu (daini.xu)</option>
-                                    <option value="David (david)">David (david)</option>
-                                    <option value="Ethan (ethan)">Ethan (ethan)</option>
-                                    <option value="Harrison.lin (harrison.lin)">Harrison.lin (harrison.lin)
-                                    </option>
-                                    <option value="Jason (jason)">Jason (jason)</option>
-                                    <option value="Jicheng.li (jicheng.li)">Jicheng.li (jicheng.li)
-                                    </option>
-                                    <option value="Richard.xu (richard.xu)">Richard.xu (richard.xu)
-                                    </option>
-                                    <option value="Steven.cheng (steven.cheng)">Steven.cheng (steven.cheng)
-                                    </option>
-                                    <option value="Tiennan.lin (tiennan.lin)">Tiennan.lin (tiennan.lin)
-                                    </option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="inputLabel">Resolved:</td>
-                            <td>
-                                <input id="impediment_Resolved" name="impediment_Resolved" type="checkbox" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td style="text-align: right;">
-                                <input class="impediment_OK" style="cursor: pointer;" id="impediment_OK" src="vm/img/ok-button-active.gif" title="OK" type="image" />
-                                <input class="impediment_Cancel" style="cursor: pointer;" id="impediment_Cancel" src="vm/img/cancel-button-active.gif" title="Cancel" type="image" />
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-            <script>
-                function initPageComment() {
-                    // pageIndustry
-                    var pageIndustry;
-                    pageIndustry = function () {
-                        hui.Action.call(this);
-                        this.id = 'pageIndustry';
-                        this.main = 'industry';
-                    };
-                    pageIndustry.prototype = {
-                        initBehavior: function () {
-                            var me = this;
-                        },
-                        finish: function () {
-                            var me = this;
-                            showTab('industry');
-                        }
-
-                    };
-
-                    hui.inherits(pageIndustry, hui.Action);
-                    hui.Router.setRule('/industry', 'pageIndustry');
-                    hui.window.pageIndustry = pageIndustry;
-                }
-            </script>
 
         </div>
         <div class="page_foot">
@@ -1507,11 +1362,6 @@
     <script type="text/javascript" src="src/hui_burndown@0.0.1/hui_burndown.js"></script>
     <script type="text/javascript" src="src/hui_memberload@0.0.1/hui_memberload.js"></script>
     <!-- Only for highrchart!!  -->
-    <!--script type="text/javascript" src="src/jquery1.9.1.js         "></script>
-    <script type="text/javascript" src="src/highcharts.js          "></script>
-    <script type="text/javascript" src="src/highcharts-more.js     "></script-->
-    <script type="text/javascript" src="src/ext_dragdrop.js          "></script>
-    <script type="text/javascript" src="src/ext_chart.js             "></script>
     <script type="text/javascript" src="src/ext_md5.js             "></script>
     <script type="text/javascript" src="src/underscore.js             "></script>
 

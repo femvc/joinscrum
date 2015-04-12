@@ -94,24 +94,17 @@ function add(req, res, next) {
     var now = new Date();
     var date = global.common.formatDate(now, 'yyyy-MM-dd HH:mm:ss');
 
-    getDataRecord(req, res, {
-        backlog_name: req.paramlist.backlog_name
-    }, function (doc) {
-        if (doc) {
-            response.err(req, res, 'BACKLOG_ALREADY_EXIST');
-        }
-        else {
-            filter.update_time = date;
-            filter.backlog_id = '40' +  global.common.formatDate(now, 'yyyyMMddHHmmss') + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 8);
 
-            dataModel.insert(filter, function (err, doc) {
-                if (err) {
-                    response.send(req, res, 'INTERNAL_DB_OPT_FAIL');
-                }
-                response.ok(req, res, doc);
-            });
+    filter.update_time = date;
+    filter.backlog_id = '40' +  global.common.formatDate(now, 'yyyyMMddHHmmss') + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 8);
+
+    dataModel.insert(filter, function (err, doc) {
+        if (err) {
+            response.send(req, res, 'INTERNAL_DB_OPT_FAIL');
         }
+        response.ok(req, res, doc);
     });
+
 
 };
 exports.add = add;
