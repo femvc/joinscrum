@@ -549,12 +549,14 @@ hui.define('hui_control', [], function () {
                 paramMap = {},
                 ctr,
                 formname,
-                value;
+                value,
+                groupList = {};
             // 如果有子控件建议递归调用子控件的getValue!!
             if (me.controlMap) {
                 for (var i = 0, len = me.controlMap.length; i < len; i++) {
                     ctr = me.controlMap[i];
                     formname = hui.Control.prototype.getFormname.call(ctr);
+                    groupList[formname] = !!ctr.group;
                     if (String(ctr.isFormItem) !== 'false') {
                         paramMap[formname] = paramMap[formname] ? paramMap[formname] : [];
                         if (ctr.getValue) {
@@ -575,7 +577,7 @@ hui.define('hui_control', [], function () {
                 // 注：默认都用数组包装，此处还原为值
                 for (var i in paramMap) {
                     if (paramMap[i] && paramMap[i].length < 2) {
-                        paramMap[i] = paramMap[i][0] !== undefined ? (paramMap[i][0].group ? paramMap[i] : paramMap[i][0]) : '';
+                        paramMap[i] = paramMap[i][0] !== undefined ? (groupList[i] ? paramMap[i] : paramMap[i][0]) : '';
                     }
                 }
             }
