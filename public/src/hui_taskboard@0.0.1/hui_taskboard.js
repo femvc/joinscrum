@@ -38,7 +38,7 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control', 'hui_draggable'], functi
          */
         getTaskboardTpl: function () {
             var str = [
-                '<div class="taskboard-title"><b ondblclick="hui.Master.get().editSprint(\'#{sprint_id}\')">#{sprint_name} </b></div>',
+                '<div class="taskboard-title"><b ondblclick="hui.Master.get().editSprint(\'#{sprint_id}\')">#{sprint_name}  #{sprint_start} - #{sprint_finish}</b></div>',
                 '<table cellspacing="0" cellpadding="0" class="taskboard">',
                 '    <colgroup>',
                 '        <col class="fixedWidth" id="pbiCol">',
@@ -124,8 +124,15 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control', 'hui_draggable'], functi
             var me   = this;
             // var main = me.getMain();
             // var innerDiv;
+            var sprint_data = me.sprint_data ? me.sprint_data : {};
+            if (sprint_data.sprint_start) {
+                sprint_data.sprint_start = hui.util.formatDate(hui.util.parseDate(sprint_data.sprint_start), 'M/dd')
+            }
+            if (sprint_data.sprint_finish) {
+                sprint_data.sprint_finish = hui.util.formatDate(hui.util.parseDate(sprint_data.sprint_finish), 'M/dd')
+            }
             
-            me.setInnerHTML(hui.format(me.getTaskboardTpl(), me.sprint_data));
+            me.setInnerHTML(hui.format(me.getTaskboardTpl(), sprint_data));
         },
         addBacklogRow: function (backlogValue) {
             var me = this,

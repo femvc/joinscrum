@@ -161,7 +161,7 @@ hui.define('hui_burndown', ['hui_util', 'hui_control', 'hui_requester', 'highcha
                 }, {
                     data: doc.referHourList, //[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                     yAxis:1,
-                    name: 'refer',
+                    name: ' ',
                     color: 'transparent',
                     dataLabels: {
                         enabled: false
