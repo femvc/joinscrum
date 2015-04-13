@@ -575,7 +575,7 @@ hui.define('hui_control', [], function () {
                 // 注：默认都用数组包装，此处还原为值
                 for (var i in paramMap) {
                     if (paramMap[i] && paramMap[i].length < 2) {
-                        paramMap[i] = paramMap[i][0] !== undefined ? paramMap[i][0] : '';
+                        paramMap[i] = paramMap[i][0] !== undefined ? (paramMap[i][0].group ? paramMap[i] : paramMap[i][0]) : '';
                     }
                 }
             }
