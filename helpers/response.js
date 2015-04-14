@@ -23,6 +23,7 @@ var err_map = {
     INTERNAL_STAT_NOT_AVAILABLE: '统计模块不可用',
 
     USER_TOKEN_EXPIRE: '登陆信息过期，请重新登陆。',
+    OUT_OF_PERMISSION: '超出访问权限。',
     USER_LOGIN_JIEPANG_FAIL: '登陆街旁失败',
     RECORD_NOT_EXIST: '内容不存在',
     USER_USERNAME_NOT_EXIST: '用户不存在',

@@ -75,9 +75,6 @@
                 </style>
                 <div class="header" style="height: 100px;border-bottom: 3px  solid #f50;">
                     <h1 class="header_title" style="float: left;padding:0px;margin:0px;"><img src="vm/img/logo-scrum.png" alt="" /></h1>
-                    <div class="headertext">
-                        <a href="#">Home</a> | <a href="#!/help" target="_blank">Help</a>
-                    </div>
                 </div>
                 <div>
                     <div class="loginboxtitle" style="width:890px;">Web Client Login</div>
@@ -581,7 +578,12 @@
                                 contentView: 'taskboard_addbacklog', 
                                 size: { width:'500px', height: '340px', bottom: '8%'}
                             });
-                            this.appendControl(nc);
+                            me.appendControl(nc);
+                            if (backlog_id) {
+                                var dialog_title = hui.cc('dialog_title', nc.getMain());
+                                dialog_title.innerHTML = dialog_title.innerHTML.replace('Add', 'Edit');
+                            }
+
                             // 绑定事件
                             nc.getByFormname('submit').onclick = new Function('hui.Master.get().saveBacklog(\''+backlogValue.sprint_id+'\', \''+backlog_id+'\')');
                             
@@ -675,6 +677,7 @@
                             var sprint_id = _.find(me.model.get('backlog_list'), function(a){return a.backlog_id == backlog_id}).sprint_id;
                             taskItem.sprint_id  = sprint_id;
                             taskItem.backlog_id = backlog_id;
+                            taskItem.task_start = hui.util.formatDate(new Date(), 'yyyy/MM/dd'); 
                             //alert(objId);
                             me.editTask(sprint_id, taskItem);
                         },
@@ -698,9 +701,14 @@
                                 id: 'editTask', 
                                 title: '',  
                                 contentView: 'taskboard_addtask', 
-                                size: { width:'750px', height: '500px', bottom: '8%'}
+                                size: { width:'650px', height: '500px', bottom: '8%'}
                             });
                             me.appendControl(nc);
+                            if (taskItem.task_name) {
+                                var dialog_title = hui.cc('dialog_title', nc.getMain());
+                                dialog_title.innerHTML = dialog_title.innerHTML.replace('Add', 'Edit');
+                            }
+
                             // 绑定事件
                             nc.getByFormname('submit').onclick = new Function('hui.Master.get().saveTask()');
                             
@@ -712,6 +720,7 @@
                             // 默认解除deleted状态
                             taskItem.task_deleted = '0';
                             taskItem.backlog_name = me.getBacklogItem(taskItem.backlog_id).backlog_name;
+                            
                             nc.setValueByTree(taskItem);
                             nc.show();
                             
@@ -882,20 +891,33 @@
                                     productValue.product_id     = productItem.product_id;
                                     productValue.product_name   = productItem.product_name;   
                                     productValue.product_key    = productItem.product_key;    
-                                    productValue.product_index  = productItem.product_index;      
+                                    productValue.product_index  = productItem.product_index;  
+                                    productValue.product_member = productItem.product_member;      
                                 }
                             }
                             // 弹出对话框
                             if (nc) {
                                 nc.dispose();
                             }
+                            var memberlist = '';
+                            var userlist = me.model.get('user_list');
+                            for (var i=0,len=userlist.length; i<len; i++) {
+                                memberlist += !userlist[i].realname && userlist[i].username === 'unspecified' ? '' : '<label ui="type:\'Checkbox\',formname:\'product_member\',value:\''+userlist[i].uid+'\',checked:\'\'">'+userlist[i].realname+'</label>'
+                            }
                             nc = hui.Control.create('Boxpanel', {
                                 id: 'editProduct', 
                                 title: product_id ? ' Edit Product' : ' Add Product', 
                                 contentView: 'taskboard_addproduct', 
-                                size: { width:'500px', height: '340px', bottom: '8%'}
+                                model: {
+                                    memberlist: memberlist
+                                },
+                                size: { width:'500px', height: '440px', bottom: '8%'}
                             });
                             this.appendControl(nc);
+                            if (productValue.product_name) {
+                                var dialog_title = hui.cc('dialog_title', nc.getMain());
+                                dialog_title.innerHTML = dialog_title.innerHTML.replace('Add', 'Edit');
+                            }
                             // 绑定事件
                             nc.getByFormname('submit').onclick = new Function('hui.Master.get().saveProduct()');
                             
@@ -970,6 +992,10 @@
                                 size: { width:'500px', height: '340px', bottom: '8%'}
                             });
                             this.appendControl(nc);
+                            if (sprint_id) {
+                                var dialog_title = hui.cc('dialog_title', nc.getMain());
+                                dialog_title.innerHTML = dialog_title.innerHTML.replace('Add', 'Edit');
+                            }
                             // 绑定事件
                             nc.getByFormname('submit').onclick = new Function('hui.Master.get().saveSprint()');
                             
@@ -1089,10 +1115,10 @@
                 <table>
                     <tr>
                         <td align="right" valign="top"> </td>
-                        <td align="left" valign="top" colspan="3"><h3>Add Sprint</h3></td>
+                        <td align="left" valign="top" colspan="3"><h3 class="dialog_title">Add Sprint</h3></td>
                     </tr>
                     <tr>
-                        <td align="right" valign="top">Sprint Name:</td>
+                        <td align="right" valign="top" width="115">Sprint Name:</td>
                         <td>
                             <input type="hidden" ui="type:'TextInput',formname:'product_id'" />
                             <input type="hidden" ui="type:'TextInput',formname:'sprint_id'" />
@@ -1100,22 +1126,22 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="inputLabel" style="vertical-align: top;">Description:</td>
+                        <td align="right" class="inputLabel" style="vertical-align: top;">Description:</td>
                         <td style="vertical-align: top;">
                             <textarea ui="type:'TextInput',formname:'sprint_desc'" cols="40" rows="9"></textarea>
                         </td>
                     </tr>
                     <tr>
-                        <td class="inputLabel" style="vertical-align: top;">Index:</td>
+                        <td align="right" class="inputLabel" style="vertical-align: top;">Index:</td>
                         <td style="vertical-align: top;">
                             <input type="text" size="16" ui="type:'TextInput',formname:'sprint_index'" />
                         </td>
                     </tr>
                     <tr>
-                        <td class="inputLabel" style="vertical-align: top;">Date Span:</td>
+                        <td align="right" class="inputLabel" style="vertical-align: top;">Start/End:</td>
                         <td style="vertical-align: top;">
-                            <input type="text" size="8" ui="type:'TextInput',formname:'sprint_start'" /> - 
-                            <input type="text" size="8" ui="type:'TextInput',formname:'sprint_finish'" />
+                            <input type="date" size="8" ui="type:'TextInput',formname:'sprint_start'" /> - 
+                            <input type="date" size="8" ui="type:'TextInput',formname:'sprint_finish'" />
                         </td>
                     </tr>
                     <tr>
@@ -1130,10 +1156,10 @@
                 <table>
                     <tr>
                         <td align="right" valign="top"> </td>
-                        <td align="left" valign="top" colspan="3"><h3>Add Product</h3></td>
+                        <td align="left" valign="top" colspan="3"><h3 class="dialog_title">Add Product</h3></td>
                     </tr>
                     <tr>
-                        <td align="right" valign="top">Name:</td>
+                        <td align="right" valign="top" width="115">Name:</td>
                         <td>
                             <input type="hidden" ui="type:'TextInput',formname:'product_id'" />
                             <input type="text" size="30" ui="type:'TextInput',formname:'product_name',rule:'required'" />
@@ -1143,7 +1169,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="inputLabel" style="vertical-align: top;">Description:</td>
+                        <td align="right" class="inputLabel" style="vertical-align: top;">Description:</td>
                         <td style="vertical-align: top;">
                             <textarea ui="type:'TextInput',formname:'product_desc'" cols="40" rows="9"></textarea>
                         </td>
@@ -1153,6 +1179,12 @@
                         <td>
                             <input type="text" size="13" ui="type:'TextInput',formname:'product_key',rule:'required'" /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Index:
                             <input type="text" size="13" ui="type:'TextInput',formname:'product_index'" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Member :</td>
+                        <td>
+                            <div id="memberlist">#{memberlist}</div>
                         </td>
                     </tr>
                     <tr>
@@ -1168,10 +1200,10 @@
                 <table>
                     <tr>
                         <td align="right" valign="top"> </td>
-                        <td align="left" valign="top" colspan="3"><h3>Add Backlog</h3></td>
+                        <td align="left" valign="top" colspan="3"><h3 class="dialog_title">Add Backlog</h3></td>
                     </tr>
                     <tr>
-                        <td align="right" valign="top">Title:</td>
+                        <td align="right" valign="top" width="115">Title:</td>
                         <td>
                             <input type="hidden" ui="type:'TextInput',formname:'sprint_id'" />
                             <input type="hidden" ui="type:'TextInput',formname:'backlog_id'" />
@@ -1191,13 +1223,13 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="inputLabel" style="vertical-align: top;">Description:</td>
+                        <td align="right" class="inputLabel" style="vertical-align: top;">Description:</td>
                         <td style="vertical-align: top;">
                             <textarea ui="type:'TextInput',formname:'backlog_desc'" cols="40" rows="9"></textarea>
                         </td>
                     </tr>
                     <tr>
-                        <td class="inputLabel" style="vertical-align: top;">Index:</td>
+                        <td align="right" class="inputLabel" style="vertical-align: top;">Index:</td>
                         <td style="vertical-align: top;">
                             <input type="text" size="16" ui="type:'TextInput',formname:'backlog_index'" />
                         </td>
@@ -1218,10 +1250,10 @@
                     <table id="addTaskTable">
                         <tr>
                             <td align="right" valign="top"> </td>
-                            <td align="left" valign="top" colspan="3"><h3>Add Task</h3></td>
+                            <td align="left" valign="top"><h3 class="dialog_title">Add Task</h3></td>
                         </tr>
                         <tr>
-                            <td align="right" valign="top">Title:</td>
+                            <td align="right" valign="top" width="115">Title:</td>
                             <td>
                                 <input type="hidden" ui="type:'TextInput',formname:'task_deleted',value:'0'" />
                                 <input type="hidden" ui="type:'TextInput',formname:'product_id'" />
@@ -1238,70 +1270,53 @@
                                     <option value="[Android]">
                                 </datalist>
                             </td>
-                            <td rowspan="6" style="vertical-align: top; padding-left:20px;">
-                                <table cellspacing="0px">
-                                    <tr>
-                                        <td style="padding-top: 0px;">
-                                            <textarea ui="type:'TextInput',formname:'new_comment',isForm:'false'" style="border: 1px solid #A9A9A9; color: #000000; height: 68px; padding: 2px; width: 260px; text-align: left;margin-bottom: 5px;" rows="1" cols="20"></textarea>
-                                            <div style="width: 264px; text-align: right;">
-                                                <img ui="type:'Button',formname:'btn_addcomment'" src="vm/img/comment-button.gif" title="Post Comment" style="cursor: pointer;" />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="commentsLabel">Comments:</td>
-                                    </tr>
-                                    <tr>
-                                        <td rowspan="3">
-                                            <textarea ui="type:'TextInput',formname:'task_comments'" style="color: black; height: 220px; overflow: scroll; padding-bottom: 2px; padding-top: 2px; vertical-align: top; width: 264px; border: 1px solid #A9A9A9;"></textarea>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
                         </tr>
                         <tr>
                             <td align="right" valign="top">Backlog:</td>
                             <td>
                                 <span style="font-weight123:bold;" ui="type:'Label',formname:'backlog_name'"></span>
                             </td>
-                            <td rowspan="6" style="vertical-align: top; padding-left:20px;">
-
-                            </td>
                         </tr>
                         <tr>
-                            <td class="inputLabel" style="vertical-align: top;">Description:</td>
+                            <td align="right" class="inputLabel" style="vertical-align: top;">Description:</td>
                             <td style="vertical-align: top;">
                                 <textarea ui="type:'TextInput',formname:'task_desc'" cols="40" rows="9" style="width: 288px;"></textarea>
                             </td>
                         </tr>
                         <tr>
-                            <td class="inputLabel">Point Person:</td>
+                            <td align="right" class="inputLabel">Point Person:</td>
                             <td>
                                 <div ui="type:'Dropdown',formname:'task_person',data_value:'uid',data_text:'user_label'" style="width: 288px;"></div>
                             </td>
                         </tr>
                         <tr>
-                            <td class="inputLabel">Status:</td>
+                            <td align="right" class="inputLabel">Status:</td>
                             <td>
                                 <div ui="type:'Dropdown',formname:'task_status',options:[{value:\'notstarted\',text:'Not Started'},{value:\'impeded\',text:'Impeded'},{value:\'inprogress\',text:'In Progress'},{value:\'done\',text:'Done'}],size:{width:\'150px\'},default_select:true">
                                 </div>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="vertical-align: top">
+                            <td align="right" class="inputLabel">Remaining:</td>
+                            <td style="vertical-align: top">
                                 <table>
                                     <tr>
-                                        <td class="inputLabel">Team hours remaining:</td>
                                         <td>
-                                            <input ui="type:'TextInput',formname:'task_remaining'" size="7" type="text" value="4" />
+                                            <input ui="type:'TextInput',formname:'task_remaining'" size="3" type="text" value="4" /> hours
                                         </td>
                                         <td class="inputLabel" style="padding-left:35px;">Original Estimate:</td>
                                         <td>
-                                            <input ui="type:'TextInput',formname:'task_estimate'" size="9" value="4">
-                                            </span>
+                                            <input ui="type:'TextInput',formname:'task_estimate'" size="3" value="4">
+                                            </span> hours
                                         </td>
                                     </tr>
                                 </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" class="inputLabel">Date start:</td>
+                            <td>
+                                <input type="date" size="18" ui="type:'TextInput',formname:'task_start'" />
                             </td>
                         </tr>
                         <tr style="height: 30px;">
@@ -1314,6 +1329,7 @@
                             </td>
                         </tr>
                     </table>
+
                 </div>
             </div>
 

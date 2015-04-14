@@ -423,8 +423,7 @@ hui.define('hui_control', [], function () {
                     if (formname && paramMap.hasOwnProperty(formname)) {
                         value = Object.prototype.toString.call(paramMap[formname]) !== '[object Array]' ?
                             [paramMap[formname]] : paramMap[formname];
-                        ctr = me.getByFormname(formname);
-                        list = ctr ? [ctr] : me.getByFormnameAll(formname, false);
+                        list = me.getByFormnameAll(formname, false);
                         if (list.length < 1) {
                             continue;
                         }
@@ -491,8 +490,7 @@ hui.define('hui_control', [], function () {
                     if (formname && paramMap.hasOwnProperty(formname)) {
                         value = Object.prototype.toString.call(paramMap[formname]) !== '[object Array]' ?
                             [paramMap[formname]] : paramMap[formname];
-                        ctr = me.getByFormname(formname);
-                        list = ctr ? [ctr] : me.getByFormnameAll(formname, false);
+                        list = me.getByFormnameAll(formname, false);
                         if (list.length < 1) {
                             continue;
                         }
@@ -549,12 +547,14 @@ hui.define('hui_control', [], function () {
                 paramMap = {},
                 ctr,
                 formname,
-                value;
+                value,
+                groupList = {};
             // 如果有子控件建议递归调用子控件的getValue!!
             if (me.controlMap) {
                 for (var i = 0, len = me.controlMap.length; i < len; i++) {
                     ctr = me.controlMap[i];
                     formname = hui.Control.prototype.getFormname.call(ctr);
+                    groupList[formname] = !!ctr.group;
                     if (String(ctr.isFormItem) !== 'false') {
                         paramMap[formname] = paramMap[formname] ? paramMap[formname] : [];
                         if (ctr.getValue) {
@@ -575,7 +575,7 @@ hui.define('hui_control', [], function () {
                 // 注：默认都用数组包装，此处还原为值
                 for (var i in paramMap) {
                     if (paramMap[i] && paramMap[i].length < 2) {
-                        paramMap[i] = paramMap[i][0] !== undefined ? paramMap[i][0] : '';
+                        paramMap[i] = paramMap[i][0] !== undefined ? (groupList[i] ? paramMap[i] : paramMap[i][0]) : '';
                     }
                 }
             }
@@ -1548,6 +1548,7 @@ hui.define('hui_control', [], function () {
         
         list = hui.Control.getByFormnameAll(formname, parentNode);
         // 注：默认返回直接子级第一个,直接子级没有才会返回最近子级的第一个
+        // 注：要找到所有直接子级等于formname的可以用getByFormnameAll(formname, parentNode, false)
         for (var i = 0, len = list.length; i < len && min > 0; i++) {
             deep = 0;
             ctr = list[i];

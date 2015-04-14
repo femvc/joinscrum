@@ -48,7 +48,7 @@ exports.detail = function (req, res, next) {
 
 var arr = [
     'task_name', 'task_desc', 'task_index', 'backlog_id', 'task_deleted', 'user_id', 'edit_time',
-    'task_person', 'task_status', 'task_remaining', 'task_estimate', 'sprint_id', 'product_id'
+    'task_person', 'task_status', 'task_remaining', 'task_estimate', 'task_start', 'sprint_id', 'product_id'
 ];
 exports.list = function (req, res, next) {
     // res.end('aaaaaaaaaa');

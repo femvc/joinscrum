@@ -45,7 +45,7 @@ exports.detail = function (req, res, next) {
     return getDataRecord(req, res, filter);
 };
 
-var arr = ['sprint_name', 'sprint_desc', 'sprint_index', 'product_id', 'sprint_deleted', 'user_id', 'edit_time'];
+var arr = ['sprint_name', 'sprint_desc', 'sprint_index', 'product_id', 'sprint_deleted', 'sprint_start', 'sprint_finish', 'user_id', 'edit_time'];
 exports.list = function (req, res, next) {
     // res.end('aaaaaaaaaa');
     var params = req.paramlist,
