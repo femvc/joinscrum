@@ -216,7 +216,7 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control', 'hui_draggable'], functi
         },
         setBacklogList: function () {
             var me = this;
-            var backlogList = me.backlogList;
+            var backlogList = hui.util.sortBy(me.backlogList, 'backlog_index');
             for (var i=0,len=backlogList.length; i<len; i++) {
                 me.addBacklogRow(backlogList[i]);
             }
