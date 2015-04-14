@@ -148,9 +148,9 @@ exports.save = function (req, res, next) {
     filter.product_member = !filter.product_member || !String(filter.product_member).replace(/,+/, '') ? [req.sessionStore.user[req.sessionID]] : filter.product_member.split(',');
 
     getDataRecord(req, res, {
-        product_name: req.paramlist.product_name
+        product_name: req.paramlist.product_id
     }, function (doc) {
-        if (doc.product_member && doc.product_member.indexOf(req.sessionStore.user[req.sessionID]) === -1) {
+        if (doc && doc.product_member && doc.product_member.indexOf(req.sessionStore.user[req.sessionID]) === -1) {
             response.err(req, res, 'OUT_OF_PERMISSION');
         }
         else {
