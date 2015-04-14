@@ -11,7 +11,12 @@ mongo.open(function (err, p_client) {
         console.log(err);
     }
     console.log('mongo ready');
-    isReady = true;
+    // isReady = true;
+
+    p_client.authenticate(global.config.mongo.username, global.config.mongo.password, function () {
+        console.log('auth ok');
+        isReady = true;
+    });
 });
 
 mongo.onReady = function (callback) {

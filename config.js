@@ -21,7 +21,9 @@ module.exports = {
       host_opts: {
         auto_reconnect: true
       },
-      dbname: 'joinscrum_api'
+      dbname: 'joinscrum_api',
+      username: '@#$%^&()_+',
+      password: 'QWERTYUIOP{}'
     },
     redis: {
         host: '127.0.0.1',
