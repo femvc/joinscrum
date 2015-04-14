@@ -45,7 +45,7 @@ exports.detail = function (req, res, next) {
     return getDataRecord(req, res, filter);
 };
 
-var arr = ['product_name', 'product_desc', 'product_key', 'product_index'];
+var arr = ['product_name', 'product_desc', 'product_key', 'product_index', 'product_member'];
 exports.list = function (req, res, next) {
     // res.end('aaaaaaaaaa');
     var params = req.paramlist,
@@ -75,7 +75,7 @@ exports.list = function (req, res, next) {
         var uid = req.sessionStore.user[req.sessionID];
         var result = [];
         for (var i = 0, len = doc.length; i < len; i++) {
-            if (doc && doc[i] && doc[i].member && doc[i].member.indexOf && (',' + doc[i].member.join(',') + ',').indexOf(',' + uid + ',') !== -1) {
+            if (doc && doc[i] && doc[i].product_member && doc[i].product_member.indexOf && (',' + doc[i].product_member.join(',') + ',').indexOf(',' + uid + ',') !== -1) {
                 result.push(doc[i]);
             }
         }
@@ -111,7 +111,7 @@ function add(req, res, next) {
         else {
             filter.update_time = date;
             filter.product_id = '20' + global.common.formatDate(now, 'yyyyMMddHHmmss') + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 8);
-            filter.member = [req.sessionStore.user[req.sessionID]];
+            filter.product_member = !filter.product_member || !String(filter.product_member).replace(/,+/, '') ? [req.sessionStore.user[req.sessionID]] : filter.product_member.split(',');
 
             dataModel.insert(filter, function (err, doc) {
                 if (err) {
@@ -145,24 +145,35 @@ exports.save = function (req, res, next) {
     var now = new Date();
     var date = global.common.formatDate(now, 'yyyy-MM-dd HH:mm:ss');
     filter.update_time = date;
+    filter.product_member = !filter.product_member || !String(filter.product_member).replace(/,+/, '') ? [req.sessionStore.user[req.sessionID]] : filter.product_member.split(',');
 
-    dataModel.update({
-        product_id: req.paramlist.product_id
-    }, {
-        $set: filter
-    }, {
-        upsert: false,
-        multi: false
-    }, function (err, doc) {
-        if (err) {
-            response.send(req, res, 'INTERNAL_DB_OPT_FAIL');
+    getDataRecord(req, res, {
+        product_name: req.paramlist.product_name
+    }, function (doc) {
+        if (doc.product_member && doc.product_member.indexOf(req.sessionStore.user[req.sessionID]) === -1) {
+            response.err(req, res, 'OUT_OF_PERMISSION');
         }
         else {
-            return getDataRecord(req, res, {
+            dataModel.update({
                 product_id: req.paramlist.product_id
-            });
+            }, {
+                $set: filter
+            }, {
+                upsert: false,
+                multi: false
+            }, function (err, doc) {
+                if (err) {
+                    response.send(req, res, 'INTERNAL_DB_OPT_FAIL');
+                }
+                else {
+                    return getDataRecord(req, res, {
+                        product_id: req.paramlist.product_id
+                    });
+                }
+            });            
         }
     });
+
 
 
 };

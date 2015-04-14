@@ -891,21 +891,30 @@
                                     productValue.product_id     = productItem.product_id;
                                     productValue.product_name   = productItem.product_name;   
                                     productValue.product_key    = productItem.product_key;    
-                                    productValue.product_index  = productItem.product_index;      
+                                    productValue.product_index  = productItem.product_index;  
+                                    productValue.product_member = productItem.product_member;      
                                 }
                             }
                             // 弹出对话框
                             if (nc) {
                                 nc.dispose();
                             }
+                            var memberlist = '';
+                            var userlist = me.model.get('user_list');
+                            for (var i=0,len=userlist.length; i<len; i++) {
+                                memberlist += !userlist[i].realname && userlist[i].username === 'unspecified' ? '' : '<label ui="type:\'Checkbox\',formname:\'product_member\',value:\''+userlist[i].uid+'\',checked:\'\'">'+userlist[i].realname+'</label>'
+                            }
                             nc = hui.Control.create('Boxpanel', {
                                 id: 'editProduct', 
                                 title: product_id ? ' Edit Product' : ' Add Product', 
                                 contentView: 'taskboard_addproduct', 
-                                size: { width:'500px', height: '340px', bottom: '8%'}
+                                model: {
+                                    memberlist: memberlist
+                                },
+                                size: { width:'500px', height: '440px', bottom: '8%'}
                             });
                             this.appendControl(nc);
-                            if (product_id) {
+                            if (productValue.product_name) {
                                 var dialog_title = hui.cc('dialog_title', nc.getMain());
                                 dialog_title.innerHTML = dialog_title.innerHTML.replace('Add', 'Edit');
                             }
@@ -1170,6 +1179,12 @@
                         <td>
                             <input type="text" size="13" ui="type:'TextInput',formname:'product_key',rule:'required'" /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Index:
                             <input type="text" size="13" ui="type:'TextInput',formname:'product_index'" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Member :</td>
+                        <td>
+                            <div id="memberlist">#{memberlist}</div>
                         </td>
                     </tr>
                     <tr>

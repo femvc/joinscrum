@@ -145,7 +145,7 @@ hui.define('hui_boxpanel', ['hui_util', 'hui_control'], function () {
             if (me.contentView && hui.Template) {
                 me.setBodyContentHtml(hui.Template.merge(
                     hui.Template.getTarget(me.contentView),
-                    (me.parentControl||{}).model
+                    me.model || (me.parentControl||{}).model
                 ));
             }
         },

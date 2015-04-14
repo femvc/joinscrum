@@ -423,8 +423,7 @@ hui.define('hui_control', [], function () {
                     if (formname && paramMap.hasOwnProperty(formname)) {
                         value = Object.prototype.toString.call(paramMap[formname]) !== '[object Array]' ?
                             [paramMap[formname]] : paramMap[formname];
-                        ctr = me.getByFormname(formname);
-                        list = ctr ? [ctr] : me.getByFormnameAll(formname, false);
+                        list = me.getByFormnameAll(formname, false);
                         if (list.length < 1) {
                             continue;
                         }
@@ -491,8 +490,7 @@ hui.define('hui_control', [], function () {
                     if (formname && paramMap.hasOwnProperty(formname)) {
                         value = Object.prototype.toString.call(paramMap[formname]) !== '[object Array]' ?
                             [paramMap[formname]] : paramMap[formname];
-                        ctr = me.getByFormname(formname);
-                        list = ctr ? [ctr] : me.getByFormnameAll(formname, false);
+                        list = me.getByFormnameAll(formname, false);
                         if (list.length < 1) {
                             continue;
                         }
@@ -1550,6 +1548,7 @@ hui.define('hui_control', [], function () {
         
         list = hui.Control.getByFormnameAll(formname, parentNode);
         // 注：默认返回直接子级第一个,直接子级没有才会返回最近子级的第一个
+        // 注：要找到所有直接子级等于formname的可以用getByFormnameAll(formname, parentNode, false)
         for (var i = 0, len = list.length; i < len && min > 0; i++) {
             deep = 0;
             ctr = list[i];
