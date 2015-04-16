@@ -1041,7 +1041,7 @@
                                 var item = taskList[i];
                                 datasource[item.sprint_id] = datasource[item.sprint_id] || {};
                                 datasource[item.sprint_id][item.task_person] = datasource[item.sprint_id][item.task_person] || 0;
-                                datasource[item.sprint_id][item.task_person] += Number(item.task_remaining);
+                                datasource[item.sprint_id][item.task_person] += isNaN(Number(item.task_remaining)) ? 0 : Number(item.task_remaining);
                                 member.push(item.task_person);
                             }
                             member = _.uniq(member).sort().reverse();
