@@ -99,7 +99,7 @@ hui.define('hui_burndown', ['hui_util', 'hui_control', 'hui_requester', 'highcha
                             key = day[i] + '_' + taskid[j];
                             if (uniq[key] && uniq[key][1] && uniq[key][1].task_status !== 'done') {
                                 leftTask++;
-                                leftHour += Number(uniq[key][1].task_remaining);
+                                leftHour += isNaN(Number(uniq[key][1].task_remaining)) ? 0 : Number(uniq[key][1].task_remaining);
                             }
                         }
                         leftTaskList.push(leftTask);
