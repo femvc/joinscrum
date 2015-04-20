@@ -45,7 +45,7 @@ exports.detail = function (req, res, next) {
     return getDataRecord(req, res, filter);
 };
 
-var arr = ['product_name', 'product_desc', 'product_key', 'product_index', 'product_member'];
+var arr = ['product_name', 'product_desc', 'product_key', 'product_index', 'product_member', 'product_observer'];
 exports.list = function (req, res, next) {
     // res.end('aaaaaaaaaa');
     var params = req.paramlist,
@@ -75,10 +75,10 @@ exports.list = function (req, res, next) {
         var uid = req.sessionStore.user[req.sessionID];
         var result = [];
         for (var i = 0, len = doc.length; i < len; i++) {
-            if (doc && doc[i] && 
-                ((doc[i].product_member   && doc[i].product_member.indexOf   && (',' + doc[i].product_member.join(',')   + ',').indexOf(',' + uid + ',') !== -1) ||  
-                 (doc[i].product_observer && doc[i].product_observer.indexOf && (',' + doc[i].product_observer.join(',') + ',').indexOf(',' + uid + ',') !== -1)
-            )) {
+            if (doc && doc[i] &&
+                ((doc[i].product_member && doc[i].product_member.indexOf && (',' + doc[i].product_member.join(',') + ',').indexOf(',' + uid + ',') !== -1) ||
+                    (doc[i].product_observer && doc[i].product_observer.indexOf && (',' + doc[i].product_observer.join(',') + ',').indexOf(',' + uid + ',') !== -1)
+                )) {
                 result.push(doc[i]);
             }
         }
@@ -149,14 +149,14 @@ exports.save = function (req, res, next) {
     var date = global.common.formatDate(now, 'yyyy-MM-dd HH:mm:ss');
     filter.update_time = date;
     filter.product_member = !filter.product_member || !String(filter.product_member).replace(/,+/, '') ? [req.sessionStore.user[req.sessionID]] : filter.product_member.split(',');
+    filter.product_observer = !filter.product_observer || !String(filter.product_observer).replace(/,+/, '') ? [req.sessionStore.user[req.sessionID]] : filter.product_observer.split(',');
 
     getDataRecord(req, res, {
         product_name: req.paramlist.product_id
     }, function (doc) {
-        if (doc && doc.product_member && doc.product_member.indexOf(req.sessionStore.user[req.sessionID]) === -1) {
-            response.err(req, res, 'OUT_OF_PERMISSION');
-        }
-        else {
+        if (doc && ((
+            doc.product_member && doc.product_member.indexOf(req.sessionStore.user[req.sessionID]) !== -1) || (
+            doc.product_observer && doc.product_observer.indexOf(req.sessionStore.user[req.sessionID]) !== -1))) {
             dataModel.update({
                 product_id: req.paramlist.product_id
             }, {
@@ -173,7 +173,10 @@ exports.save = function (req, res, next) {
                         product_id: req.paramlist.product_id
                     });
                 }
-            });            
+            });
+        }
+        else {
+            response.err(req, res, 'OUT_OF_PERMISSION');
         }
     });
 
