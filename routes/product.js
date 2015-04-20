@@ -152,7 +152,7 @@ exports.save = function (req, res, next) {
     filter.product_observer = !filter.product_observer || !String(filter.product_observer).replace(/,+/, '') ? [req.sessionStore.user[req.sessionID]] : filter.product_observer.split(',');
 
     getDataRecord(req, res, {
-        product_name: req.paramlist.product_id
+        product_id: req.paramlist.product_id
     }, function (doc) {
         console.log('>>>>>>>>>>>>>>>>>>>>>>');
         console.log(doc);
