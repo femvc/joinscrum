@@ -1160,6 +1160,12 @@
                </table>
 
                 <!-- target: taskboard_addproduct -->
+                <style>
+                #memberlist,
+                #observerlist{ height: 84px;overflow-y: scroll;}
+                #memberlist .hui_checkbox,
+                #observerlist .hui_checkbox{ min-width: 76px;}
+                </style>
                 <table>
                     <tr>
                         <td align="right" valign="top"> </td>
@@ -1191,13 +1197,13 @@
                     <tr>
                         <td align="right" valign="top">Member :</td>
                         <td>
-                            <div id="memberlist" style="height: 84px;overflow-y: scroll;">#{memberlist}</div>
+                            <div id="memberlist" style="">#{memberlist}</div>
                         </td>
                     </tr>
                     <tr>
                         <td align="right" valign="top">Observer :</td>
                         <td>
-                            <div id="memberlist" style="height: 84px;overflow-y: scroll;">#{observerlist}</div>
+                            <div id="observerlist" style="">#{observerlist}</div>
                         </td>
                     </tr>
                     <tr>
