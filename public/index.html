@@ -508,7 +508,7 @@
                             var product_id = hui.Control.getByFormname('product_list').getValue();
                             var product_member = ','+me.getProductItem(product_id).product_member.join(',')+',';
                             for (var i=0,len=list.length; i<len; i++) {
-                                if (~product_member.indexOf(list[i].uid)) {
+                                if (~product_member.indexOf(list[i].uid) || list[i].username === 'unspecified') {
                                     list[i].user_label = (list[i].realname !== undefined ? list[i].realname : list[i].username) + ' (' + list[i].username + ')';
                                     result.push(list[i]);
                                 }

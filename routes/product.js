@@ -154,8 +154,6 @@ exports.save = function (req, res, next) {
     getDataRecord(req, res, {
         product_id: req.paramlist.product_id
     }, function (doc) {
-        console.log('>>>>>>>>>>>>>>>>>>>>>>');
-        console.log(doc);
         if (doc && ((!doc.product_member && !doc.product_observer) || (
             doc.product_member && doc.product_member.indexOf(req.sessionStore.user[req.sessionID]) !== -1 ) || ( 
             doc.product_observer && doc.product_observer.indexOf(req.sessionStore.user[req.sessionID]) !== -1))) {
