@@ -888,11 +888,12 @@
                             if (isNew != 'new') {
                                 productItem = me.getProduct(product_id);
                                 if (productItem) {
-                                    productValue.product_id     = productItem.product_id;
-                                    productValue.product_name   = productItem.product_name;   
-                                    productValue.product_key    = productItem.product_key;    
-                                    productValue.product_index  = productItem.product_index;  
-                                    productValue.product_member = productItem.product_member;      
+                                    productValue.product_id       = productItem.product_id;
+                                    productValue.product_name     = productItem.product_name;   
+                                    productValue.product_key      = productItem.product_key;    
+                                    productValue.product_index    = productItem.product_index;  
+                                    productValue.product_observer = productItem.product_observer;      
+                                    productValue.product_member   = productItem.product_member;  
                                 }
                             }
                             // 弹出对话框
@@ -904,12 +905,18 @@
                             for (var i=0,len=userlist.length; i<len; i++) {
                                 memberlist += !userlist[i].realname && userlist[i].username === 'unspecified' ? '' : '<label ui="type:\'Checkbox\',formname:\'product_member\',value:\''+userlist[i].uid+'\',checked:\'\'">'+userlist[i].realname+'</label>'
                             }
+                            var observerlist = '';
+                            var userlist = me.model.get('user_list');
+                            for (var i=0,len=userlist.length; i<len; i++) {
+                                observerlist += !userlist[i].realname && userlist[i].username === 'unspecified' ? '' : '<label ui="type:\'Checkbox\',formname:\'product_observer\',value:\''+userlist[i].uid+'\',checked:\'\'">'+userlist[i].realname+'</label>'
+                            }
                             nc = hui.Control.create('Boxpanel', {
                                 id: 'editProduct', 
                                 title: product_id ? ' Edit Product' : ' Add Product', 
                                 contentView: 'taskboard_addproduct', 
                                 model: {
-                                    memberlist: memberlist
+                                    memberlist: memberlist,
+                                    observerlist: observerlist
                                 },
                                 size: { width:'500px', height: '440px', bottom: '8%'}
                             });
@@ -1179,6 +1186,12 @@
                         <td>
                             <input type="text" size="13" ui="type:'TextInput',formname:'product_key',rule:'required'" /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Index:
                             <input type="text" size="13" ui="type:'TextInput',formname:'product_index'" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Observer :</td>
+                        <td>
+                            <div id="memberlist">#{observerlist}</div>
                         </td>
                     </tr>
                     <tr>
