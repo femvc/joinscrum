@@ -411,7 +411,7 @@
                             me.model.remove('task_list');
                             me.model.remove('taskindex_list');
 
-                            var include_done = hui.getCookie('include_done') === 'true' ? '' : '&include_done=yes';
+                            var include_done = hui.g('include_done').checked ? '&include_done=yes' : '';
                             Requester.get('/ue_api/internal/sprint_list?product_id=' + product_id + include_done, {
                                 onsuccess: function (data) {
                                     me.model.set('sprint_list'   , _.sortBy(data[1].items, 'sprint_index'));
