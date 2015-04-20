@@ -1019,7 +1019,7 @@
                                 id: 'editSprint', 
                                 title: sprint_id ? ' Edit Sprint' : ' Add Sprint', 
                                 contentView: 'taskboard_addsprint', 
-                                size: { width:'500px', height: '440px', bottom: '8%'}
+                                size: { width:'500px', height: '400px', bottom: '8%'}
                             });
                             this.appendControl(nc);
                             if (sprint_id) {
@@ -1165,6 +1165,7 @@
                         <td align="right" class="inputLabel" style="vertical-align: top;">Index:</td>
                         <td style="vertical-align: top;">
                             <input type="text" size="16" ui="type:'TextInput',formname:'sprint_index'" />
+                            Done: <label ui="type:'Checkbox',formname:'sprint_done',value:'yes',checked:''">&nbsp;</label>
                         </td>
                     </tr>
                     <tr>
@@ -1172,12 +1173,6 @@
                         <td style="vertical-align: top;">
                             <input type="date" size="8" ui="type:'TextInput',formname:'sprint_start'" /> - 
                             <input type="date" size="8" ui="type:'TextInput',formname:'sprint_finish'" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" class="inputLabel" style="vertical-align: top;">Done:</td>
-                        <td style="vertical-align: top;">
-                            <label ui="type:'Checkbox',formname:'sprint_done',value:'yes',checked:''">&nbsp;</label>
                         </td>
                     </tr>
                     <tr>
