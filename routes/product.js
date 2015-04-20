@@ -75,7 +75,10 @@ exports.list = function (req, res, next) {
         var uid = req.sessionStore.user[req.sessionID];
         var result = [];
         for (var i = 0, len = doc.length; i < len; i++) {
-            if (doc && doc[i] && doc[i].product_member && doc[i].product_member.indexOf && (',' + doc[i].product_member.join(',') + ',').indexOf(',' + uid + ',') !== -1) {
+            if (doc && doc[i] && 
+                ((doc[i].product_member   && doc[i].product_member.indexOf   && (',' + doc[i].product_member.join(',')   + ',').indexOf(',' + uid + ',') !== -1) ||  
+                 (doc[i].product_observer && doc[i].product_observer.indexOf && (',' + doc[i].product_observer.join(',') + ',').indexOf(',' + uid + ',') !== -1)
+            )) {
                 result.push(doc[i]);
             }
         }
