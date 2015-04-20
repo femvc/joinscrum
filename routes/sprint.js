@@ -45,7 +45,7 @@ exports.detail = function (req, res, next) {
     return getDataRecord(req, res, filter);
 };
 
-var arr = ['sprint_name', 'sprint_desc', 'sprint_index', 'product_id', 'sprint_deleted', 'sprint_start', 'sprint_finish', 'user_id', 'edit_time'];
+var arr = ['sprint_name', 'sprint_desc', 'sprint_index', 'product_id', 'sprint_deleted', 'sprint_start', 'sprint_finish', 'user_id', 'edit_time', 'sprint_done'];
 exports.list = function (req, res, next) {
     // res.end('aaaaaaaaaa');
     var params = req.paramlist,
@@ -62,6 +62,8 @@ exports.list = function (req, res, next) {
         }
     }
 
+    if (params.include_done !== 'yes')
+        filter.sprint_done = '';
     if (params.sprint_name)
         filter.sprint_name = global.common.likeWith(params.sprint_name);
     if (params.sprint_desc)
@@ -105,7 +107,7 @@ function add(req, res, next) {
     });
 
 
-};
+}
 exports.add = add;
 exports.save = function (req, res, next) {
     if (!req.paramlist.sprint_id) {

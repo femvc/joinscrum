@@ -244,7 +244,10 @@
                                     <button class="link" style="margin-left: 0px;" onclick="hui.Master.get().addProduct()">add</button><i>/</i>
                                     <button class="link" style="margin-left:0px;" onclick="hui.Master.get().editProduct()">edit</button>
                                 </td>
-                                <td> </td>
+                                <td>
+                                    <input id="include_done" name="include_done" type="checkbox" onclick="hui.setCookie('include_done', String(this.checked));hui.Master.get().switchProduct()" />
+                                    <label for="include_done">Show done sprint</label>
+                                </td>
                                 <td><label style="float: right;margin-top: 5px;margin-right: 10px;">Highlight Tasks</label> </td>
                             </tr>
                             <tr>
@@ -405,7 +408,8 @@
                             me.model.remove('task_list');
                             me.model.remove('taskindex_list');
 
-                            Requester.get('/ue_api/internal/sprint_list?product_id=' + product_id, {
+                            var include_done = hui.getCookie('include_done') === 'true' ? '' : '&include_done=yes';
+                            Requester.get('/ue_api/internal/sprint_list?product_id=' + product_id + include_done, {
                                 onsuccess: function (data) {
                                     me.model.set('sprint_list'   , _.sortBy(data[1].items, 'sprint_index'));
                                     me.switchProductCallback();
@@ -1164,6 +1168,12 @@
                         <td style="vertical-align: top;">
                             <input type="date" size="8" ui="type:'TextInput',formname:'sprint_start'" /> - 
                             <input type="date" size="8" ui="type:'TextInput',formname:'sprint_finish'" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" class="inputLabel" style="vertical-align: top;">Done:</td>
+                        <td style="vertical-align: top;">
+                            <label ui="type:'Checkbox',formname:'sprint_done',value:'yes',checked:''">&nbsp;</label>
                         </td>
                     </tr>
                     <tr>
