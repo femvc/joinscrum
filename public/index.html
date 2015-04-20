@@ -180,7 +180,7 @@
                                 
                                 hui.context.set('mid', result['mid']);
                                 hui.context.set('token', result['token']);
-                                hui.setCookie('mid', result['mid']);
+                                hui.setCookie('mid', result['mid'], 360 * 24 * 60 * 60 * 1000);
                                 hui.setCookie('token', result['token']);
 
                                 if (hui.Locator.currentLocation.indexOf('/login') == 0) {
