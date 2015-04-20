@@ -261,7 +261,7 @@
                                     <label for="include_deleted">Show deleted task</label>
                                 </td>
                                 <td>
-                                    <div ui="type:'Dropdown',formname:'user_list',data_value:'uid',data_text:'user_label'" style="width:230px; float: right;">
+                                    <div ui="type:'Dropdown',formname:'member_list',data_value:'uid',data_text:'user_label'" style="width:230px; float: right;">
                                         <!--option value="Aaron.lu (aaron.lu)">Aaron.lu (aaron.lu)</option-->
                                     </div>
                                     
@@ -373,9 +373,7 @@
                                 productList.setValue(hui.getCookie('taskboard_product'));
                                 productList.onchange = hui.fn(me.switchProduct, me);
                                 
-                                var userList    = hui.Control.getByFormname('user_list' );
-                                userList.setOptions(me.getUserList());
-                                userList.setValue(hui.getCookie('taskboard_user'));
+                                var userList    = hui.Control.getByFormname('member_list' );
                                 userList.onassignvalue = userList.onchange    = hui.fn(me.switchUser, me);  
                                 
                                 me.switchProduct();
@@ -397,6 +395,10 @@
                             var me = this;
                             var product_id = hui.Control.getByFormname('product_list').getValue();
                             hui.setCookie('taskboard_product', product_id);
+
+                            var userList   = hui.Control.getByFormname('member_list' );
+                            userList.setOptions(me.getMemberList());
+                            userList.setValue(hui.getCookie('taskboard_user'));
 
                             me.model.remove('sprint_list');
                             me.model.remove('backlog_list');
@@ -499,6 +501,20 @@
                             }
                             return _.sortBy(list, 'realname');        
                         },
+                        getMemberList: function () {
+                            var me = this;
+                            var result = [];
+                            var list = me.model.get('user_list');
+                            var product_id = hui.Control.getByFormname('product_list').getValue();
+                            var product_member = ','+me.getProductItem(product_id).product_member.join(',')+',';
+                            for (var i=0,len=list.length; i<len; i++) {
+                                if (~product_member.indexOf(list[i].uid)) {
+                                    list[i].user_label = (list[i].realname !== undefined ? list[i].realname : list[i].username) + ' (' + list[i].username + ')';
+                                    result.push(list[i]);
+                                }
+                            }
+                            return _.sortBy(result, 'realname');        
+                        },
                         getUserItem: function (id) {
                             var me = this,
                                 list = me.model.get('user_list'),
@@ -525,7 +541,7 @@
                             }
                             return item;        
                         },
-                        getProduct: function (id) {
+                        getProductItem: function (id) {
                             return this.getDataItem('product', id);        
                         },
                         getSprintItem: function (id) {
@@ -620,7 +636,7 @@
                             //var taskboard = hui.Control.getByFormname('taskboard');
                             taskboard.removeBacklogRow('all');
                             
-                            taskboard.product_key = me.getProduct(hui.Control.getByFormname('product_list').getValue()).product_key;
+                            taskboard.product_key = me.getProductItem(hui.Control.getByFormname('product_list').getValue()).product_key;
                             taskboard.backlogList = _.filter(me.model.get('backlog_list'), function(a){
                                 return a.sprint_id == taskboard.sprint_id});
                             
@@ -637,7 +653,7 @@
                          */
                         takeTask: function (task_id) {
                             var me = this,
-                                uid = hui.Control.getByFormname('user_list').getValue(),
+                                uid = hui.Control.getByFormname('member_list').getValue(),
                                 taskItem = me.getTaskItem(task_id);
                             taskItem.task_person    = uid;
                             taskItem.task_deleted   = '0';
@@ -658,7 +674,6 @@
                         },
                         deleteTask: function (task_id) {
                             var me = this,
-                                uid = hui.Control.getByFormname('user_list').getValue(),
                                 taskItem = me.getTaskItem(task_id);
                             taskItem.task_deleted   = 'deleted';
                             
@@ -715,7 +730,7 @@
                             // nc.setTitle(taskItem.task_name ? ' Edit Task - ' + taskItem.task_name + '' : 
                             //             ' Add Task to - ' + me.getBacklogItem(taskItem.backlog_id).backlog_name + '');
                             // 必须先初始化options，否则task_person无法setValue!!
-                            nc.getByFormname('task_person').setOptions(me.getUserList());
+                            nc.getByFormname('task_person').setOptions(me.getMemberList());
                             nc.getByFormname('task_person').setValue(hui.getCookie('taskboard_user'));
                             // 默认解除deleted状态
                             taskItem.task_deleted = '0';
@@ -830,7 +845,7 @@
                         },
                         highlightTask: function () {
                             var me = this,
-                                uid = hui.Control.getByFormname('user_list').getValue(),
+                                uid = hui.Control.getByFormname('member_list').getValue(),
                                 list = hui.c('task'),
                                 task_person;
                             for (var i=0,len=list.length; i<len; i++) {
@@ -886,7 +901,7 @@
                             // 确定productItem的值
                             productValue = {};
                             if (isNew != 'new') {
-                                productItem = me.getProduct(product_id);
+                                productItem = me.getProductItem(product_id);
                                 if (productItem) {
                                     productValue.product_id       = productItem.product_id;
                                     productValue.product_name     = productItem.product_name;   
