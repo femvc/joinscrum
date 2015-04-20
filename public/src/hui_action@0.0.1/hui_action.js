@@ -869,7 +869,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
             }
 
             if (hash) {
-                return hash.replace(/^#!/, '').replace(/^#/, '');
+                return hash.replace(/^#!+/, '').replace(/^#/, '').replace(/^!+/, '');
             }
 
             return '';
@@ -922,7 +922,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
 
             // 增加location带起始#号的容错性
             // 可能有人直接读取location.hash，经过string处理后直接传入
-            loc = loc.replace(/^#!/, '').replace(/^#/, '');
+            loc = loc.replace(/^#!+/, '').replace(/^#/, '');
 
             // 空string当成DEFAULT_INDEX处理
             if (loc.length === 0) {
