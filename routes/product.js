@@ -154,8 +154,8 @@ exports.save = function (req, res, next) {
     getDataRecord(req, res, {
         product_name: req.paramlist.product_id
     }, function (doc) {
-        if (doc && ((
-            doc.product_member && doc.product_member.indexOf(req.sessionStore.user[req.sessionID]) !== -1) || (
+        if (doc && ((!doc.product_member && !doc.product_observer) || (
+            doc.product_member && doc.product_member.indexOf(req.sessionStore.user[req.sessionID]) !== -1 ) || ( 
             doc.product_observer && doc.product_observer.indexOf(req.sessionStore.user[req.sessionID]) !== -1))) {
             dataModel.update({
                 product_id: req.paramlist.product_id
