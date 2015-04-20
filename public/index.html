@@ -146,8 +146,8 @@
                             var password = me.getByFormname('password');
                             var login_submit = me.getByFormname('login_submit');
 
-                            if (username.getValue() == '' && hui.getCookie('mid')) {
-                                 username.setValue(hui.getCookie('mid'));
+                            if (username.getValue() == '' && hui.getCookie('un')) {
+                                 username.setValue(hui.getCookie('un'));
                             }
                             
                             username.onenter = password.onenter = login_submit.onclick = function(){ me.onSubmit();};
@@ -180,6 +180,7 @@
                                 hui.context.set('mid', result['mid']);
                                 hui.context.set('token', result['token']);
                                 hui.setCookie('mid', result['mid'], 360 * 24 * 60 * 60 * 1000);
+                                hui.setCookie('un', result['username'], 360 * 24 * 60 * 60 * 1000);
                                 hui.setCookie('token', result['token']);
 
                                 if (hui.Locator.currentLocation.indexOf('/login') == 0) {
