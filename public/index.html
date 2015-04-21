@@ -455,7 +455,7 @@
                                 var sprint_list = _.filter(me.model.get('sprint_list'), function(item){
                                         return item.product_id == product_id
                                     });
-                                sprint_list = _.sortBy(sprint_list, 'sprint_index');
+                                sprint_list = hui.util.sortBy(sprint_list, 'sprint_index');
                                 for (var i=0,len=sprint_list.length; i<len; i++) {
                                     var taskboard = hui.Control.create('Taskboard', {
                                             formname:'taskboard' + sprint_list[i].sprint_id, 
