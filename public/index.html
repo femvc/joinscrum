@@ -245,8 +245,7 @@
                                     <button class="link" style="margin-left:0px;" onclick="hui.Master.get().editProduct()">edit</button>
                                 </td>
                                 <td style="vertical-align: bottom;">
-                                    <input id="include_done" name="include_done" type="checkbox" onclick="hui.setCookie('include_done', String(this.checked));hui.Master.get().switchProduct()" />
-                                    <label for="include_done">Show done sprint</label>
+                                    
                                 </td>
                                 <td><label style="float: right;margin-top: 5px;margin-right: 10px;">Highlight Tasks</label> </td>
                             </tr>
@@ -259,9 +258,11 @@
                                 </td>
                                 <td>
                                     <input id="include_burndown" name="include_burndown" type="checkbox" onclick="hui.setCookie('include_burndown', String(this.checked));hui.Master.get().switchProduct()" />
-                                    <label for="include_deleted">Show burndown chart</label>
+                                    <label for="include_deleted">Burndown chart</label>
                                     <input id="include_deleted" name="include_deleted" type="checkbox" onclick="hui.setCookie('include_deleted', String(this.checked));hui.Master.get().switchProduct()" />
                                     <label for="include_deleted">Show deleted task</label>
+                                    <input id="include_done" name="include_done" type="checkbox" onclick="hui.setCookie('include_done', String(this.checked));hui.Master.get().switchProduct()" />
+                                    <label for="include_done">Done sprint</label>
                                 </td>
                                 <td>
                                     <div ui="type:'Dropdown',formname:'member_list',data_value:'uid',data_text:'user_label'" style="width:230px; float: right;">
