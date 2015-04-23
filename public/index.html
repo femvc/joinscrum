@@ -1097,7 +1097,7 @@
                                     barcolor = colors.shift();
                                     colors.push(barcolor);
                                     lefthours = {
-                                        name: sprintItem.sprint_name, 
+                                        name: sprintItem.sprint_name.split('').slice(0, 14).join(''), 
                                         data: [], color: barcolor
                                     }; 
                                     for (var j=0,len2=member.length; j<len2; j++) {
@@ -1110,7 +1110,7 @@
                             var user;
                             for (var j=0,len2=member.length; j<len2; j++) {
                                 user = me.getUserItem(member[j]) || {};
-                                username.push(user.realname + '(' + user.username.split('').slice(0, 14).join('') + ')');
+                                username.push(user.realname + '(' + user.username + ')');
                             }
 
                             var memberload = hui.Control.create('Memberload', {
