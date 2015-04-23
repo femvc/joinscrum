@@ -1110,7 +1110,7 @@
                             var user;
                             for (var j=0,len2=member.length; j<len2; j++) {
                                 user = me.getUserItem(member[j]) || {};
-                                username.push(user.realname + '(' + user.username + ')');
+                                username.push(user.realname + '(' + user.username.split('').slice(0, 14).join('') + ')');
                             }
 
                             var memberload = hui.Control.create('Memberload', {
