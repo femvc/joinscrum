@@ -1087,20 +1087,24 @@
                             //     name: 'search',
                             //     data: [2, 2, 3, 2, 1]
                             // }]  
-                            var colors = ['#FF9900','#99CC00','#CC9900','#99CC00','#0099CC','#00CC99','#CC5599','#FE8463','#9BCA63','#FAD860','#F3A43B','#60C0DD','#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'];
+                            var colors = ['#FF9900','#99CC00','#CC9900','#0099CC','#00CC99','#CC5599','#FE8463','#9BCA63','#FAD860','#F3A43B','#60C0DD','#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'];
                             var barcolor;
                             var lefthours;
+                            var sprintItem;
                             for (var i in datasource) {
-                                barcolor = colors.shift();
-                                colors.push(barcolor);
-                                lefthours = {
-                                    name: me.getSprintItem(i).sprint_name, 
-                                    data: [], color: barcolor
-                                }; 
-                                for (var j=0,len2=member.length; j<len2; j++) {
-                                    lefthours.data.push(datasource[i][member[j]] || 0);
+                                sprintItem = me.getSprintItem(i);
+                                if (sprintItem) {
+                                    barcolor = colors.shift();
+                                    colors.push(barcolor);
+                                    lefthours = {
+                                        name: sprintItem.sprint_name, 
+                                        data: [], color: barcolor
+                                    }; 
+                                    for (var j=0,len2=member.length; j<len2; j++) {
+                                        lefthours.data.push(datasource[i][member[j]] || 0);
+                                    }
+                                    hours.push(lefthours);
                                 }
-                                hours.push(lefthours);
                             }
                             var username = [];
                             var user;
