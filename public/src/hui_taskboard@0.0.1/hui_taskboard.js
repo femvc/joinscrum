@@ -38,7 +38,7 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control', 'hui_draggable'], functi
          */
         getTaskboardTpl: function () {
             var str = [
-                '<div class="taskboard-title"><b ondblclick="hui.Master.get().editSprint(\'#{sprint_id}\')">#{sprint_name}  #{sprint_start} - #{sprint_finish}</b></div>',
+                '<div class="taskboard-title"><b ondblclick="hui.Master.get().editSprint(\'#{sprint_id}\')">#{sprint_name}  #{sprint_start} - #{sprint_finish} #{done_status}</b></div>',
                 '<table cellspacing="0" cellpadding="0" class="taskboard">',
                 '    <colgroup>',
                 '        <col class="fixedWidth" id="pbiCol">',
@@ -131,6 +131,7 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control', 'hui_draggable'], functi
             if (sprint_data.sprint_finish) {
                 sprint_data.sprint_finish = hui.util.formatDate(hui.util.parseDate(sprint_data.sprint_finish), 'M/dd')
             }
+            sprint_data.done_status = sprint_data.sprint_done === 'yes' ? '(Done)' : '';
             
             me.setInnerHTML(hui.format(me.getTaskboardTpl(), sprint_data));
         },
