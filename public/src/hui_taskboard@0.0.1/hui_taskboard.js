@@ -88,7 +88,7 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control', 'hui_draggable'], functi
             '</div>' +
             '<div style="width: 100%; height: 30px; text-align: right; padding-top: 6px;">' +
                 '<div id="person_#{backlog_id}"></div>' +
-                '<button class="link" id="addtask_#{backlog_id}" style="cursor: pointer; margin-right: 7px;" onclick="hui.Master.get().addTask(\'#{backlog_id}\')">add</button>' +
+                '<button class="link" id="addtask_#{backlog_id}" style="cursor: pointer; margin-right: 7px;" onclick="hui.Master.get().addTask(\'#{backlog_id}\')">+ Task</button>' +
             '</div>';
             return str;
         },
