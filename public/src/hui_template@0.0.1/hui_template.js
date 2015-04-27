@@ -143,40 +143,56 @@ hui.define('hui_template', [], function () {
             return hui.Template.parse(targetContent, model);
         },
         format: function (source, opts) {
+            function handler(match, key) {
+                var type = String(key).indexOf('!!') === 0 ? 'decode' : String(key).indexOf('!') === 0 ? '' : 'encode',
+                    parts = key.replace(/^!!?/, '').split('.'),
+                    part = parts.shift(),
+                    cur = data,
+                    variable;
+                while (part) {
+                    if (cur[part] !== undefined) {
+                        cur = cur[part];
+                    }
+                    else {
+                        cur = undefined;
+                        break;
+                    }
+                    part = parts.shift();
+                }
+                
+                variable = cur;
+                if ('[object Function]' === toString.call(variable)) {
+                    variable = variable(key);
+                }
+                if (undefined !== variable) {
+                    variable = String(variable);
+                    // encodeURIComponent not encode '
+                    var fr = '&|<|>| |\'|"|\\'.split('|'),
+                        to = '&amp;|&lt;|&gt;|&nbsp;|&apos;|&quot;|&#92;'.split('|');
+                    if (type === 'decode') {
+                        for (var i = fr.length - 1; i > -1; i--) {
+                            variable = variable.replace(new RegExp('\\' + to[i], 'ig'), fr[i]);
+                        }
+                    }
+                    else if (type === 'encode') {
+                        for (var i = 0, l = fr.length; i < l; i++) {
+                            variable = variable.replace(new RegExp('\\' + fr[i], 'ig'), to[i]);
+                        }
+                    }
+                }
+
+                return (undefined === variable ? '' : variable);
+            }
+            
             source = String(source);
             var data = Array.prototype.slice.call(arguments, 1),
                 toString = Object.prototype.toString;
             if (data.length) {
                 data = (data.length == 1 ?
-                    /* IE 下 Object.prototype.toString.call(null) == '[object Object]' */
+                    /* ie 下 Object.prototype.toString.call(null) == '[object Object]' */
                     (opts !== null && (/\[object (Array|Object)\]/.test(toString.call(opts))) ? opts : data) : data);
-                return source.replace(/#\{(.+?)\}/g, function (match, key) {
-                    key = String(key).replace(/(^\s+|\s+$)/g, '');
-                    var parts,
-                        part,
-                        cur,
-                        replacer;
-
-                    if (key.indexOf('(') !== -1) {
-                        // #{Math.floor(user.age, user.birth)}
-                        replacer = hui.runWithoutStrict(key, data);
-                    }
-                    else {
-                        parts = hui.Template.overloadOperator(key).split('.');
-                        cur = data;
-                        part = parts.shift();
-                        while (part && cur) {
-                            cur = cur[part] !== undefined ? cur[part] : cur = undefined;
-                            part = parts.shift();
-                        }
-                        replacer = cur;
-                    }
-
-                    if ('[object Function]' === toString.call(replacer)) {
-                        replacer = replacer(key);
-                    }
-                    return (undefined === replacer ? '' : replacer);
-                });
+                
+                return source.replace(/#\{(.+?)\}/g, handler).replace(/\{\{(.+?)\}\}/g, handler);
             }
             return source;
         },
