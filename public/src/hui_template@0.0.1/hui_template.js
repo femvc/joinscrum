@@ -47,8 +47,8 @@ hui.define('hui_template', [], function () {
             }
 
             targetList = {};
-            targetNameList = tplStr.match(me.targetRule) || [],
-                targetContentList = tplStr.replace(me.targetRule, sep).split(sep);
+            targetNameList = tplStr.match(me.targetRule) || [];
+            targetContentList = tplStr.replace(me.targetRule, sep).split(sep);
 
             //抛弃掉第一个<!-- target: XXX -->之前的内容
             if (targetContentList.length - targetNameList.length == 1) {
