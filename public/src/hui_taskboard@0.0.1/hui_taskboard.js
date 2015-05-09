@@ -38,8 +38,8 @@ hui.define('hui_taskboard', ['hui_util', 'hui_control', 'hui_draggable'], functi
          */
         getTaskboardTpl: function () {
             var str = [
-                '<div class="taskboard-title"><b ondblclick="hui.Master.get().editSprint(\'#{sprint_id}\')">#{sprint_name}  #{sprint_start} - #{sprint_finish} #{done_status}</b></div>',
-                '<table cellspacing="0" cellpadding="0" class="taskboard">',
+                '<div class="taskboard-title"><b class="line" ondblclick="hui.Master.get().editSprint(\'#{sprint_id}\')">#{sprint_name}  #{sprint_start} - #{sprint_finish} #{done_status}</b> <b class="arrow"><a class="arrow_icon" onclick="var t=hui.g(\'taskboard_table_#{sprint_id}\');if(t.style.display==\'none\'){t.style.display=\'block\';}else{t.style.display=\'none\'}">&nbsp;</a></b> </div>',
+                '<table cellspacing="0" cellpadding="0" class="taskboard" id="taskboard_table_#{sprint_id}">',
                 '    <colgroup>',
                 '        <col class="fixedWidth" id="pbiCol">',
                 '        <col span="4" class="fixedWidth">',
