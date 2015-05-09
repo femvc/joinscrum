@@ -54,11 +54,11 @@ define('./taskboard', [], function(){
                             // 注：还未执行hui.Control.init(),无法访问到me.getByFormname('taskboard')!!!
                             //me.getByFormname('taskboard').addBacklogRow(me.model.get('backlog_list')[0]);
                         },
-                        initBehavior: function(controlMap) {
+                        initBehavior: function(clist) {
                             var me = this;
                             
-                            // hui.Master.get().controlMap.vModal2.show();
-                            // me.controlMap.submit.onclick = hui.fn(me.onSubmit, me);
+                            // hui.Master.get().clist.vModal2.show();
+                            // me.clist.submit.onclick = hui.fn(me.onSubmit, me);
                             var productList = me.getByFormname('product_list');
                             var sprintList  = me.getByFormname('sprint_list' );
                             var userList    = me.getByFormname('user_list' );

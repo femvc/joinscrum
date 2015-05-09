@@ -22,7 +22,7 @@ hui.define('hui_boxpanel', ['hui_util', 'hui_control'], function () {
         hui.Boxpanel.superClass.call(this, options, 'pending');
         this.type = 'boxpanel';
 
-        this.controlMap = [];
+        this.clist = [];
 
         // 进入控件处理主流程!
         if (pending != 'pending') {

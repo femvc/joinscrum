@@ -19,7 +19,7 @@
 
 <script type="text/javascript">
 <!--
-var haiyang = {controlMap:{}};
+var haiyang = {clist:{}};
 var aa;
 function doit() {
     aa = bui.bocument.createElement('DIV', {childNodes:[]});
@@ -44,7 +44,7 @@ function doit2() {
 </head>
 
 <body><button type="button" onclick="doit()">Create</button><button type="button" onclick="doit2()">Create2</button>
-<button type="button" onclick="alert(bui.window.controlMap.price.getValue())">Get selected value</button>
+<button type="button" onclick="alert(bui.window.clist.price.getValue())">Get selected value</button>
 <div id="aa">
 <div ui="type:'ButtonGroup',id:'price',name:'price',value:'50-100',options:['0-50','50-100','100-150','150-200','200+']" class="btn-group"></div>
 </div>

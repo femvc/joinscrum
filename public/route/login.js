@@ -26,9 +26,9 @@ login.prototype = {
     },
     /**
      * @name 初始化列表行为
-     * @param {Object} controlMap 当前主内容区域绘制的控件集合.
+     * @param {Object} clist 当前主内容区域绘制的控件集合.
      */
-    initBehavior: function(controlMap) {
+    initBehavior: function(clist) {
         var me = this;
         
         if (me.args['logout']) {
@@ -55,7 +55,7 @@ login.prototype = {
     },
     /**
      * @name 初始化列表行为
-     * @param {Object} controlMap 当前主内容区域绘制的控件集合.
+     * @param {Object} clist 当前主内容区域绘制的控件集合.
      */
     onSubmit: function(){
         if (this.validate()) {

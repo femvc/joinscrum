@@ -128,9 +128,9 @@
                     pageLogin.prototype = {
                         /**
                          * @name 初始化列表行为
-                         * @param {Object} controlMap 当前主内容区域绘制的控件集合.
+                         * @param {Object} clist 当前主内容区域绘制的控件集合.
                          */
-                        initBehavior: function(controlMap) {
+                        initBehavior: function(clist) {
                             var me = this;
                             
                             if (me.querystring['logout']) {
@@ -155,7 +155,7 @@
                         },
                         /**
                          * @name 初始化列表行为
-                         * @param {Object} controlMap 当前主内容区域绘制的控件集合.
+                         * @param {Object} clist 当前主内容区域绘制的控件集合.
                          */
                         onSubmit: function(){
                             if (this.validate()) {
@@ -353,11 +353,11 @@
                                 //this.getTaskData(callback)
                             }
                         },
-                        initBehavior: function(controlMap) {
+                        initBehavior: function(clist) {
                             var me = this;
                             
-                            // hui.Master.get().controlMap.vModal2.show();
-                            // me.controlMap.submit.onclick = hui.fn(me.onSubmit, me);
+                            // hui.Master.get().clist.vModal2.show();
+                            // me.clist.submit.onclick = hui.fn(me.onSubmit, me);
                               
 
                         },

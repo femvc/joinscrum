@@ -200,7 +200,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
         var baseModel = hui.Action.getExtClass('hui.BaseModel');
         this.model = new baseModel();
         // Action的顶层控件容器
-        this.controlMap = [];
+        this.clist = [];
         // 声明类型
         this.type = 'action';
 
@@ -335,14 +335,14 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                 }
             }
             var exist = false;
-            for (var i = 0, len = hui.window.controlMap.length; i < len; i++) {
-                if (hui.window.controlMap[i] === action) {
+            for (var i = 0, len = hui.window.clist.length; i < len; i++) {
+                if (hui.window.clist[i] === action) {
                     exist = true;
                     break;
                 }
             }
             if (!exist) {
-                hui.window.controlMap.push(action);
+                hui.window.clist.push(action);
             }
         }
     };
@@ -474,14 +474,14 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
 
             if (Object.prototype.toString.call(action) === '[object Object]') {
                 var exist = false;
-                for (var i = 0, len = hui.window.controlMap.length; i < len; i++) {
-                    if (hui.window.controlMap[i] === action) {
+                for (var i = 0, len = hui.window.clist.length; i < len; i++) {
+                    if (hui.window.clist[i] === action) {
                         exist = true;
                         break;
                     }
                 }
                 if (!exist) {
-                    hui.window.controlMap.push(action);
+                    hui.window.clist.push(action);
                 }
             }
         },
@@ -659,7 +659,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
         getActionInstance: function (actionName) {
             var action = null;
             if (Object.prototype.toString.call(actionName) === '[object String]') {
-                var list = hui.window.controlMap;
+                var list = hui.window.clist;
                 for (var i = 0, len = list.length; i < len; i++) {
                     if (list[i].id === actionName) {
                         action = list[i];
@@ -680,25 +680,25 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
             }*/
             if (!action && Object.prototype.toString.call(actionName) === '[object Function]') {
                 var exist = false;
-                for (var i = 0, len = hui.window.controlMap.length; i < len; i++) {
-                    if (hui.window.controlMap[i] instanceof actionName) {
+                for (var i = 0, len = hui.window.clist.length; i < len; i++) {
+                    if (hui.window.clist[i] instanceof actionName) {
                         exist = true;
-                        action = hui.window.controlMap[i];
+                        action = hui.window.clist[i];
                         break;
                     }
                 }
                 if (!exist) {
                     var action = new actionName();
-                    // 注：上面new的过程可能会改变hui.window.controlMap！因此需要重新检查！
-                    for (var i = 0, len = hui.window.controlMap.length; i < len; i++) {
-                        if (hui.window.controlMap[i] instanceof actionName) {
+                    // 注：上面new的过程可能会改变hui.window.clist！因此需要重新检查！
+                    for (var i = 0, len = hui.window.clist.length; i < len; i++) {
+                        if (hui.window.clist[i] instanceof actionName) {
                             exist = true;
-                            action = hui.window.controlMap[i];
+                            action = hui.window.clist[i];
                             break;
                         }
                     }
                     if (!exist) {
-                        hui.window.controlMap.push(action);
+                        hui.window.clist.push(action);
                     }
                 }
             }
@@ -1412,7 +1412,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
         },
         /**
          * @name 初始化列表行为
-         * @param {Object} controlMap 当前主内容区域绘制的控件集合.
+         * @param {Object} clist 当前主内容区域绘制的控件集合.
          */
         initBehavior: function () {
             //var me = this;

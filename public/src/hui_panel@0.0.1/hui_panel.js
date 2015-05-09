@@ -21,7 +21,7 @@ hui.define('hui_panel', ['hui_control'], function () {
         this.isFormItem = false;
         hui.Panel.superClass.call(this, options, 'pending');
 
-        this.controlMap = [];
+        this.clist = [];
 
         // 进入控件处理主流程!
         if (pending != 'pending') {

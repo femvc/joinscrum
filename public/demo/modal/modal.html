@@ -18,8 +18,8 @@
 <script type="text/javascript" src="../../helper/ui_modal.js"></script>
 <script type="text/javascript">
 <!--
-var haiyang = {id:'haiyang',controlMap:{},type:'action'};
-var ymy = {id:'ymy',controlMap:{},type:'action'};
+var haiyang = {id:'haiyang',clist:{},type:'action'};
+var ymy = {id:'ymy',clist:{},type:'action'};
 function doit() {
     // bui.Template.parseTemplate('<!-- target:modalBody -->Hello ${name} ');
     // bui.Template.parseTemplate('<!-- target:modalFoot -->foot ${name} ');
@@ -30,12 +30,12 @@ function doit() {
     //bui.Control.init(bui.bocument.getElementById('aa'),{},haiyang);
     var nc = bui.Control.create('Modal', {id:'ff',title:'This is dialog.', size: {width: '600px',height: '300px'}});
     nc.setBodyContentHtml('This is body.');
-    bui.window.controlMap['ff'] = nc;
+    bui.window.clist['ff'] = nc;
     
     //nc.appendSelfTo(haiyang);
-    //bui.window.controlMap['haiyang'] = haiyang;
-    //bui.window.controlMap['ymy'] = ymy;
-    //bui.window.controlMap.bb.appendSelfTo(nc);
+    //bui.window.clist['haiyang'] = haiyang;
+    //bui.window.clist['ymy'] = ymy;
+    //bui.window.clist.bb.appendSelfTo(nc);
 }
 
 //-->

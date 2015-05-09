@@ -158,7 +158,7 @@ hui.define('hui_util', [], function () {
                 control = parentElement;
                 break;
             }
-            // 未找到直接父控件则将control从hui.window.controlMap移动到action.controlMap中
+            // 未找到直接父控件则将control从hui.window.clist移动到action.clist中
             else if (~',html,body,'.indexOf(',' + String(parentElement.tagName).toLowerCase() + ',')) {
                 break;
             }

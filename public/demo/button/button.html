@@ -15,10 +15,10 @@
 <script type="text/javascript" src="../../helper/ui_button.js"></script>
 <script type="text/javascript">
 <!--
-var haiyang = {controlMap:{}};
+var haiyang = {clist:{}};
 function doit() {
     bui.Control.init(document.getElementById('aa'),{}/*,haiyang*/);
-    bui.window.controlMap.submit.onclick=function(){alert('You click me.');};
+    bui.window.clist.submit.onclick=function(){alert('You click me.');};
     alert('Create OK');
 }
 
@@ -27,7 +27,7 @@ function doit() {
 </head>
 
 <body><button type="button" onclick="doit()">Create</button>
-<button type="button" onclick="alert(bui.window.controlMap&&bui.window.controlMap.submit?'Create success':'Fail')">Check if create success</button>
+<button type="button" onclick="alert(bui.window.clist&&bui.window.clist.submit?'Create success':'Fail')">Check if create success</button>
 <div id="aa">
 <button ui="type:'Button',id:'submit'" class="btn btn-primary" type="button">Then click here.</button>
 </div>

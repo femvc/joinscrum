@@ -214,8 +214,8 @@ hui.define('hui_control', [], function () {
                 }
             }
         },
-        // 注: controlMap不能放在这里,放在这里会导致"原型继承属性只是用一个副本的坑"!!
-        // controlMap: [],
+        // 注: clist不能放在这里,放在这里会导致"原型继承属性只是用一个副本的坑"!!
+        // clist: [],
         /**
          * @name 获取dom子部件的css class
          * @protected
@@ -340,9 +340,9 @@ hui.define('hui_control', [], function () {
         initBehaviorByTree: function () {
             var me = this,
                 main = me.getMain();
-            if (me.controlMap) {
-                for (var i = 0, len = me.controlMap.length; i < len; i++) {
-                    me.controlMap[i].initBehaviorByTree();
+            if (me.clist) {
+                for (var i = 0, len = me.clist.length; i < len; i++) {
+                    me.clist[i].initBehaviorByTree();
                 }
             }
             if (main.getAttribute('_initbehavior') != 'true') {
@@ -357,7 +357,7 @@ hui.define('hui_control', [], function () {
         validate: function (show_error) {
             var me = this,
                 result = true,
-                controlMap = me.controlMap,
+                clist = me.clist,
                 Validator = hui.Control.getExtClass('hui.Validator'),
                 c,
                 list,
@@ -378,13 +378,13 @@ hui.define('hui_control', [], function () {
                 }
             }
             // result ===  null
-            if (!me.rule && controlMap && !me.isDisabled()) {
+            if (!me.rule && clist && !me.isDisabled()) {
                 result = true;
                 m = null;
-                for (var i = 0, len = controlMap.length; i < len; i++) {
-                    n = controlMap[i].validate(show_error);
+                for (var i = 0, len = clist.length; i < len; i++) {
+                    n = clist[i].validate(show_error);
                     result = n && result;
-                    m = m === null && !n ? controlMap[i] : m;
+                    m = m === null && !n ? clist[i] : m;
                 }
                 //m && m.getInput && m.getInput() && m.getInput().focus();
             }
@@ -395,9 +395,9 @@ hui.define('hui_control', [], function () {
             var me = this,
                 Validator = hui.Control.getExtClass('hui.Validator');
             Validator.cancelNotice(me.getMain());
-            if (me.controlMap) {
-                for (var i = 0, len = me.controlMap.length; i < len; i++) {
-                    me.controlMap[i].hideError();
+            if (me.clist) {
+                for (var i = 0, len = me.clist.length; i < len; i++) {
+                    me.clist[i].hideError();
                 }
             }
             return me;
@@ -418,7 +418,7 @@ hui.define('hui_control', [], function () {
                 value,
                 list,
                 ctr;
-            if (me.controlMap && paramMap) {
+            if (me.clist && paramMap) {
                 for (var formname in paramMap) {
                     if (formname && paramMap.hasOwnProperty(formname)) {
                         value = Object.prototype.toString.call(paramMap[formname]) !== '[object Array]' ?
@@ -431,7 +431,7 @@ hui.define('hui_control', [], function () {
                             ctr = list[i];
                             if (ctr) {
                                 if (Object.prototype.toString.call(value[i]) === '[object Object]' &&
-                                    ctr.controlMap) {
+                                    ctr.clist) {
                                     ctr.showErrorByTree(value[i], code);
                                 }
                                 else if (ctr.showError) {
@@ -464,7 +464,7 @@ hui.define('hui_control', [], function () {
         //getValue:   new Function(), // 注: 控件直接返回值(对象/数组/字符串)时才能使用getValue! 获取所有子控件的值,应该用getParamMap
         setValue: function (paramMap) {
             var me = this;
-            if (me.controlMap && (/\[object Object\]/.test(Object.prototype.toString.call(paramMap)))) {
+            if (me.clist && (/\[object Object\]/.test(Object.prototype.toString.call(paramMap)))) {
                 me.setValueByTree(this.value);
             }
             else {
@@ -485,7 +485,7 @@ hui.define('hui_control', [], function () {
                 list,
                 ctr,
                 main;
-            if (me.controlMap && paramMap) {
+            if (me.clist && paramMap) {
                 for (var formname in paramMap) {
                     if (formname && paramMap.hasOwnProperty(formname)) {
                         value = Object.prototype.toString.call(paramMap[formname]) !== '[object Array]' ?
@@ -513,7 +513,7 @@ hui.define('hui_control', [], function () {
                                 ctr.setValue !== hui.Control.prototype.setValue) {
                                 ctr.setValue(value[i]);
                             }
-                            else if (ctr.controlMap) {
+                            else if (ctr.clist) {
                                 ctr.setValueByTree(value[i]);
                             }
                             else if (ctr.getMain || ctr.main) {
@@ -533,7 +533,7 @@ hui.define('hui_control', [], function () {
             var me = this,
                 main = me.getMain ? me.getMain() : document.getElementById(me.main),
                 value = main.value;
-            if (me.controlMap) {
+            if (me.clist) {
                 value = me.getParamMap();
             }
             return value;
@@ -550,9 +550,9 @@ hui.define('hui_control', [], function () {
                 value,
                 groupList = {};
             // 如果有子控件建议递归调用子控件的getValue!!
-            if (me.controlMap) {
-                for (var i = 0, len = me.controlMap.length; i < len; i++) {
-                    ctr = me.controlMap[i];
+            if (me.clist) {
+                for (var i = 0, len = me.clist.length; i < len; i++) {
+                    ctr = me.clist[i];
                     formname = hui.Control.prototype.getFormname.call(ctr);
                     groupList[formname] = !!ctr.group;
                     if (String(ctr.isFormItem) !== 'false') {
@@ -565,7 +565,7 @@ hui.define('hui_control', [], function () {
                             value = (ctr.getMain ? ctr.getMain() : document.getElementById(ctr.main)).value;
                             paramMap[formname].push(value);
                         }
-                        else if (ctr.controlMap) {
+                        else if (ctr.clist) {
                             value = ctr.getParamMap();
                             paramMap[formname].push(value);
                         }
@@ -707,15 +707,15 @@ hui.define('hui_control', [], function () {
          */
         dispose: function () {
             var me = this,
-                controlMap,
+                clist,
                 main = me.getMain ? me.getMain() : document.getElementById(me.main),
                 list;
-            // 从父控件的controlMap中删除引用
+            // 从父控件的clist中删除引用
             if (me.parentControl) {
-                controlMap = me.parentControl.controlMap;
-                for (var i = 0, len = controlMap.length; i < len; i++) {
-                    if (controlMap[i] === me) {
-                        controlMap.splice(i, 1);
+                clist = me.parentControl.clist;
+                for (var i = 0, len = clist.length; i < len; i++) {
+                    if (clist[i] === me) {
+                        clist.splice(i, 1);
                         break;
                     }
                 }
@@ -749,12 +749,12 @@ hui.define('hui_control', [], function () {
         disposeChild: function () {
             var me = this;
             // dispose子控件
-            if (me.controlMap) {
-                for (var i = me.controlMap.length - 1; i > -1; i--) {
-                    me.controlMap[i].dispose();
-                    me.controlMap[i] = null;
+            if (me.clist) {
+                for (var i = me.clist.length - 1; i > -1; i--) {
+                    me.clist[i].dispose();
+                    me.clist[i] = null;
                 }
-                me.controlMap = [];
+                me.clist = [];
             }
         },
         // /**
@@ -889,7 +889,7 @@ hui.define('hui_control', [], function () {
                         hui.Control.appendControl(control, me);
                         break;
                     }
-                    // 未找到直接父控件则将control从hui.window.controlMap移动到action.controlMap中
+                    // 未找到直接父控件则将control从hui.window.clist移动到action.clist中
                     else if (~',html,body,'.indexOf(',' + String(parentElement.tagName).toLowerCase() + ',')) {
                         hui.Control.appendControl(null, me);
                         break;
@@ -1112,7 +1112,7 @@ hui.define('hui_control', [], function () {
         opt_propMap = opt_propMap || {}; // 这里并不会缓存BaseModel，因此销毁空间时无须担心BaseModel
         // parentControl不传默认为window对象
         parentControl = parentControl || hui.window;
-        parentControl.controlMap = parentControl.controlMap || [];
+        parentControl.clist = parentControl.clist || [];
 
 
         var uiAttr = hui.Control.UI_ATTRIBUTE || 'ui';
@@ -1159,7 +1159,7 @@ hui.define('hui_control', [], function () {
             }
         }
 
-        return parentControl.controlMap;
+        return parentControl.clist;
     };
 
     /**
@@ -1274,17 +1274,17 @@ hui.define('hui_control', [], function () {
         /**/
         /*uiObj.clazz = uiClazz;// 已经使用this.constructor代替*/
         /*
-        // 加到父控件的controlMap中
-        if (!((uiObj.parentControl && uiObj.parentControl.controlMap && uiObj.parentControl.controlMap[objId] == uiObj) &&
+        // 加到父控件的clist中
+        if (!((uiObj.parentControl && uiObj.parentControl.clist && uiObj.parentControl.clist[objId] == uiObj) &&
             (uiObj.getId && uiObj.getId() !== objId) || (uiObj.id !== objId))) {
             
-            if (uiObj.parentControl && uiObj.parentControl.controlMap && uiObj.parentControl.controlMap[objId] !== uiObj) {
+            if (uiObj.parentControl && uiObj.parentControl.clist && uiObj.parentControl.clist[objId] !== uiObj) {
                 hui.Control.appendControl(uiObj.parentControl, uiObj);
-                //uiObj.parentControl.controlMap[objId] = uiObj;
+                //uiObj.parentControl.clist[objId] = uiObj;
             }
-            else if (options.parentControl && options.parentControl.controlMap && options.parentControl.controlMap[objId] !== uiObj) {
+            else if (options.parentControl && options.parentControl.clist && options.parentControl.clist[objId] !== uiObj) {
                 hui.Control.appendControl(options.parentControl, uiObj);
-                //options.parentControl.controlMap[objId] = uiObj;
+                //options.parentControl.clist[objId] = uiObj;
             }
         }
         */
@@ -1316,12 +1316,12 @@ hui.define('hui_control', [], function () {
         // Add: 上面这样做静态没问题，动态生成appendSelfTo就会出问题，因此需要加上options.parentControl
         // Fixme: 第二次执行到这里hui.Master.get()居然是前一个action？
         parent = parent || hui.window;
-        parent.controlMap = parent.controlMap || [];
+        parent.clist = parent.clist || [];
 
         // var ctrId = uiObj.getId ? uiObj.getId() : uiObj.id;
-        // 注：从原来的父控件controlMap中移除
-        if (uiObj.parentControl && uiObj.parentControl.controlMap && uiObj.parentControl.controlMap != parent.controlMap) {
-            var list = uiObj.parentControl.controlMap;
+        // 注：从原来的父控件clist中移除
+        if (uiObj.parentControl && uiObj.parentControl.clist && uiObj.parentControl.clist != parent.clist) {
+            var list = uiObj.parentControl.clist;
             for (var i = list.length - 1; i > -1; i--) {
                 if (list[i] === uiObj) {
                     list.splice(i, 1);
@@ -1329,16 +1329,16 @@ hui.define('hui_control', [], function () {
             }
         }
 
-        // !!!悲催的案例,如果将controlMap放在prototype里, 这里parent.controlMap===uiObj.controlMap!!!
+        // !!!悲催的案例,如果将clist放在prototype里, 这里parent.clist===uiObj.clist!!!
         var exist = false;
-        for (var i = 0, len = parent.controlMap.length; i < len; i++) {
-            if (parent.controlMap[i] === uiObj) {
+        for (var i = 0, len = parent.clist.length; i < len; i++) {
+            if (parent.clist[i] === uiObj) {
                 exist = true;
                 break;
             }
         }
         if (!exist) {
-            parent.controlMap.push(uiObj);
+            parent.clist.push(uiObj);
         }
         // 重置parentControl标识
         uiObj.parentControl = parent;
@@ -1418,8 +1418,8 @@ hui.define('hui_control', [], function () {
 
                 results.push(childNode);
 
-                if (!childNode.controlMap) continue;
-                list = list.concat(childNode.controlMap);
+                if (!childNode.clist) continue;
+                list = list.concat(childNode.clist);
             }
             // 去掉顶层父控件或Action,如不去掉处理复合控件时会导致死循环!!
             if (results.length > 0) results.shift();
@@ -1454,7 +1454,7 @@ hui.define('hui_control', [], function () {
     /**
      * @name 根据控件id找到对应控件
      * @public
-     * @param {Control} parentControl 可不传, 默认从当前Action开始找, 如果未使用action则直接从hui.window.controlMap开始找
+     * @param {Control} parentControl 可不传, 默认从当前Action开始找, 如果未使用action则直接从hui.window.clist开始找
      * @id 控件ID
      * @param {String} 控件id
      */
@@ -1481,7 +1481,7 @@ hui.define('hui_control', [], function () {
             }
         }
 
-        // If not found then find in 'window.controlMap'
+        // If not found then find in 'window.clist'
         if (!result) {
             list = hui.Control.findAllControl(hui.window);
             for (var i = 0, len = list.length; i < len; i++) {
@@ -1512,15 +1512,15 @@ hui.define('hui_control', [], function () {
             
             // 注掉原因：不应该找自身！！
             // // 先查找自身 
-            // childNodes = parentControl && parentControl.controlMap ? parentControl.controlMap : [];
+            // childNodes = parentControl && parentControl.clist ? parentControl.clist : [];
             // //childNodes.unshift(parentControl);
             // if (parentControl.getFormname && parentControl.getFormname() === formname) {
             //     list.push(parentControl);
             // }
 
             // 再遍历控件树
-            childNodes = parentControl && parentControl.controlMap ?
-                (all === false ? parentControl.controlMap : hui.Control.findAllControl(parentControl)) : [];
+            childNodes = parentControl && parentControl.clist ?
+                (all === false ? parentControl.clist : hui.Control.findAllControl(parentControl)) : [];
             for (var i = 0, len = childNodes.length; i < len; i++) {
                 item = childNodes[i];
                 if ((item.getFormname && item.getFormname() === formname) || item['formname'] === formname) {
