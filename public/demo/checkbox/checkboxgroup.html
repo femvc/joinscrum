@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../../src/erui/checkbox-group.js"></script>
 <script type="text/javascript">
 <!--
-var haiyang = {clist:{}};
+var haiyang = {childControl:{}};
 function doit() {
     bui.Control.init(bui.bocument.getElementById('aa'),{}/*,haiyang*/);
 }
@@ -23,8 +23,8 @@ function doit() {
 </head>
 
 <body><button type="button" onclick="doit()">doit</button>
-<button type="button" onclick="alert(bui.window.clist.places.setDisabled())">disabled</button>
-<button type="button" onclick="alert(bui.window.clist.places.getParamString())">set(get())</button>
+<button type="button" onclick="alert(bui.window.cc.places.setDisabled())">disabled</button>
+<button type="button" onclick="alert(bui.window.cc.places.getParamString())">set(get())</button>
 <div id="aa">
 <div ui="type:CheckboxGroup;id:places;name:places;value:['0','2','3'];options:[['0','所有'],['1','小清新'],['2','冰淇淋']]"></div>
 </div>

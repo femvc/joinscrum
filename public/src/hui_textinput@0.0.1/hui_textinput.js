@@ -149,21 +149,21 @@ hui.define('hui_textinput', ['hui_control', 'hui_util'], function () {
             var me = this,
                 main = me.getMain(),
                 input,
-                input = me.useAgent ? hui.cc(me.getClass('text')) : main;
+                input = me.useAgent ? hui.f(me.getClass('text')) : main;
             return input;
         },
         getPlaceholder: function () {
             var me = this,
                 main = me.getMain(),
                 input,
-                input = me.useAgent ? hui.cc(me.getClass('placeholder')) : hui.util.findSiblingByClassName(main, me.getClass('placeholder'), 'pre');
+                input = me.useAgent ? hui.f(me.getClass('placeholder')) : hui.util.findSiblingByClassName(main, me.getClass('placeholder'), 'pre');
             return input;
         },
         getEye: function () {
             var me = this,
                 main = me.getMain(),
                 input,
-                input = me.useAgent ? hui.cc(me.getClass('eye')) : hui.util.findSiblingByClassName(main, me.getClass('eye'), 'pre');
+                input = me.useAgent ? hui.f(me.getClass('eye')) : hui.util.findSiblingByClassName(main, me.getClass('eye'), 'pre');
             return input;
         },
         renderInput: function () {

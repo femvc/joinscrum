@@ -85,7 +85,7 @@ hui.define('hui_util', [], function () {
             }
         }
     };
-    hui.util.cc = function (searchClass, node) {
+    hui.util.f = function (searchClass, node) {
         return hui.util.c(searchClass, node)[0];
     };
 
@@ -158,7 +158,7 @@ hui.define('hui_util', [], function () {
                 control = parentElement;
                 break;
             }
-            // 未找到直接父控件则将control从hui.window.clist移动到action.clist中
+            // 未找到直接父控件则将control从hui.window.childControl移动到action.childControl中
             else if (~',html,body,'.indexOf(',' + String(parentElement.tagName).toLowerCase() + ',')) {
                 break;
             }
@@ -813,7 +813,7 @@ hui.define('hui_util', [], function () {
 
     hui.g = hui.util.g;
     hui.c = hui.util.c;
-    hui.cc = hui.util.cc;
+    hui.f = hui.util.f;
     hui.t = hui.util.t;
     hui.appendHTML = hui.util.appendHTML;
     hui.hasClass = hui.util.hasClass;

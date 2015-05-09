@@ -26,7 +26,7 @@
             //     onsuccess: function (result) {
             //         if (result && !result[0] && result[1]) {
             //             hui.g('uid').innerHTML = String(result[1]);
-            //             hui.cc('link').style.display = 'block';
+            //             hui.f('link').style.display = 'block';
             //         }
             //     }
             // });
@@ -128,9 +128,9 @@
                     pageLogin.prototype = {
                         /**
                          * @name 初始化列表行为
-                         * @param {Object} clist 当前主内容区域绘制的控件集合.
+                         * @param {Object} cc 当前主内容区域绘制的控件集合.
                          */
-                        initBehavior: function(clist) {
+                        initBehavior: function(cc) {
                             var me = this;
                             
                             if (me.querystring['logout']) {
@@ -155,7 +155,7 @@
                         },
                         /**
                          * @name 初始化列表行为
-                         * @param {Object} clist 当前主内容区域绘制的控件集合.
+                         * @param {Object} cc 当前主内容区域绘制的控件集合.
                          */
                         onSubmit: function(){
                             if (this.validate()) {
@@ -353,11 +353,11 @@
                                 //this.getTaskData(callback)
                             }
                         },
-                        initBehavior: function(clist) {
+                        initBehavior: function(cc) {
                             var me = this;
                             
-                            // hui.Master.get().clist.vModal2.show();
-                            // me.clist.submit.onclick = hui.fn(me.onSubmit, me);
+                            // hui.Master.get().cc.vModal2.show();
+                            // me.cc.submit.onclick = hui.fn(me.onSubmit, me);
                               
 
                         },
@@ -606,7 +606,7 @@
                             });
                             me.appendControl(nc);
                             if (backlog_id) {
-                                var dialog_title = hui.cc('dialog_title', nc.getMain());
+                                var dialog_title = hui.f('dialog_title', nc.getMain());
                                 dialog_title.innerHTML = dialog_title.innerHTML.replace('Add', 'Edit');
                             }
 
@@ -730,7 +730,7 @@
                             });
                             me.appendControl(nc);
                             if (taskItem.task_name) {
-                                var dialog_title = hui.cc('dialog_title', nc.getMain());
+                                var dialog_title = hui.f('dialog_title', nc.getMain());
                                 dialog_title.innerHTML = dialog_title.innerHTML.replace('Add', 'Edit');
                             }
 
@@ -947,7 +947,7 @@
                             });
                             this.appendControl(nc);
                             if (productValue.product_name) {
-                                var dialog_title = hui.cc('dialog_title', nc.getMain());
+                                var dialog_title = hui.f('dialog_title', nc.getMain());
                                 dialog_title.innerHTML = dialog_title.innerHTML.replace('Add', 'Edit');
                             }
                             // 绑定事件
@@ -1026,7 +1026,7 @@
                             });
                             this.appendControl(nc);
                             if (sprint_id) {
-                                var dialog_title = hui.cc('dialog_title', nc.getMain());
+                                var dialog_title = hui.f('dialog_title', nc.getMain());
                                 dialog_title.innerHTML = dialog_title.innerHTML.replace('Add', 'Edit');
                             }
                             // 绑定事件

@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../../helper/ui_textinput.js"></script>
 <script type="text/javascript">
 <!--
-//var haiyang = {clist:{}};
+//var haiyang = {childControl:{}};
 function doit() {
     bui.Control.init(document.getElementById('aa'),{}/*,haiyang*/);
     alert('Finish');
@@ -26,7 +26,7 @@ function doit() {
 <body><button type="button" onclick="doit()">Create</button>
 <div id="aa">
 <input type="text" ui="type:'TextInput',id:'gg'" />
-<button type="button" onclick="alert(bui.window.clist&&bui.window.clist.gg?'Success':'Not exist.')">Get Control</button>
+<button type="button" onclick="alert(bui.window.cc&&bui.window.cc.gg?'Success':'Not exist.')">Get Control</button>
 
 </div>
 </body>

@@ -177,7 +177,7 @@ hui.define('hui', [], function () {
     if (window.hui) {
         window.hui.window = window; /*hui.bocument = document;//注：hui.bocument与document不相同!!*/
     }
-    hui.window.clist = [];
+    hui.window.cc = [];
 
 
     /** 

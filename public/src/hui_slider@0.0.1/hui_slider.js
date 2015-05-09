@@ -82,7 +82,7 @@ hui.define('hui_slider', ['hui_util', 'hui_draggable', 'hui_control'], function 
                     tickHTML += hui.Control.format(tickTpl, i, (i - minValue) * width / (me.maxValue - me.minValue));
                 }
 
-                me.setInnerHTML(hui.cc('hui_slider_ticks', main), tickHTML);
+                me.setInnerHTML(hui.f('hui_slider_ticks', main), tickHTML);
             }
         },
         showLabels: function () {
@@ -91,12 +91,12 @@ hui.define('hui_slider', ['hui_util', 'hui_draggable', 'hui_control'], function 
                 min,
                 max;
             if (me.labels === undefined || me.labels === 'both' || me.labels === 'left') {
-                min = hui.cc('hui_slider_min', main);
+                min = hui.f('hui_slider_min', main);
                 me.setInnerHTML(min, me.minValue);
                 min.style.display = 'inline';
             }
             if (me.labels === undefined || me.labels === 'both' || me.labels === 'right') {
-                max = hui.cc('hui_slider_max', main);
+                max = hui.f('hui_slider_max', main);
                 me.setInnerHTML(max, me.maxValue);
                 max.style.display = 'inline';
             }
@@ -112,7 +112,7 @@ hui.define('hui_slider', ['hui_util', 'hui_draggable', 'hui_control'], function 
 
             me.setInnerHTML(me, hui.Control.format(me.getMainTpl(), me.getId()));
 
-            hui.cc('hui_slider_layer', main).style.width = me.width + 'px';
+            hui.f('hui_slider_layer', main).style.width = me.width + 'px';
 
             me.showTicks();
             me.showLabels();
@@ -126,7 +126,7 @@ hui.define('hui_slider', ['hui_util', 'hui_draggable', 'hui_control'], function 
             var me = this,
                 main = me.getMain();
 
-            me.handler1 = hui.Draggable(hui.cc('hui_slider_leftpoint', main), {
+            me.handler1 = hui.Draggable(hui.f('hui_slider_leftpoint', main), {
                 preventDefault: true,
                 move: function () {
                     if (this.moving) {
@@ -152,7 +152,7 @@ hui.define('hui_slider', ['hui_util', 'hui_draggable', 'hui_control'], function 
                 autoTop: false
             });
 
-            me.handler2 = hui.Draggable(hui.cc('hui_slider_rightpoint', main), {
+            me.handler2 = hui.Draggable(hui.f('hui_slider_rightpoint', main), {
                 preventDefault: true,
                 move: function () {
                     if (this.moving) {
@@ -176,8 +176,8 @@ hui.define('hui_slider', ['hui_util', 'hui_draggable', 'hui_control'], function 
             });
 
             if (!me.rangeSelection) {
-                hui.cc('hui_slider_leftpoint', main).style.display = 'none';
-                hui.cc('hui_slider_leftinput', main).style.display = 'none';
+                hui.f('hui_slider_leftpoint', main).style.display = 'none';
+                hui.f('hui_slider_leftinput', main).style.display = 'none';
             }
 
             if (me.value !== undefined) {
@@ -198,40 +198,40 @@ hui.define('hui_slider', ['hui_util', 'hui_draggable', 'hui_control'], function 
         getLeftValue: function () {
             var me = this,
                 main = me.getMain(),
-                value = hui.cc('hui_slider_leftinput', main).value;
+                value = hui.f('hui_slider_leftinput', main).value;
             return value;
         },
         getRightValue: function () {
             var me = this,
                 main = me.getMain(),
-                value = hui.cc('hui_slider_rightinput', main).value;
+                value = hui.f('hui_slider_rightinput', main).value;
             return value;
         },
         setLeftValue: function (value) {
             var me = this,
                 main = me.getMain();
-            hui.cc('hui_slider_leftinput', main).value = Math.round(value / me.smallChange) * me.smallChange;
+            hui.f('hui_slider_leftinput', main).value = Math.round(value / me.smallChange) * me.smallChange;
             value = value < me.minValue ? me.minValue : value > me.maxValue ? me.maxValue : Number(value);
             main.leftPercent = (value - me.minValue) / (me.maxValue - me.minValue);
             if (main.leftPercent > main.rightPercent) {
                 main.leftPercent = main.rightPercent;
-                hui.cc('hui_slider_leftinput', main).value = Math.round((me.minValue + (me.maxValue - me.minValue) * main.rightPercent) / me.smallChange) * me.smallChange;
+                hui.f('hui_slider_leftinput', main).value = Math.round((me.minValue + (me.maxValue - me.minValue) * main.rightPercent) / me.smallChange) * me.smallChange;
             }
             me.handler1.elem.style.left = (me.width * main.leftPercent) + 'px';
-            hui.cc('hui_slider_inner', main).style.left = (me.width * main.leftPercent) + 'px';
+            hui.f('hui_slider_inner', main).style.left = (me.width * main.leftPercent) + 'px';
         },
         setRightValue: function (value) {
             var me = this,
                 main = me.getMain();
-            hui.cc('hui_slider_rightinput', main).value = Math.round(value / me.smallChange) * me.smallChange;
+            hui.f('hui_slider_rightinput', main).value = Math.round(value / me.smallChange) * me.smallChange;
             value = value < me.minValue ? me.minValue : value > me.maxValue ? me.maxValue : Number(value);
             main.rightPercent = (value - me.minValue) / (me.maxValue - me.minValue);
             if (main.rightPercent < main.leftPercent) {
                 main.rightPercent = main.leftPercent;
-                hui.cc('hui_slider_rightinput', main).value = Math.round((me.minValue + (me.maxValue - me.minValue) * main.rightPercent) / me.smallChange) * me.smallChange;
+                hui.f('hui_slider_rightinput', main).value = Math.round((me.minValue + (me.maxValue - me.minValue) * main.rightPercent) / me.smallChange) * me.smallChange;
             }
             me.handler2.elem.style.left = (me.width * main.rightPercent) + 'px';
-            hui.cc('hui_slider_inner', main).style.right = (me.width * (1 - main.rightPercent)) + 'px';
+            hui.f('hui_slider_inner', main).style.right = (me.width * (1 - main.rightPercent)) + 'px';
         },
         setValue: function (value) {
             var me = this;

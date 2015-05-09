@@ -34,19 +34,19 @@ hui.define('hui_checkbox', ['hui_util', 'hui_control'], function () {
         getInput: function () {
             var me = this,
                 main = me.getMain(),
-                input = hui.cc(me.getClass('input'), main);
+                input = hui.f(me.getClass('input'), main);
             return input;
         },
         getIcon: function () {
             var me = this,
                 main = me.getMain(),
-                icon = hui.cc(me.getClass('icon'), main);
+                icon = hui.f(me.getClass('icon'), main);
             return icon;
         },
         getLabel: function () {
             var me = this,
                 main = me.getMain(),
-                icon = hui.cc(me.getClass('label'), main);
+                icon = hui.f(me.getClass('label'), main);
             return icon;
         },
         renderLabel: function () {

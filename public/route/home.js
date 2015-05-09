@@ -42,11 +42,11 @@ home.prototype = {
         // 注：还未执行bui.Control.init(),无法访问到me.getByFormname('home')!!!
         //me.getByFormname('home').addBacklogRow(me.model.get('backlog_list')[0]);
     },
-    initBehavior: function(clist) {
+    initBehavior: function(cc) {
         var me = this;
         
-        // bui.Master.get().clist.vModal2.show();
-        // me.clist.submit.onclick = bui.fn(me.onSubmit, me);
+        // bui.Master.get().cc.vModal2.show();
+        // me.cc.submit.onclick = bui.fn(me.onSubmit, me);
         var productList = me.getByFormname('product_list');
         var sprintList  = me.getByFormname('sprint_list' );
         var userList    = me.getByFormname('user_list' );

@@ -65,7 +65,7 @@ hui.define('hui_checklabel', ['hui_checkbox'], function () {
                 main = me.getMain(),
                 icon = me.getIcon(),
                 label = me.getLabel(),
-                textarea = hui.cc(me.getClass('textarea'), main);
+                textarea = hui.f(me.getClass('textarea'), main);
             me.setChecked(!!me.checked);
             icon.onclick = hui.fn(me.getClickHandler, me);
             icon.onselectstart = new Function('return false;');
@@ -89,7 +89,7 @@ hui.define('hui_checklabel', ['hui_checkbox'], function () {
         editLabel: function () {
             var me = this,
                 main = me.getMain(),
-                textarea = hui.cc(me.getClass('textarea'), main);
+                textarea = hui.f(me.getClass('textarea'), main);
             hui.addClass(main, me.getClass('edit'));
             if (String(me.getPresetValue()).indexOf('-') === 0) {
                 textarea.value = '';
@@ -104,8 +104,8 @@ hui.define('hui_checklabel', ['hui_checkbox'], function () {
             var me = this,
                 label_id = me.getPresetValue(),
                 main = me.getMain(),
-                label = hui.cc(me.getClass('label'), main),
-                textarea = hui.cc(me.getClass('textarea'), main),
+                label = hui.f(me.getClass('label'), main),
+                textarea = hui.f(me.getClass('textarea'), main),
                 value = textarea.value;
 
             if (value === '' && me.removeblank !== false) {
@@ -142,7 +142,7 @@ hui.define('hui_checklabel', ['hui_checkbox'], function () {
             var me = this,
                 label_id = me.getPresetValue(),
                 main = me.getMain(),
-                textarea = hui.cc(me.getClass('textarea'), main),
+                textarea = hui.f(me.getClass('textarea'), main),
                 value = textarea.value,
                 url_save = me.getUrlSave();
             if (url_save) {
@@ -166,7 +166,7 @@ hui.define('hui_checklabel', ['hui_checkbox'], function () {
         onesc: function () {
             var me = this,
                 main = me.getMain(),
-                textarea = hui.cc(me.getClass('textarea'), main);
+                textarea = hui.f(me.getClass('textarea'), main);
             textarea.value = textarea.getAttribute('old');
         },
         onenter: function () {
