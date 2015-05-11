@@ -33,7 +33,7 @@ hui.define('hui_radiobox', ['hui_checkbox'], function () {
 
     hui.Radiobox.prototype = {
         getTpl: function () {
-            return '<span class="#{1}"><span class="#{3}">〇</span><span class="#{2}">●</span><input type="radio" class="#{0}" style="display:none" /></span>';
+            return '<span class="{{1}}"><span class="{{3}}">〇</span><span class="{{2}}">●</span><input type="radio" class="{{0}}" style="display:none" /></span>';
         },
         /**
          * @name 渲染控件

@@ -841,7 +841,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
         IFRAME_CONTENT: [
             '<html><head></head><body><input type="text" id="save">',
             '<script type="text/javascript">',
-            'var loc = "#{0}";',
+            'var loc = "{{0}}";',
             'document.getElementById("save").value = loc;',
             'parent.hui.Locator.updateLocation(loc);',
             'parent.hui.Locator.switchToLocation(loc);<',
@@ -1043,7 +1043,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
 
             iframeDoc.open('text/html');
             iframeDoc.write(
-                me.IFRAME_CONTENT.replace('#{0}',
+                me.IFRAME_CONTENT.replace('{{0}}',
                     String(loc).replace(/\\/g, '\\\\').replace(/\"/g, '\\"'))); //'
             iframeDoc.close();
 
@@ -1389,7 +1389,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                 '<ul><li>If you typed the page address in the Address bar, make sure that it is spelled correctly.<br/></li>',
                 '<li>Open the <a href="#!/">home page</a>, and then look for links to the information you want.</li>',
                 '<li>Click the <a href="javascript:history.go(-1)">Back</a> button to try another link. </li>',
-                '</ul><p><br></p>HTTP 404 - File not found<br />Need any help? Please contact the Monsieur #{name}.<br /></div>'
+                '</ul><p><br></p>HTTP 404 - File not found<br />Need any help? Please contact the Monsieur {{name}}.<br /></div>'
             ].join(''), this.querystring);
             return str;
         },
@@ -1436,12 +1436,12 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                 '<ul><li>If you typed the page address in the Address bar, make sure that it is spelled correctly.<br/></li>',
                 '<li>Open the <a href="#!/">home page</a>, and then look for links to the information you want.</li>',
                 '<li>Click the <a href="javascript:history.go(-1)">Back</a> button to try another link. </li>',
-                '</ul><p><br></p>HTTP 404 - File not found<br />Need any help? Please contact the Monsieur #{name}.<br /></div>'
+                '</ul><p><br></p>HTTP 404 - File not found<br />Need any help? Please contact the Monsieur {{name}}.<br /></div>'
             ].join(''), this.querystring);
             return str;
         },
         getViewAsync: function (callback) {
-            callback && callback('Hello #{user}');
+            callback && callback('Hello {{user}}');
         }
     });
 

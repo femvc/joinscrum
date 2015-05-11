@@ -73,7 +73,7 @@ hui.define('hui_table', ['hui_util', 'hui_control'], function () {
          * @private
          */
         getTplTablePrefix: function (argument) {
-            return '<table cellpadding="0" cellspacing="0" border="0" width="#{0}" control="#{1}">';
+            return '<table cellpadding="0" cellspacing="0" border="0" width="{{0}}" control="{{1}}">';
         },
         /**
          * @name 默认的onclick事件执行函数, 不做任何事，容错
@@ -454,7 +454,7 @@ hui.define('hui_table', ['hui_util', 'hui_control'], function () {
                 thTextClass = me.getClass('thtext'),
                 sortClass = me.getClass('thsort'),
                 selClass = me.getClass('thsel'),
-                contentTpl = '<div class="#{0}">#{!1}</div>#{!2}',
+                contentTpl = '<div class="{{0}}">{{!1}}</div>{{!2}}',
                 contentHtml,
                 orderClass,
                 sortIconHtml,
@@ -498,7 +498,7 @@ hui.define('hui_table', ['hui_util', 'hui_control'], function () {
                     contentHtml,
                     sortIconHtml);
                 html.push(
-                hui.Control.format('<th id="#{0}" index="#{1}" #{2} style="width:#{3}px"><div class="#{4}">#{!5} #{!6}</div></th>',
+                hui.Control.format('<th id="{{0}}" index="{{1}}" {{2}} style="width:{{3}}px"><div class="{{4}}">{{!5}} {{!6}}</div></th>',
                         this.getTitleCellId(i),
                         i,
                         sortAction(field, i),
@@ -521,7 +521,7 @@ hui.define('hui_table', ['hui_util', 'hui_control'], function () {
             function sortAction(field, index) {
                 if (me.sortable && field.sortable) {
                     return hui.Control.format(
-                        ' onmouseover="#{0}" onmouseout="#{1}" onclick="#{2}" sortable="1"',
+                        ' onmouseover="{{0}}" onmouseout="{{1}}" onclick="{{2}}" sortable="1"',
                         'hui.Control.getById(\'' + me.id + '\').titleOverHandler(this)',
                         'hui.Control.getById(\'' + me.id + '\').titleOutHandler(this)',
                         'hui.Control.getById(\'' + me.id + '\').titleClickHandler(this)'
@@ -544,10 +544,10 @@ hui.define('hui_table', ['hui_util', 'hui_control'], function () {
 
 
         getTplSortIcon: function () {
-            return '<div class="#{0}"></div>';
+            return '<div class="{{0}}"></div>';
         },
         tplTipIcon: function () {
-            return '<div class="#{0}" #{1}></div>';
+            return '<div class="{{0}}" {{1}}></div>';
         },
 
         /**
@@ -709,7 +709,7 @@ hui.define('hui_table', ['hui_util', 'hui_control'], function () {
         },
 
         tplRowPrefix: function () {
-            return '<div id="#{0}" class="#{1}" onmouseover="#{2}" onmouseout="#{3}" onclick="#{4}">';
+            return '<div id="{{0}}" class="{{1}}" onmouseover="{{2}}" onmouseout="{{3}}" onclick="{{4}}">';
         },
 
         /**

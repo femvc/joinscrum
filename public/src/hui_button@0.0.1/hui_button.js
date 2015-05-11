@@ -33,7 +33,7 @@ hui.define('hui_button', ['hui_util', 'hui_control'], function () {
          * @name button的html模板
          * @private
          */
-        tplButton: '<span id="#{2}" class="#{1}">#{0}</span>',
+        tplButton: '<span id="{{2}}" class="{{1}}">{{0}}</span>',
 
         /**
          * @name 默认的onclick事件执行函数, 不做任何事，容错

@@ -53,7 +53,7 @@ hui.define('hui_checkbox', ['hui_util', 'hui_control'], function () {
             var me = this,
                 main = me.getMain(),
                 label = me.getLabel(),
-                tpl = '<span class="#{0}">#{1}</span>';
+                tpl = '<span class="{{0}}">{{1}}</span>';
             if (!label) {
                 hui.appendHTML(main, hui.Control.format(tpl,
                     me.getClass('label'),
@@ -65,7 +65,7 @@ hui.define('hui_checkbox', ['hui_util', 'hui_control'], function () {
             }
         },
         getTpl: function () {
-            return '<i class="#{1}"><input type="checkbox" class="#{0}" style="display:none" />✓&nbsp;&nbsp;&nbsp;</i>';
+            return '<i class="{{1}}"><input type="checkbox" class="{{0}}" style="display:none" />✓&nbsp;&nbsp;&nbsp;</i>';
         },
         /**
          * @name 渲染控件

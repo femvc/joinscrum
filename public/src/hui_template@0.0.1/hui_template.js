@@ -18,7 +18,7 @@ hui.define('hui_template', [], function () {
         /**
          * @name 解析模板字符串流[增加target]
          * @public
-         * @param {String} tplStr 模板字符串流tpl:<!-- target:mergeTest -->hello #{myName}!
+         * @param {String} tplStr 模板字符串流tpl:<!-- target:mergeTest -->hello {{myName}}!
          * @param {Object|string...} opts 提供相应数据的对象或多个字符串
          * @returns {String} 格式化后的字符串
          */
@@ -94,7 +94,7 @@ hui.define('hui_template', [], function () {
         /**
          * @name 依赖于me.originTargetContainer循环解析targetList中的target
          * @public
-         * @param {String} tplStr 模板字符串流tpl:<!-- target:mergeTest -->hello #{myName}!
+         * @param {String} tplStr 模板字符串流tpl:<!-- target:mergeTest -->hello {{myName}}!
          * @param {Object|String...} opts 提供相应数据的对象或多个字符串
          * @returns {String} 格式化后的字符串
          */
@@ -128,7 +128,7 @@ hui.define('hui_template', [], function () {
          * @public
          * @param {HTMLElement} targetContent  原始模板内容.
          * @param {Object}      model    数据模型
-         * @return {String} 替换掉#{varName}变量后的模板内容.
+         * @return {String} 替换掉{{varName}}变量后的模板内容.
          */
         merge: function (targetContent, model) {
             return hui.Template.parse(targetContent, model);
@@ -150,7 +150,7 @@ hui.define('hui_template', [], function () {
                     }
                     part = parts.shift();
                 }
-                
+
                 variable = cur;
                 if ('[object Function]' === toString.call(variable)) {
                     variable = variable(key);
@@ -174,7 +174,7 @@ hui.define('hui_template', [], function () {
 
                 return (undefined === variable ? '' : variable);
             }
-            
+
             source = String(source);
             var data = Array.prototype.slice.call(arguments, 1),
                 toString = Object.prototype.toString;
@@ -182,8 +182,8 @@ hui.define('hui_template', [], function () {
                 data = (data.length == 1 ?
                     /* ie 下 Object.prototype.toString.call(null) == '[object Object]' */
                     (opts !== null && (/\[object (Array|Object)\]/.test(toString.call(opts))) ? opts : data) : data);
-                
-                return source.replace(/#\{(.+?)\}/g, handler).replace(/\{\{(.+?)\}\}/g, handler);
+
+                return source.replace(/#\{(.+?)\}/g, handler).replace(/\{\{([^\{]+?)\}\}/g, handler);
             }
             return source;
         },
@@ -273,7 +273,7 @@ hui.define('hui_template', [], function () {
                         if (lineNum % 2 === 0) {
                             if (list[preQuot] === c) {
                                 t1.push(c);
-                                s1.push('#{' + t2.length + '}');
+                                s1.push('{{' + t2.length + '}}');
                                 t2.push(t1);
                                 t1 = [];
 
@@ -308,7 +308,18 @@ hui.define('hui_template', [], function () {
                     }
                     // 非值 notValue = true
                     else {
-                        if (c === '{' || c === '[') {
+                         if (c + list[i + 1] === '{{') {
+                            s1.push(' ');
+                            for (var j = i + 2; j < ilen; j++) {
+                                if (list[j] + list[j + 1] === '}}' ) {
+                                    i = j + 1;
+                                    break;
+                                }
+                                s1.push(list[j]);
+                            }
+                            s1.push(' ');
+                        }
+                        else if (c === '{' || c === '[') {
                             isJSON = true;
                             preBracket.push(c);
 
@@ -339,17 +350,6 @@ hui.define('hui_template', [], function () {
                             s2.push('=');
                             s1 = [];
                         }
-                        else if (c === '#' && list[i + 1] === '{') {
-                            s1.push(' ');
-                            for (var j = i + 2; j < ilen; j++) {
-                                if (list[j] === '}') {
-                                    i = j;
-                                    break;
-                                }
-                                s1.push(list[j]);
-                            }
-                            s1.push(' ');
-                        }
                         else {
                             s1.push(c);
                         }
@@ -360,7 +360,7 @@ hui.define('hui_template', [], function () {
             }
 
             if (t1.join('')) {
-                s1.push('#{' + t2.length + '}');
+                s1.push('{{' + t2.length + '}}');
                 t2.push(t1);
             }
 
@@ -468,7 +468,7 @@ hui.define('hui_template', [], function () {
                 ~'{['.indexOf(v.substr(0, 1)) ||
                 keyword[v] ||
                 v.replace(/^[a-zA-Z_]+[a-zA-Z0-9_]*/g, '') === '') {
-                value = hui.Template.getKeyValue(v);
+                value = hui.Template.getKeyValue(v, model, strMap);
             }
             // Exp
             else {
@@ -575,8 +575,8 @@ hui.define('hui_template', [], function () {
                     if (Object.prototype.toString.call(c) === '[object Array]') {
                         c = hui.Template.expCalculate(c, model, strMap);
                     }
-                    if (c && String(c).indexOf('#') === 0) {
-                        c = strMap[c.replace(/(^#{|}$)/g, '')];
+                    if (c && String(c).indexOf('{{') === 0) {
+                        c = strMap[c.replace(/(^{{|}}$)/g, '')];
                     }
                     list[i] = c;
                 }
@@ -752,12 +752,16 @@ hui.define('hui_template', [], function () {
             else if (~'"\''.indexOf(v.substr(0, 1))) {
                 value = v.replace(/(^[\"\']|[\"\']$)/g, ''); //"
             }
+            // {{0}}
+            else if (v.indexOf('{{') > -1) {
+                value = hui.Template.format(strMap[v.replace(/(^{{|}}$)/g, '')], model);
+                //value = v;
+            }
             // JSON
             else if (~'{['.indexOf(v.substr(0, 1))) {
-                v = v1.replace(/#{(\d+)}/g, function (match, key) {
+                v = v1.replace(/{{(\d+)}}/g, function (match, key) {
                     return strMap[key];
                 });
-                v = v.replace(/@@/g, '#').replace(/@_/g, '@');
 
                 value = (new Function('return ' + v))();
                 value = value;
@@ -765,11 +769,6 @@ hui.define('hui_template', [], function () {
             // null, undefined, true, false
             else if (keyword[v]) {
                 value = keyword[v].v;
-            }
-            // #{0}
-            else if (v.indexOf('#') > -1) {
-                value = hui.Template.format(strMap[v.replace(/(^#{|}$)/g, '')], model);
-                //value = v;
             }
             // model[v]
             else {
@@ -779,7 +778,7 @@ hui.define('hui_template', [], function () {
 
             return value;
         },
-        // b.a !== #{0}, b[#{1}] !== #{2}, a+b
+        // b.a !== {{0}}, b[{{1}}] !== {{2}}, a+b
         expTokenization: function (str) {
             var list,
                 pre,
@@ -807,15 +806,15 @@ hui.define('hui_template', [], function () {
                         s1.push(c);
                     }
                 }
-                else if (c === '#') {
+                else if (c + list[i+1] === '{{') {
                     if (s1.length) {
                         s2.push(s1);
                     }
                     s1 = [];
                     for (var j = i; j < ilen; j++) {
                         s1.push(list[j]);
-                        if (list[j] === '}') {
-                            i = j;
+                        if (list[j] + list[j+1] === '}}') {
+                            i = j + 1;
                             break;
                         }
                     }
@@ -1624,8 +1623,8 @@ hui.define('hui_template', [], function () {
                     model = nodeItem.getScopeChainModel();
 
                     v = str.split(' in ');
-                    k = v[0].replace(/(^\s+|\s+$)/g, '').replace(/(^#{|}$)/g, '');
-                    list = model[v[1].replace(/(^\s+|\s+$)/g, '').replace(/(^#{|}$)/g, '')];
+                    k = v[0].replace(/(^\s+|\s+$)/g, '').replace(/(^{{|}}$)/g, '');
+                    list = model[v[1].replace(/(^\s+|\s+$)/g, '').replace(/(^{{|}}$)/g, '')];
 
                     if (Object.prototype.toString.call(list) !== '[object Array]') {
                         throw new Error('SyntaxError: invalid "list" operand in "' + str + '"');
@@ -1658,13 +1657,14 @@ hui.define('hui_template', [], function () {
                         targetName = str.substring(0, str.indexOf('(')),
                         targetContent = hui.Template.getTarget(targetName);
                     //varStr = hui.Template.format(varStr, model);
-                    me.parse('<!--var:' + varStr + '-->', null, nodeItem);
-                    result = me.parse(targetContent, null, nodeItem);
+                    me.parse('<!--var:' + varStr + '-->', model, nodeItem);
+                    model = nodeItem.getScopeChainModel();
+                    result = me.parse(targetContent, model, nodeItem);
                 }
                 else if (tagName === 'nodetext') {
                     str = nodeItem.nodeValue;
                     model = nodeItem.getScopeChainModel();
-                    result = hui.Template.format(str, model);
+                    result = hui.Template.format(str, model).replace(/\{(\\*)\\\{/g, '{$1{').replace(/\}(\\*)\\\}/g, '}$1}');
                 }
                 else {
                     result = nodeItem.labelValue;

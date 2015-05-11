@@ -35,8 +35,8 @@ hui.define('hui_checklabel', ['hui_checkbox'], function () {
          */
         getCheckLabelTpl: function () {
             var tpl = [
-                '<input class="#{0}" old="#{1}" value="#{1}" onblur="hui.Control.getById(\'#{2}\').getBlurHandler()" type="text" size="5" /> '
-                //'<!--span class="#{2}">X</span-->'
+                '<input class="{{0}}" old="{{1}}" value="{{1}}" onblur="hui.Control.getById(\'{{2}}\').getBlurHandler()" type="text" size="5" /> '
+                //'<!--span class="{{2}}">X</span-->'
             ].join('');
             return tpl;
         },

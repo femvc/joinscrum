@@ -40,12 +40,12 @@ hui.define('hui_slider', ['hui_util', 'hui_draggable', 'hui_control'], function 
             var tpl =
                 '<div class="hui_slider_layer">' +
                 '    <div class="hui_slider_leftside">' +
-                '        <input type="text" class="hui_slider_leftinput" onblur="hui.Control.getById(\'#{0}\').setLeftValue(this.value)" />' +
+                '        <input type="text" class="hui_slider_leftinput" onblur="hui.Control.getById(\'{{0}}\').setLeftValue(this.value)" />' +
                 '        <span class="hui_slider_min" style="display:none;">0</span>' +
                 '    </div>' +
                 '    <div class="hui_slider_rightside">' +
                 '        <span class="hui_slider_max" style="display:none;">20</span>' +
-                '        <input type="text" class="hui_slider_rightinput" onblur="hui.Control.getById(\'#{0}\').setRightValue(this.value)" />' +
+                '        <input type="text" class="hui_slider_rightinput" onblur="hui.Control.getById(\'{{0}}\').setRightValue(this.value)" />' +
                 '    </div>' +
                 '    <div class="hui_slider_scrollbar">' +
                 '        <div class="hui_slider_inner">&nbsp;</div>' +
@@ -60,9 +60,9 @@ hui.define('hui_slider', ['hui_util', 'hui_draggable', 'hui_control'], function 
         },
         getTickTpl: function () {
             var tpl =
-                '<div class="hui_slider_unit" style="left:#{1}px;">' +
+                '<div class="hui_slider_unit" style="left:{{1}}px;">' +
                 '    <span class="hui_slider_line">|</span>' +
-                '    <span class="hui_slider_num">#{0}</span>' +
+                '    <span class="hui_slider_num">{{0}}</span>' +
                 '</div>';
             return tpl;
         },

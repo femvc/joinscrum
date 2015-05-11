@@ -169,7 +169,7 @@ hui.define('hui_textinput', ['hui_control', 'hui_util'], function () {
         renderInput: function () {
             var me = this,
                 main = me.getMain(),
-                tpl = '<input type="text" class="#{0}" />';
+                tpl = '<input type="text" class="{{0}}" />';
             if (me.useAgent) {
                 hui.appendHTML(main, hui.Control.format(tpl, me.getClass('text')));
             }
@@ -194,7 +194,7 @@ hui.define('hui_textinput', ['hui_control', 'hui_util'], function () {
         renderEye: function () {
             var me = this,
                 main = me.getMain(),
-                tpl = '<a href="#nogo" onmousedown="hui.Control.getById(\'#{1}\').onmousedown()" onmouseup="hui.Control.getById(\'#{1}\').onmouseup()" class="#{0}">Show</a>',
+                tpl = '<a href="#nogo" onmousedown="hui.Control.getById(\'{{1}}\').onmousedown()" onmouseup="hui.Control.getById(\'{{1}}\').onmouseup()" class="{{0}}">Show</a>',
                 elem = me.getEye();
             if (!elem) {
                 elem = hui.util.getDom(hui.Control.format(tpl, me.getClass('eye'), me.getId()))[0];
