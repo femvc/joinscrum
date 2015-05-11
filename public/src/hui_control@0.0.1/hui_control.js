@@ -1631,16 +1631,9 @@ hui.define('hui_control', [], function () {
     };
 
     hui.Control.format = function (source, opts) {
-        source = String(source);
-        var data = Array.prototype.slice.call(arguments, 1),
-            toString = Object.prototype.toString;
-        if (data.length) {
-            data = (data.length == 1 ?
-                /* ie 下 Object.prototype.toString.call(null) == '[object Object]' */
-                (opts !== null && (/\[object (Array|Object)\]/.test(toString.call(opts))) ? opts : data) : data);
-            return source.replace(/#\{(.+?)\}/g, function (match, key) {
-                var encode = String(key).indexOf('!') === 0,
-                    parts = key.replace(/^!/, '').split('.'),
+        function handler(match, key) {
+                var type = String(key).indexOf('!!') === 0 ? 'decode' : String(key).indexOf('!') === 0 ? '' : 'encode',
+                    parts = hui.Template.overloadOperator(key.replace(/^!!?/, '')).split('.'),
                     part = parts.shift(),
                     cur = data,
                     variable;
@@ -1654,15 +1647,42 @@ hui.define('hui_control', [], function () {
                     }
                     part = parts.shift();
                 }
-                variable = cur;
 
+                variable = cur;
                 if ('[object Function]' === toString.call(variable)) {
                     variable = variable(key);
                 }
-                return (undefined === variable ? '' : encode ? variable : hui.Control.encodehtml(variable));
-            });
-        }
-        return source;
+                if (undefined !== variable) {
+                    variable = String(variable);
+                    // encodeURIComponent not encode '
+                    var fr = '&|<|>| |\'|"|\\'.split('|'),
+                        to = '&amp;|&lt;|&gt;|&nbsp;|&apos;|&quot;|&#92;'.split('|');
+                    if (type === 'decode') {
+                        for (var i = fr.length - 1; i > -1; i--) {
+                            variable = variable.replace(new RegExp('\\' + to[i], 'ig'), fr[i]);
+                        }
+                    }
+                    else if (type === 'encode') {
+                        for (var i = 0, l = fr.length; i < l; i++) {
+                            variable = variable.replace(new RegExp('\\' + fr[i], 'ig'), to[i]);
+                        }
+                    }
+                }
+
+                return (undefined === variable ? '' : variable);
+            }
+
+            source = String(source);
+            var data = Array.prototype.slice.call(arguments, 1),
+                toString = Object.prototype.toString;
+            if (data.length) {
+                data = (data.length == 1 ?
+                    /* ie 下 Object.prototype.toString.call(null) == '[object Object]' */
+                    (opts !== null && (/\[object (Array|Object)\]/.test(toString.call(opts))) ? opts : data) : data);
+
+                return source.replace(/#\{(.+?)\}/g, handler).replace(/\{\{([^\{]+?)\}\}/g, handler);
+            }
+            return source;
     };
 
     hui.Control.formatDate = function (date, fmt) {
