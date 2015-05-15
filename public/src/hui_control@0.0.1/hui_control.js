@@ -850,7 +850,7 @@ hui.define('hui_control', [], function () {
                         me.initModel();
 
                         next && next();
-                    }, uiObj);
+                    });
                     que.push(function (next) {
                         var me = this;
                         var main = me.getMain();
@@ -859,7 +859,7 @@ hui.define('hui_control', [], function () {
                     });
                 }
                 else if (uiObj.initModelAsync && uiObj.initModelMethod !== 'sync' && uiObj.initModelMethod !== 'skip') {
-                    que.push(uiObj.initModelAsync, uiObj);
+                    que.push(uiObj.initModelAsync);
                     que.push(function (next) {
                         var me = uiObj;
                         var main = me.getMain();
