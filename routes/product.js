@@ -74,12 +74,19 @@ exports.list = function (req, res, next) {
 
         var uid = req.sessionStore.user[req.sessionID];
         var result = [];
+        var member;
+        var observer;
         for (var i = 0, len = doc.length; i < len; i++) {
-            if (doc && doc[i] &&
-                ((doc[i].product_member && doc[i].product_member.indexOf && (',' + doc[i].product_member.join(',') + ',').indexOf(',' + uid + ',') !== -1) ||
-                    (doc[i].product_observer && doc[i].product_observer.indexOf && (',' + doc[i].product_observer.join(',') + ',').indexOf(',' + uid + ',') !== -1)
-                )) {
-                result.push(doc[i]);
+            if (doc && doc[i]) {
+                member = doc[i].product_member;
+                observer = doc[i].product_observer;
+                if ((member && member.join && (',' + member.join(',') + ',').indexOf(',' + uid + ',') !== -1) ||
+                    (observer && observer.join && (',' + observer.join(',') + ',').indexOf(',' + uid + ',') !== -1) ||
+                    (member && member.indexOf && (',' + member + ',').indexOf(',' + uid + ',') !== -1) ||
+                    (observer && observer.indexOf && (',' + observer + ',').indexOf(',' + uid + ',') !== -1)
+                ) {
+                    result.push(doc[i]);
+                }
             }
         }
 
@@ -155,8 +162,8 @@ exports.save = function (req, res, next) {
         product_id: req.paramlist.product_id
     }, function (doc) {
         if (doc && ((!doc.product_member && !doc.product_observer) || (
-            doc.product_member && doc.product_member.indexOf(req.sessionStore.user[req.sessionID]) !== -1 ) || ( 
-            doc.product_observer && doc.product_observer.indexOf(req.sessionStore.user[req.sessionID]) !== -1))) {
+                doc.product_member && doc.product_member.indexOf(req.sessionStore.user[req.sessionID]) !== -1) || (
+                doc.product_observer && doc.product_observer.indexOf(req.sessionStore.user[req.sessionID]) !== -1))) {
             dataModel.update({
                 product_id: req.paramlist.product_id
             }, {
