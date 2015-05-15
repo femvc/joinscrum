@@ -827,7 +827,7 @@ hui.define('hui_control', [], function () {
             var que = new hui.Flow(); // 注：可以参照hui_flow.js文件。非常简单，不到30行代码
             if (elem.getAttribute && !elem.getAttribute('ctrid')) {
                 que.push(function (next) {
-                    var me = this;
+                    var me = uiObj;
                     var main = me.getMain();
                     // 默认设置value
                     if (uiObj.value !== undefined) {
@@ -839,14 +839,14 @@ hui.define('hui_control', [], function () {
                     me.setSize && me.setSize();
 
                     next && next();
-                }, uiObj);
+                });
             }
 
             // 初始化Model
             if (elem.getAttribute && elem.getAttribute('_initModel') != 'true') {
                 if (uiObj.initModel && uiObj.initModelMethod !== 'async' && uiObj.initModelMethod !== 'skip') {
                     que.push(function (next) {
-                        var me = this;
+                        var me = uiObj;
                         me.initModel();
 
                         next && next();
@@ -856,16 +856,16 @@ hui.define('hui_control', [], function () {
                         var main = me.getMain();
                         main.getAttribute('_initModel', 'true');
                         next && next();
-                    }, uiObj);
+                    });
                 }
                 else if (uiObj.initModelAsync && uiObj.initModelMethod !== 'sync' && uiObj.initModelMethod !== 'skip') {
                     que.push(uiObj.initModelAsync, uiObj);
                     que.push(function (next) {
-                        var me = this;
+                        var me = uiObj;
                         var main = me.getMain();
                         main.getAttribute('_initModel', 'true');
                         next && next();
-                    }, uiObj);
+                    });
                 }
             }
 
@@ -873,24 +873,24 @@ hui.define('hui_control', [], function () {
             if (elem.getAttribute && elem.getAttribute('_initView') != 'true') {
                 if (uiObj.getView && uiObj.getViewMethod !== 'async' && uiObj.getViewMethod !== 'skip') {
                     que.push(function (next) {
-                        var me = this;
+                        var me = uiObj;
                         var main = me.getMain();
                         var tpl = me.getView();
                         var mainHTML = me.model && me.model.getData ? hui.Master.getExtClass('hui.Template').merge(tpl, me.model.getData()) : tpl;
                         hui.Control.prototype.setInnerHTML(main, mainHTML);
 
                         next && next();
-                    }, uiObj);
+                    });
                     que.push(function (next) {
-                        var me = this;
+                        var me = uiObj;
                         var main = me.getMain();
                         main.getAttribute('_initView', 'true');
                         next && next();
-                    }, uiObj);
+                    });
                 }
                 else if (uiObj.getViewAsync && uiObj.getViewMethod !== 'sync' && uiObj.getViewMethod !== 'skip') {
                     que.push(function (next) {
-                        var me = this;
+                        var me = uiObj;
                         me.getViewAsync(function (tpl) {
                             var main = me.getMain();
                             var mainHTML = me.model && me.model.getData ? hui.Master.getExtClass('hui.Template').merge(tpl, me.model.getData()) : tpl;
@@ -898,19 +898,19 @@ hui.define('hui_control', [], function () {
 
                             next && next();
                         });
-                    }, uiObj);
+                    });
                     que.push(function (next) {
-                        var me = this;
+                        var me = uiObj;
                         var main = me.getMain();
                         main.getAttribute('_initView', 'true');
 
                         next && next();
-                    }, uiObj);
+                    });
                 }
             }
 
             que.push(function (next) {
-                var me = this;
+                var me = uiObj;
                 var main = me.getMain();
                 // 动态生成control需手动维护me.parentControl
                 // 回溯找到父控件,若要移动控件,则需手动维护parentControl属性!!
@@ -930,14 +930,14 @@ hui.define('hui_control', [], function () {
                     }
                 }
                 next && next();
-            }, uiObj);
+            });
 
             // 1. initView()会在render调用父类的render时自动调用，
             // 2. 不管是批量hui.Control.init()还是hui.Control.create(), 都会通过enterControl来执行render
             // 3. initBehavior()会在后面执行
             if (elem.getAttribute && elem.getAttribute('_rendered') != 'true') {
                 que.push(function (next) {
-                    var me = this;
+                    var me = uiObj;
                     var main = me.getMain();
                     me.render && me.render();
 
@@ -948,11 +948,11 @@ hui.define('hui_control', [], function () {
                     }
 
                     next && next();
-                }, uiObj);
+                });
             }
             if (elem.getAttribute && elem.getAttribute('_initBehavior') != 'true') {
                 que.push(function (next) {
-                    var me = this;
+                    var me = uiObj;
                     if (me.initBehaviorByTree) {
                         me.initBehaviorByTree();
                     }
@@ -961,14 +961,14 @@ hui.define('hui_control', [], function () {
                     }
 
                     next && next();
-                }, uiObj);
+                });
             }
             que.push(function (next) {
-                var me = this;
+                var me = uiObj;
                 me.finish && me.finish();
 
                 callback && callback();
-            }, uiObj);
+            });
 
             que.next();
         },
