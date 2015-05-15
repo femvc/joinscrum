@@ -103,41 +103,75 @@ hui.define('hui_control', [], function () {
     hui.EventDispatcher.prototype.constructor = hui.EventDispatcher;
 
     hui.Flow = function () {
-        this.que = []; // 注：存放要调用的函数列表
-        this.id = Math.random(); // 注：仅用于标示，不会被调用（即使删掉也没什么影响）
-    };
+        var me = this;
+        me.que = [hui.fn(me.endFlow, me)]; // 注：存放要调用的函数列表
+        me.id = hui.Flow.getIndex(); // 注：仅用于标示，不会被调用（即使删掉也没什么影响）
+        me.parentflow = [];
+        /**  
+         * @name 开始执行异步队列
+         * @param {Function} callback 嵌套时的回调函数，其实就是hui.Flow.prototype.next
+         * @return {void}
+         */
+        me.next = function (callback) {
+            var args = [].slice.call(arguments, 0);
 
+            // console.log(me.id);
+            if (me.que.length > 0) {
+                var fn = me.que.shift();
+                fn.apply(null, args);
+            }
+        };
+        me.next._isFlowPrivate = hui.Flow.getIdentity();
+        me.next.mainFlow = me;
+
+    };
+    hui.Flow.getIdentity = (function () {
+        var guid = new Date().toString() + Math.random();
+        return function (formname) {
+            return guid;
+        };
+    })();
+    hui.Flow.getIndex = (function () {
+        var guid = 1;
+        return function (formname) {
+            return guid++;
+        };
+    })();
     /**  
      * @name 添加需要异步执行的函数
      * @param {Function} fn 需要异步执行的函数
      * @return {this} 返回主体以便于后续操作
      */
-    hui.Flow.prototype.push = function (fn, target) {
-        var me = this,
-            _fn = target ? hui.fn(fn, target) : fn,
-            callback = hui.fn(me.next, me);
+    hui.Flow.prototype.push = function (fn) {
+        var me = this;
 
-        fn = function () {
-            _fn(callback);
-        };
-        me.que.push(fn);
+        if (fn && fn._isFlowPrivate === hui.Flow.getIdentity()) {
+            var endFlow = me.que.pop();
+            me.que.push(fn);
+            me.que.push(endFlow);
+            if (fn.mainFlow) {
+                fn.mainFlow.parentflow.push(me);
+            }
+        }
+        else {
+            var callback = hui.fn(me.next, me);
+            callback._isFlowPrivate = hui.Flow.getIdentity();
+
+            var endFlow = me.que.pop();
+            me.que.push(function () {
+                fn.apply(me, [callback].concat([].slice.call(arguments, 0)));
+            });
+            me.que.push(endFlow);
+        }
 
         return me;
     };
-
-    /**  
-     * @name 开始执行异步队列
-     * @param {Function} callback 嵌套时的回调函数，其实就是hui.Flow.prototype.next
-     * @return {void}
-     */
-    hui.Flow.prototype.next = function (callback) {
-        if (callback) {
-            callback();
-        }
-
-        if (this.que.length > 0) {
-            var fn = this.que.shift();
-            fn();
+    hui.Flow.prototype.endFlow = function () {
+        var me = this;
+        if (me.parentflow) {
+            while (me.parentflow.length) {
+                me.parentflow.pop().next();
+            }
         }
     };
 
@@ -1509,7 +1543,7 @@ hui.define('hui_control', [], function () {
 
         if (formname) {
             formname = String(formname);
-            
+
             // 注掉原因：不应该找自身！！
             // // 先查找自身 
             // childNodes = parentControl && parentControl.cc ? parentControl.cc : [];
@@ -1543,9 +1577,9 @@ hui.define('hui_control', [], function () {
             min = Number.MAX_VALUE,
             deep,
             ctr;
-        
+
         parentNode = parentNode && typeof parentNode === 'object' ? parentNode : hui.window;
-        
+
         list = hui.Control.getByFormnameAll(formname, parentNode);
         // 注：默认返回直接子级第一个,直接子级没有才会返回最近子级的第一个
         // 注：要找到所有直接子级等于formname的可以用getByFormnameAll(formname, parentNode, false)
@@ -1578,7 +1612,7 @@ hui.define('hui_control', [], function () {
             }
         }
     };
-    
+
     /**
      * @name 为目标元素添加className
      * @public
@@ -1632,57 +1666,57 @@ hui.define('hui_control', [], function () {
 
     hui.Control.format = function (source, opts) {
         function handler(match, key) {
-                var type = String(key).indexOf('!!') === 0 ? 'decode' : String(key).indexOf('!') === 0 ? '' : 'encode',
-                    parts = hui.Template.overloadOperator(key.replace(/^!!?/, '')).split('.'),
-                    part = parts.shift(),
-                    cur = data,
-                    variable;
-                while (part) {
-                    if (cur[part] !== undefined) {
-                        cur = cur[part];
-                    }
-                    else {
-                        cur = undefined;
-                        break;
-                    }
-                    part = parts.shift();
+            var type = String(key).indexOf('!!') === 0 ? 'decode' : String(key).indexOf('!') === 0 ? '' : 'encode',
+                parts = hui.Template.overloadOperator(key.replace(/^!!?/, '')).split('.'),
+                part = parts.shift(),
+                cur = data,
+                variable;
+            while (part) {
+                if (cur[part] !== undefined) {
+                    cur = cur[part];
                 }
-
-                variable = cur;
-                if ('[object Function]' === toString.call(variable)) {
-                    variable = variable(key);
+                else {
+                    cur = undefined;
+                    break;
                 }
-                if (undefined !== variable) {
-                    variable = String(variable);
-                    // encodeURIComponent not encode '
-                    var fr = '&|<|>| |\'|"|\\'.split('|'),
-                        to = '&amp;|&lt;|&gt;|&nbsp;|&apos;|&quot;|&#92;'.split('|');
-                    if (type === 'decode') {
-                        for (var i = fr.length - 1; i > -1; i--) {
-                            variable = variable.replace(new RegExp('\\' + to[i], 'ig'), fr[i]);
-                        }
-                    }
-                    else if (type === 'encode') {
-                        for (var i = 0, l = fr.length; i < l; i++) {
-                            variable = variable.replace(new RegExp('\\' + fr[i], 'ig'), to[i]);
-                        }
-                    }
-                }
-
-                return (undefined === variable ? '' : variable);
+                part = parts.shift();
             }
 
-            source = String(source);
-            var data = Array.prototype.slice.call(arguments, 1),
-                toString = Object.prototype.toString;
-            if (data.length) {
-                data = (data.length == 1 ?
-                    /* ie 下 Object.prototype.toString.call(null) == '[object Object]' */
-                    (opts !== null && (/\[object (Array|Object)\]/.test(toString.call(opts))) ? opts : data) : data);
-
-                return source.replace(/#\{(.+?)\}/g, handler).replace(/\{\{([^\{]+?)\}\}/g, handler);
+            variable = cur;
+            if ('[object Function]' === toString.call(variable)) {
+                variable = variable(key);
             }
-            return source;
+            if (undefined !== variable) {
+                variable = String(variable);
+                // encodeURIComponent not encode '
+                var fr = '&|<|>| |\'|"|\\'.split('|'),
+                    to = '&amp;|&lt;|&gt;|&nbsp;|&apos;|&quot;|&#92;'.split('|');
+                if (type === 'decode') {
+                    for (var i = fr.length - 1; i > -1; i--) {
+                        variable = variable.replace(new RegExp('\\' + to[i], 'ig'), fr[i]);
+                    }
+                }
+                else if (type === 'encode') {
+                    for (var i = 0, l = fr.length; i < l; i++) {
+                        variable = variable.replace(new RegExp('\\' + fr[i], 'ig'), to[i]);
+                    }
+                }
+            }
+
+            return (undefined === variable ? '' : variable);
+        }
+
+        source = String(source);
+        var data = Array.prototype.slice.call(arguments, 1),
+            toString = Object.prototype.toString;
+        if (data.length) {
+            data = (data.length == 1 ?
+                /* ie 下 Object.prototype.toString.call(null) == '[object Object]' */
+                (opts !== null && (/\[object (Array|Object)\]/.test(toString.call(opts))) ? opts : data) : data);
+
+            return source.replace(/#\{(.+?)\}/g, handler).replace(/\{\{([^\{]+?)\}\}/g, handler);
+        }
+        return source;
     };
 
     hui.Control.formatDate = function (date, fmt) {
