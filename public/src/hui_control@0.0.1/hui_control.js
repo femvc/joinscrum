@@ -852,7 +852,7 @@ hui.define('hui_control', [], function () {
                         next && next();
                     });
                     que.push(function (next) {
-                        var me = this;
+                        var me = uiObj;
                         var main = me.getMain();
                         main.getAttribute('_initModel', 'true');
                         next && next();
