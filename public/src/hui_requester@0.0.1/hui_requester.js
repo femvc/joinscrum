@@ -268,7 +268,8 @@ hui.define('hui_requester', [], function () {
                         querystring = querystring + '&' + str.join('&');
                     }
                     else {
-                        querystring = querystring + '&' + data;
+                        // user_list?& Nginx will down!!
+                        querystring = querystring + (data ? '&' + data : '');
                     }
 
                     // 使用GET方式提交
