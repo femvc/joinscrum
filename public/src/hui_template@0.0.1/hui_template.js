@@ -308,10 +308,10 @@ hui.define('hui_template', [], function () {
                     }
                     // 非值 notValue = true
                     else {
-                         if (c + list[i + 1] === '{{') {
+                        if (c + list[i + 1] === '{{') {
                             s1.push(' ');
                             for (var j = i + 2; j < ilen; j++) {
-                                if (list[j] + list[j + 1] === '}}' ) {
+                                if (list[j] + list[j + 1] === '}}') {
                                     i = j + 1;
                                     break;
                                 }
@@ -464,8 +464,8 @@ hui.define('hui_template', [], function () {
                 v = v1;
             // Number
             if (v.replace(/^[+\-]?(\d+\.)?\d+/g, '') === '' ||
-                ~'"\''.indexOf(v.substr(0, 1)) ||
-                ~'{['.indexOf(v.substr(0, 1)) ||
+                '"\''.indexOf(v.substr(0, 1)) !== -1 ||
+                '{['.indexOf(v.substr(0, 1)) !== -1 ||
                 keyword[v] ||
                 v.replace(/^[a-zA-Z_]+[a-zA-Z0-9_]*/g, '') === '') {
                 value = hui.Template.getKeyValue(v, model, strMap);
@@ -806,14 +806,14 @@ hui.define('hui_template', [], function () {
                         s1.push(c);
                     }
                 }
-                else if (c + list[i+1] === '{{') {
+                else if (c + list[i + 1] === '{{') {
                     if (s1.length) {
                         s2.push(s1);
                     }
                     s1 = [];
                     for (var j = i; j < ilen; j++) {
                         s1.push(list[j]);
-                        if (list[j] + list[j+1] === '}}') {
+                        if (list[j] + list[j + 1] === '}}') {
                             i = j + 1;
                             break;
                         }
@@ -1624,7 +1624,7 @@ hui.define('hui_template', [], function () {
 
                     v = str.split(' in ');
                     k = v[0].replace(/(^\s+|\s+$)/g, '').replace(/(^{{|}}$)/g, '');
-                    list = model[v[1].replace(/(^\s+|\s+$)/g, '').replace(/(^{{|}}$)/g, '')];
+                    list = hui.Template.getExpValue(v[1].replace(/(^\s+|\s+$)/g, '').replace(/(^{{|}}$)/g, ''), model);
 
                     if (Object.prototype.toString.call(list) !== '[object Array]') {
                         throw new Error('SyntaxError: invalid "list" operand in "' + str + '"');
