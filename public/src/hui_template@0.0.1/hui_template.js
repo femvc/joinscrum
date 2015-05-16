@@ -1508,14 +1508,14 @@ hui.define('hui_template', [], function () {
                 else if (token.nodeType == 'endTag') {
                     if (!me.typeCloseSelf[token.tagName]) {
 
-                        if (token.tagName == curentParent.tagName) {
-                            curentParent = curentParent.parentNode;
-                        }
-                        else if (token.tagName == 'if' && ~',if,elif,else,'.indexOf(',' + curentParent.tagName)) {
+                         if (token.tagName == 'if' && ~',if,elif,else,'.indexOf(',' + curentParent.tagName)) {
                             parentElem = curentParent.parentNode;
                             if (parentElem.tagName == 'ifif') {
                                 curentParent = parentElem.parentNode;
                             }
+                        }
+                        else if (token.tagName == curentParent.tagName) {
+                            curentParent = curentParent.parentNode;
                         }
                         // Only deal with typeBlock!
                         else if (me.typeBlock[token.tagName]) {
