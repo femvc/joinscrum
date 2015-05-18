@@ -169,7 +169,7 @@ if (hui === undefined) {
     };
 
 
-    hui.define.checkLeft = function () {
+    hui.define.left = function () {
         var left = [];
         var list = hui.define.modules;
         var load = {};
