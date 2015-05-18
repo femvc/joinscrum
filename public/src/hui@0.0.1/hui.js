@@ -167,6 +167,26 @@ if (hui === undefined) {
         }
         return module;
     };
+
+
+    hui.define.checkLeft = function () {
+        var left = [];
+        var list = hui.define.modules;
+        var load = {};
+        for (var i = 0, len = list.length; i < len; i++) {
+            left = left.concat(hui.define.modules[i].left);
+            load[hui.define.modules[i].name] = 1;
+        }
+        list = left;
+        left = [];
+        for (var i = 0, len = list.length; i < len; i++) {
+            if (!load[list[i]]) {
+                left.push(list[i]);
+                load[list[i]] = 1;
+            }
+        }
+        return left.join(',');
+    };
 }
 
 hui.define('hui', [], function () {
