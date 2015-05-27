@@ -803,7 +803,7 @@ hui.define('hui_control', [], function () {
         //     if (typeof view === 'function') {
         //         view = view();
         //     }
-        //     view = hui.Master.getExtClass('hui.Template').getTarget(String(view));
+        //     view = hui.Control.getExtClass('hui.Template').getTarget(String(view));
 
         //     return view;
         // },
@@ -876,7 +876,7 @@ hui.define('hui_control', [], function () {
                         var me = uiObj;
                         var main = me.getMain();
                         var tpl = me.getView();
-                        var mainHTML = me.model && me.model.getData ? hui.Master.getExtClass('hui.Template').merge(tpl, me.model.getData()) : tpl;
+                        var mainHTML = me.model && me.model.getData ? hui.Control.getExtClass('hui.Template').merge(tpl, me.model.getData()) : tpl;
                         hui.Control.prototype.setInnerHTML(main, mainHTML);
 
                         next && next();
@@ -893,7 +893,7 @@ hui.define('hui_control', [], function () {
                         var me = uiObj;
                         me.getViewAsync(function (tpl) {
                             var main = me.getMain();
-                            var mainHTML = me.model && me.model.getData ? hui.Master.getExtClass('hui.Template').merge(tpl, me.model.getData()) : tpl;
+                            var mainHTML = me.model && me.model.getData ? hui.Control.getExtClass('hui.Template').merge(tpl, me.model.getData()) : tpl;
                             hui.Control.prototype.setInnerHTML(main, mainHTML);
 
                             next && next();
