@@ -1508,7 +1508,7 @@ hui.define('hui_template', [], function () {
                 else if (token.nodeType == 'endTag') {
                     if (!me.typeCloseSelf[token.tagName]) {
 
-                         if (token.tagName == 'if' && ~',if,elif,else,'.indexOf(',' + curentParent.tagName)) {
+                        if (token.tagName == 'if' && ~',if,elif,else,'.indexOf(',' + curentParent.tagName)) {
                             parentElem = curentParent.parentNode;
                             if (parentElem.tagName == 'ifif') {
                                 curentParent = parentElem.parentNode;
@@ -1618,13 +1618,37 @@ hui.define('hui_template', [], function () {
                     }
                 }
                 else if (tagName === 'for') {
-                    str = nodeItem.nodeValue;
                     var scopeChain = nodeItem.scopeChain;
+                    str = nodeItem.nodeValue;
                     model = nodeItem.getScopeChainModel();
 
                     v = str.split(' in ');
                     k = v[0].replace(/(^\s+|\s+$)/g, '').replace(/(^{{|}}$)/g, '');
-                    list = hui.Template.getExpValue(v[1].replace(/(^\s+|\s+$)/g, '').replace(/(^{{|}}$)/g, ''), model);
+                    var vname = v[1].replace(/(^\s+|\s+$)/g, '').replace(/(^{{|}}$)/g, '');
+                    var str2;
+                    var start;
+                    var end;
+                    var step = 1;
+                    var tail;
+                    if (vname.indexOf('..') !== -1) {
+                        if (vname.indexOf('...') !== -1) {
+                            tail = true;
+                            vname = vname.replace('...', '..');
+                        }
+                        str2 = vname.split(' step ');
+                        step = Number((str2[1] ? str2[1].replace(/\s/g, '') : step) || step);
+
+                        start = Number(str2[0].split('..')[0]);
+                        end = Number(str2[0].split('..')[1]) + (tail ? step : 0);
+                        list = [];
+                        for (var i = start; i < end; i += step) {
+                            list.push(i);
+                        }
+                    }
+                    else {
+                        list = hui.Template.getExpValue(vname, model);
+                    }
+
 
                     if (Object.prototype.toString.call(list) !== '[object Array]') {
                         throw new Error('SyntaxError: invalid "list" operand in "' + str + '"');
