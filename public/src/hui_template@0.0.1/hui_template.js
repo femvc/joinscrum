@@ -1441,7 +1441,7 @@ hui.define('hui_template', [], function () {
                     token = {
                         tagName: 'comment',
                         nodeValue: nodeValue,
-                        labelValue: nodeValue,
+                        labelValue: '<!--' + nodeValue + '-->',
                         nodeType: 'selfClose'
                     };
                     tokenserial.push(hui.Template.overloadTagName(token));
