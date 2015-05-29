@@ -1629,7 +1629,7 @@ hui.define('hui_template', [], function () {
                     var start;
                     var end;
                     var step = 1;
-                    var tail;
+                    var tail = false;
                     if (vname.indexOf('..') !== -1) {
                         if (vname.indexOf('...') !== -1) {
                             tail = true;
@@ -1639,9 +1639,9 @@ hui.define('hui_template', [], function () {
                         step = Number((str2[1] ? str2[1].replace(/\s/g, '') : step) || step);
 
                         start = Number(str2[0].split('..')[0]);
-                        end = Number(str2[0].split('..')[1]) + (tail ? step : 0);
+                        end = Number(str2[0].split('..')[1]);
                         list = [];
-                        for (var i = start; i < end; i += step) {
+                        for (var i = start; i < end || (tail && i === end); i += step) {
                             list.push(i);
                         }
                     }
