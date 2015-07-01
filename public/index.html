@@ -25,7 +25,7 @@
             // Requester.get('/ue_api/internal/account/get_uid?rand=' + Math.random(), {
             //     onsuccess: function (result) {
             //         if (result && !result[0] && result[1]) {
-            //             document.getElementById('uid').innerHTML = String(result[1]);
+            //             hui.g('uid').innerHTML = String(result[1]);
             //             hui.f('link').style.display = 'block';
             //         }
             //     }
@@ -37,18 +37,18 @@
             initPageLogin();
             initPageIndex();
 
-            hui.Template.parseTemplate(document.getElementById('history').innerHTML);
+            hui.Template.parseTemplate(hui.g('history').innerHTML);
 
             hui.Action.start();
         };
         function showTab(tab, main) {
-            document.getElementById('login'    ).style.display = 'none';
-            document.getElementById('index'    ).style.display = 'none';
-            document.getElementById('history'  ).style.display = 'none';
+            hui.g('login'    ).style.display = 'none';
+            hui.g('index'    ).style.display = 'none';
+            hui.g('history'  ).style.display = 'none';
             
 
             main = main || tab;
-            document.getElementById(main).style.display = 'block';
+            hui.g(main).style.display = 'block';
         }
 
         //-->
@@ -368,13 +368,13 @@
                             showTab('index');
 
                             if (hui.getCookie('include_deleted') === 'true') {
-                                document.getElementById('include_deleted').checked = 'checked';
+                                hui.g('include_deleted').checked = 'checked';
                             }
                             if (hui.getCookie('include_done') === 'true') {
-                                document.getElementById('include_done').checked = 'checked';
+                                hui.g('include_done').checked = 'checked';
                             }
                             if (hui.getCookie('include_burndown') === 'true') {
-                                document.getElementById('include_burndown').checked = 'checked';
+                                hui.g('include_burndown').checked = 'checked';
                             }
                             
                             me.getSprintData(function(){
@@ -389,7 +389,7 @@
                                 me.switchProduct();
 
                                 var user = me.getUserItem(hui.getCookie('mid'));
-                                document.getElementById('welcome_user').innerHTML = user.realname;
+                                hui.g('welcome_user').innerHTML = user.realname;
                                 
                             });
                             //me.switchProduct();
@@ -415,7 +415,7 @@
                             me.model.remove('task_list');
                             me.model.remove('taskindex_list');
 
-                            var include_done = document.getElementById('include_done').checked ? '&include_done=yes' : '';
+                            var include_done = hui.g('include_done').checked ? '&include_done=yes' : '';
                             Requester.get('/ue_api/internal/sprint_list?product_id=' + product_id + include_done, {
                                 onsuccess: function (data) {
                                     me.model.set('sprint_list'   , _.sortBy(data[1].items, 'sprint_index'));
@@ -804,9 +804,9 @@
                                 if (String(taskValue.task_deleted) === 'deleted') {
                                     taskboard.deleteTask(taskValue);
                                 }
-                                else if (document.getElementById('task_'+taskValue.task_id)) {
+                                else if (hui.g('task_'+taskValue.task_id)) {
                                     taskboard.updateTask(taskValue);
-                                    hui.removeClass(document.getElementById('task_'+taskValue.task_id), 'deleted');
+                                    hui.removeClass(hui.g('task_'+taskValue.task_id), 'deleted');
                                 }
                                 else {
                                     taskboard.addTaskRow(taskValue);
@@ -831,7 +831,7 @@
                         saveTaskIndex: function (taskValue) {
                             var me = this,
                                 task_id = taskValue.task_id,
-                                backlogItem = document.getElementById('task_' + task_id).parentNode,
+                                backlogItem = hui.g('task_' + task_id).parentNode,
                                 str = backlogItem.id.split('_'),
                                 task_status = str[0],
                                 backlog_id = str[1],
@@ -886,7 +886,7 @@
                                 last_log = data[1][0] ? data[1][0] : {_id: '0'};
                             
                             if (task_lastmodify && task_lastmodify !== String(last_log._id)) {
-                                document.getElementById('needsUpdate').style.display = 'block';
+                                hui.g('needsUpdate').style.display = 'block';
                             }
                             else {            
                                 hui.setCookie('task_lastmodify', last_log._id);
