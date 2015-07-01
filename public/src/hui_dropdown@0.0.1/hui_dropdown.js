@@ -46,7 +46,7 @@ hui.define('hui_dropdown', ['hui_util', 'hui_control'], function () {
         getTitle: function () {
             var me = this,
                 main = me.getMain(),
-                title_text = hui.f(me.getClass('title_text'), main);
+                title_text = hui.fn(me.getClass('title_text'), main);
             if (!title_text) {
                 var title = document.createElement('DIV');
                 title.className = me.getClass('title');
@@ -54,14 +54,14 @@ hui.define('hui_dropdown', ['hui_util', 'hui_control'], function () {
                 main.appendChild(title);
                 main.insertBefore(title, main.childNodes[0]);
 
-                title_text = hui.f(me.getClass('title_text'), title);
+                title_text = hui.fn(me.getClass('title_text'), title);
             }
             return title_text;
         },
         getOptionContainer: function () {
             var me = this,
                 main = me.getMain(),
-                optionContainer = hui.f(me.getClass('options'), main);
+                optionContainer = hui.fn(me.getClass('options'), main);
             if (!optionContainer) {
                 optionContainer = document.createElement('DIV');
                 optionContainer.className = me.getClass('options');
@@ -119,7 +119,7 @@ hui.define('hui_dropdown', ['hui_util', 'hui_control'], function () {
                     me.hideAllOptions();
                     hui.addClass(main, hui.Dropdown.expandClassName);
                     if (me.size && me.size.scrollTop && !me.size.doscrollTop) {
-                        hui.f('hui_dropdown_options', main).scrollTop = me.size.scrollTop;
+                        hui.fn('hui_dropdown_options', main).scrollTop = me.size.scrollTop;
                         me.size.doscrollTop = true;
                     }
                     hui.off(document.body, 'click', me.showOptions);
