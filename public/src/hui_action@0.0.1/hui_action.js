@@ -1,12 +1,11 @@
 'use strict';
-//   __  __   __  __    _____   ______   ______   __  __   _____     
-//  /\ \/\ \ /\ \/\ \  /\___ \ /\__  _\ /\  _  \ /\ \/\ \ /\  __`\   
-//  \ \ \_\ \\ \ \ \ \ \/__/\ \\/_/\ \/ \ \ \/\ \\ \ `\\ \\ \ \ \_\  
-//   \ \  _  \\ \ \ \ \   _\ \ \  \ \ \  \ \  __ \\ \ . ` \\ \ \ =__ 
-//    \ \ \ \ \\ \ \_\ \ /\ \_\ \  \_\ \__\ \ \/\ \\ \ \`\ \\ \ \_\ \
-//     \ \_\ \_\\ \_____\\ \____/  /\_____\\ \_\ \_\\ \_\ \_\\ \____/
-//      \/_/\/_/ \/_____/ \/___/   \/_____/ \/_/\/_/ \/_/\/_/ \/___/ 
-//                                                                   
+//   __    __           ______   ______  _____    __  __     
+//  /\ \  /\ \ /'\_/`\ /\  _  \ /\__  _\/\  __`\ /\ \/\ \    
+//  \ `\`\\/'//\      \\ \ \/\ \\/_/\ \/\ \ \/\ \\ \ \ \ \   
+//   `\ `\ /' \ \ \__\ \\ \  __ \  \ \ \ \ \ \ \ \\ \ \ \ \  
+//     `\ \ \  \ \ \_/\ \\ \ \/\ \  \ \ \ \ \ \_\ \\ \ \_\ \ 
+//       \ \_\  \ \_\\ \_\\ \_\ \_\  \ \_\ \ \_____\\ \_____\
+//        \/_/   \/_/ \/_/ \/_/\/_/   \/_/  \/_____/ \/_____/
 //                                                                   
 
 /**
@@ -53,7 +52,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                     changes.push([attr, undefined, hui.BaseModel.clone(attrs[attr])]);
                     _model[attr] = newValue;
                 }
-                else if (typeof JSON !== 'undefined' && JSON.stringify(_model[attr]) != JSON.stringify(attrs[attr])) {
+                else if (!hui.BaseModel.isEqual(_model[attr], attrs[attr])) {
                     changes.push([attr, hui.BaseModel.clone(_model[attr]), hui.BaseModel.clone(attrs[attr])]);
                     _model[attr] = attrs[attr];
                 }
@@ -116,6 +115,108 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
             }
         }
     };
+
+    hui.BaseModel.isEqual = function (a, b, aStack, bStack) {
+        // Identical objects are equal. `0 === -0`, but they aren't identical.
+        // See the Harmony `egal` proposal: http://wiki.ecmascript.org/doku.php?id=harmony:egal.
+        if (a === b) {
+            return a !== 0 || 1 / a == 1 / b;
+        }
+        // A strict comparison is necessary because `null == undefined`.
+        if (a == null || b == null) {
+            return a === b;
+        }
+        if (aStack == undefined || bStack == undefined) {
+            aStack = [];
+            bStack = [];
+        }
+        // Compare `[[Class]]` names.
+        var className = Object.prototype.toString.call(a);
+        if (className != Object.prototype.toString.call(b)) {
+            return false;
+        }
+        switch (className) {
+            // Strings, numbers, dates, and booleans are compared by value.
+        case '[object String]':
+            // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
+            // equivalent to `new String("5")`.
+            return a == String(b);
+        case '[object Number]':
+            // `NaN`s are equivalent, but non-reflexive. An `egal` comparison is performed for
+            // other numeric values.
+            return a != +a ? b != +b : (a == 0 ? 1 / a == 1 / b : a == +b);
+        case '[object Date]':
+        case '[object Boolean]':
+            // Coerce dates and booleans to numeric primitive values. Dates are compared by their
+            // millisecond representations. Note that invalid dates with millisecond representations
+            // of `NaN` are not equivalent.
+            return +a == +b;
+            // RegExps are compared by their source patterns and flags.
+        case '[object RegExp]':
+            return a.source == b.source &&
+                a.global == b.global &&
+                a.multiline == b.multiline &&
+                a.ignoreCase == b.ignoreCase;
+        }
+        if (typeof a != 'object' || typeof b != 'object') return false;
+        // Assume equality for cyclic structures. The algorithm for detecting cyclic
+        // structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.
+        var length = aStack.length;
+        while (length--) {
+            // Linear search. Performance is inversely proportional to the number of
+            // unique nested structures.
+            if (aStack[length] == a) return bStack[length] == b;
+        }
+        // Add the first object to the stack of traversed objects.
+        aStack.push(a);
+        bStack.push(b);
+
+        var size = 0,
+            result = true;
+        // Recursively compare objects and arrays.
+        if (className == '[object Array]') {
+            // Compare array lengths to determine if a deep comparison is necessary.
+            size = a.length;
+            result = size == b.length;
+            if (result) {
+                // Deep compare the contents, ignoring non-numeric properties.
+                while (size--) {
+                    if (!(result = hui.BaseModel.isEqual(a[size], b[size], aStack, bStack))) break;
+                }
+            }
+        }
+        else {
+            // Objects with different constructors are not equivalent, but `Object`s
+            // from different frames are.
+            var aCtor = a.constructor,
+                bCtor = b.constructor;
+            if (aCtor !== bCtor && !(Object.prototype.toString.call(aCtor) == '[object Function]' && (aCtor instanceof aCtor) &&
+                Object.prototype.toString.call(bCtor) == '[object Function]' && (bCtor instanceof bCtor))) {
+                return false;
+            }
+            // Deep compare objects.
+            for (var key in a) {
+                if (Object.prototype.hasOwnProperty.call(a, key)) {
+                    // Count the expected number of properties.
+                    size++;
+                    // Deep compare each member.
+                    if (!(result = Object.prototype.hasOwnProperty.call(b, key) && hui.BaseModel.isEqual(a[key], b[key], aStack, bStack))) break;
+                }
+            }
+            // Ensure that both objects contain the same number of properties.
+            if (result) {
+                for (key in b) {
+                    if (Object.prototype.hasOwnProperty.call(b, key) && !(size--)) break;
+                }
+                result = !size;
+            }
+        }
+        // Remove the first object from the stack of traversed objects.
+        aStack.pop();
+        bStack.pop();
+
+        return result;
+    };
     hui.inherits(hui.BaseModel, hui.EventDispatcher);
 
     /** 
@@ -163,7 +264,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                     newArr.push(result);
                     var resultLen = 0;
                     for (i = 0, len = source.length; i < len; i++) {
-                        result[resultLen++] = hui.util.clone(source[i], oldArr, newArr);
+                        result[resultLen++] = hui.BaseModel.clone(source[i], oldArr, newArr);
                     }
                 }
                 else if (!!source && Object.prototype.toString.call(source) == '[object Object]') {
@@ -172,7 +273,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                     newArr.push(result);
                     for (i in source) {
                         if (source.hasOwnProperty(i)) {
-                            result[i] = hui.util.clone(source[i], oldArr, newArr);
+                            result[i] = hui.BaseModel.clone(source[i], oldArr, newArr);
                         }
                     }
                 }
@@ -296,7 +397,21 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
          * @name 退出
          * @public
          */
-        leave: function () {}
+        leave: function () {},
+        moveIn: function () {
+            var me = this,
+                main = me.getMain ? me.getMain() : null;
+            if (main) {
+                main.style.display = 'block';
+            }
+        },
+        moveOut: function () {
+            var me = this,
+                main = me.getMain ? me.getMain() : null;
+            if (main) {
+                main.style.display = 'none';
+            }
+        }
     };
 
     hui.inherits(hui.Action, hui.Control);
@@ -551,6 +666,8 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                 // 首先销毁当前action的实例
                 if (me.historyList[me.historyList.length - 1]) {
                     // me.disposeAction(me.parseLocator(me.historyList[me.historyList.length - 1])['location']);
+                    action = me.getActionInstance(me.findActionNameByLocation(me.parseLocator(me.historyList[me.historyList.length - 1])['location']));
+                    (action.moveOut ? action.moveOut() : hui.Action.prototype.moveOut.call(action));
                 }
 
                 // 找到匹配的路径规则(该过程中会创建action实例)
@@ -566,10 +683,12 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
 
                     me.historyList.push(url);
                     action.enterControl(args);
+                    action.moveIn && action.moveIn();
                 }
                 else if (action) {
                     me.historyList.push(url);
                     hui.Action.prototype.enterControl.call(action, args);
+                    (action.moveIn ? action.moveIn() : hui.Action.prototype.moveIn.call(action));
                 }
             }
         },
@@ -886,7 +1005,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
             // 存储当前信息
             // opera下，相同的hash重复写入会在历史堆栈中重复记录
             // 所以需要getLocation来判断
-            if (me.currentLocation != loc && me.getLocation() != loc || window.location.hash !== '#!' + loc ) {
+            if (me.currentLocation != loc && me.getLocation() != loc || window.location.hash !== '#!' + loc) {
                 window.location.hash = '!' + loc;
             }
 
@@ -1128,7 +1247,10 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
         addFilter: function (rule, target) {
             var me = this;
             if ('function' == typeof target) {
-                me.filters.push({rule: rule, target: target});
+                me.filters.push({
+                    rule: rule,
+                    target: target
+                });
             }
         },
         /**
@@ -1141,19 +1263,19 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
             var filters = [];
             var list = hui.Locator.filters;
             //[优先]匹配单独具体路径
-            for (var i=0,ilen=list.length; i<ilen; i++) {
+            for (var i = 0, ilen = list.length; i < ilen; i++) {
                 if (list[i] && !(list[i].rule instanceof RegExp) && list[i].rule === url) {
                     filters.unshift(list[i].target);
                 }
             }
             //匹配所有符合表达式的路径[正则表达式]
-            for (var i=list.length-1; i>-1; i--) {
+            for (var i = list.length - 1; i > -1; i--) {
                 if (list[i] && list[i].rule instanceof RegExp && list[i].rule.test(url)) {
                     filters.push(list[i].target);
                 }
             }
-            
-            this.applyFilterCallback(filters, finish);            
+
+            this.applyFilterCallback(filters, finish);
         },
         applyFilterCallback: function (filters, finish) {
             if (filters.length) {
@@ -1171,107 +1293,6 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
             else {
                 finish && finish();
             }
-        },
-        isEqual: function (a, b, aStack, bStack) {
-            // Identical objects are equal. `0 === -0`, but they aren't identical.
-            // See the Harmony `egal` proposal: http://wiki.ecmascript.org/doku.php?id=harmony:egal.
-            if (a === b) {
-                return a !== 0 || 1 / a == 1 / b;
-            }
-            // A strict comparison is necessary because `null == undefined`.
-            if (a == null || b == null) {
-                return a === b;
-            }
-            if (aStack == undefined || bStack == undefined) {
-                aStack = [];
-                bStack = [];
-            }
-            // Compare `[[Class]]` names.
-            var className = Object.prototype.toString.call(a);
-            if (className != Object.prototype.toString.call(b)) {
-                return false;
-            }
-            switch (className) {
-                // Strings, numbers, dates, and booleans are compared by value.
-            case '[object String]':
-                // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
-                // equivalent to `new String("5")`.
-                return a == String(b);
-            case '[object Number]':
-                // `NaN`s are equivalent, but non-reflexive. An `egal` comparison is performed for
-                // other numeric values.
-                return a != +a ? b != +b : (a == 0 ? 1 / a == 1 / b : a == +b);
-            case '[object Date]':
-            case '[object Boolean]':
-                // Coerce dates and booleans to numeric primitive values. Dates are compared by their
-                // millisecond representations. Note that invalid dates with millisecond representations
-                // of `NaN` are not equivalent.
-                return +a == +b;
-                // RegExps are compared by their source patterns and flags.
-            case '[object RegExp]':
-                return a.source == b.source &&
-                    a.global == b.global &&
-                    a.multiline == b.multiline &&
-                    a.ignoreCase == b.ignoreCase;
-            }
-            if (typeof a != 'object' || typeof b != 'object') return false;
-            // Assume equality for cyclic structures. The algorithm for detecting cyclic
-            // structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.
-            var length = aStack.length;
-            while (length--) {
-                // Linear search. Performance is inversely proportional to the number of
-                // unique nested structures.
-                if (aStack[length] == a) return bStack[length] == b;
-            }
-            // Add the first object to the stack of traversed objects.
-            aStack.push(a);
-            bStack.push(b);
-
-            var size = 0,
-                result = true;
-            // Recursively compare objects and arrays.
-            if (className == '[object Array]') {
-                // Compare array lengths to determine if a deep comparison is necessary.
-                size = a.length;
-                result = size == b.length;
-                if (result) {
-                    // Deep compare the contents, ignoring non-numeric properties.
-                    while (size--) {
-                        if (!(result = hui.util.isEqual(a[size], b[size], aStack, bStack))) break;
-                    }
-                }
-            }
-            else {
-                // Objects with different constructors are not equivalent, but `Object`s
-                // from different frames are.
-                var aCtor = a.constructor,
-                    bCtor = b.constructor;
-                if (aCtor !== bCtor && !(Object.prototype.toString.call(aCtor) == '[object Function]' && (aCtor instanceof aCtor) &&
-                    Object.prototype.toString.call(bCtor) == '[object Function]' && (bCtor instanceof bCtor))) {
-                    return false;
-                }
-                // Deep compare objects.
-                for (var key in a) {
-                    if (Object.prototype.hasOwnProperty.call(a, key)) {
-                        // Count the expected number of properties.
-                        size++;
-                        // Deep compare each member.
-                        if (!(result = Object.prototype.hasOwnProperty.call(b, key) && hui.util.isEqual(a[key], b[key], aStack, bStack))) break;
-                    }
-                }
-                // Ensure that both objects contain the same number of properties.
-                if (result) {
-                    for (key in b) {
-                        if (Object.prototype.hasOwnProperty.call(b, key) && !(size--)) break;
-                    }
-                    result = !size;
-                }
-            }
-            // Remove the first object from the stack of traversed objects.
-            aStack.pop();
-            bStack.pop();
-
-            return result;
         }
     };
 
@@ -1383,7 +1404,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
         getView: function () {
             var str = hui.Control.format([
                 '<div style="font-size:10pt;line-height:1.2em; line-height: 1.2em;padding: 15px;text-align: left;background-color: #f1f1f1;">',
-                '<h3 style="margin:0px;line-height:3em;">The page cannot be found</h3>',
+                '<button style="display:none" ui="type:\'Button\'">ddd</button><h3 style="margin:0px;line-height:3em;">The page cannot be found</h3>',
                 '<p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>',
                 '<p>Please try the following:</p>',
                 '<ul><li>If you typed the page address in the Address bar, make sure that it is spelled correctly.<br/></li>',
@@ -1430,18 +1451,23 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
         getView: function () {
             var str = hui.Control.format([
                 '<div style="font-size:10pt;line-height:1.2em; line-height: 1.2em;padding: 15px;text-align: left;background-color: #f1f1f1;">',
-                '<button style="display:none" ui="type:\'Button\'">ddd</button><h3 style="margin:0px;line-height:3em;">The page cannot be found</h3>',
+                '<h3 style="margin:0px;line-height:3em;">The page cannot be found</h3>',
                 '<p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>',
                 '<p>Please try the following:</p>',
                 '<ul><li>If you typed the page address in the Address bar, make sure that it is spelled correctly.<br/></li>',
                 '<li>Open the <a href="#!/">home page</a>, and then look for links to the information you want.</li>',
                 '<li>Click the <a href="javascript:history.go(-1)">Back</a> button to try another link. </li>',
-                '</ul><p><br></p>HTTP 404 - File not found<br />Need any help? Please contact the Monsieur {{name}}.<br /></div>'
+                '</ul><p><br></p>HTTP 404 - File not found<br />Need any help? Please contact the Monsieur {{user}}.<br /></div>'
             ].join(''), this.querystring);
             return str;
         },
         getViewAsync: function (callback) {
             callback && callback('Hello {{user}}');
+        },
+        initModelAsync: function (callback) {
+            var me = this;
+            me.model.set('user', me.querystring.user);
+            callback && callback();
         }
     });
 

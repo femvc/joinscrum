@@ -1,4 +1,13 @@
 'use strict';
+//   __    __           ______   ______  _____    __  __     
+//  /\ \  /\ \ /'\_/`\ /\  _  \ /\__  _\/\  __`\ /\ \/\ \    
+//  \ `\`\\/'//\      \\ \ \/\ \\/_/\ \/\ \ \/\ \\ \ \ \ \   
+//   `\ `\ /' \ \ \__\ \\ \  __ \  \ \ \ \ \ \ \ \\ \ \ \ \  
+//     `\ \ \  \ \ \_/\ \\ \ \/\ \  \ \ \ \ \ \_\ \\ \ \_\ \ 
+//       \ \_\  \ \_\\ \_\\ \_\ \_\  \ \_\ \ \_____\\ \_____\
+//        \/_/   \/_/ \/_/ \/_/\/_/   \/_/  \/_____/ \/_____/
+//                                                                   
+
 /**
  * @name 控件基础类
  * @public
@@ -659,10 +668,10 @@ hui.define('hui_control', [], function () {
             main.disabled = typeof disabled === 'undefined' ? disabled = true : disabled;
 
             if (main.disabled) {
-                hui.addClass(main, me.getClass('disabled'));
+                hui.Control.addClass(main, me.getClass('disabled'));
             }
             else {
-                hui.removeClass(main, me.getClass('disabled'));
+                hui.Control.removeClass(main, me.getClass('disabled'));
             }
             return me;
         },
@@ -859,7 +868,10 @@ hui.define('hui_control', [], function () {
                     });
                 }
                 else if (uiObj.initModelAsync && uiObj.initModelMethod !== 'sync' && uiObj.initModelMethod !== 'skip') {
-                    que.push(uiObj.initModelAsync);
+                    que.push(function(next){
+                        uiObj.initModelAsync();
+                        next && next();
+                    });
                     que.push(function (next) {
                         var me = uiObj;
                         var main = me.getMain();
@@ -1667,7 +1679,7 @@ hui.define('hui_control', [], function () {
     hui.Control.format = function (source, opts) {
         function handler(match, key) {
             var type = String(key).indexOf('!!') === 0 ? 'decode' : String(key).indexOf('!') === 0 ? '' : 'encode',
-                parts = hui.Template.overloadOperator(key.replace(/^!!?/, '')).split('.'),
+                parts = key.replace(/^!!?/, '').split('.'),
                 part = parts.shift(),
                 cur = data,
                 variable;

@@ -1,19 +1,18 @@
 'use strict';
-//   __  __   __  __    _____   ______   ______   __  __   _____     
-//  /\ \/\ \ /\ \/\ \  /\___ \ /\__  _\ /\  _  \ /\ \/\ \ /\  __`\   
-//  \ \ \_\ \\ \ \ \ \ \/__/\ \\/_/\ \/ \ \ \/\ \\ \ `\\ \\ \ \ \_\  
-//   \ \  _  \\ \ \ \ \   _\ \ \  \ \ \  \ \  __ \\ \ . ` \\ \ \ =__ 
-//    \ \ \ \ \\ \ \_\ \ /\ \_\ \  \_\ \__\ \ \/\ \\ \ \`\ \\ \ \_\ \
-//     \ \_\ \_\\ \_____\\ \____/  /\_____\\ \_\ \_\\ \_\ \_\\ \____/
-//      \/_/\/_/ \/_____/ \/___/   \/_____/ \/_/\/_/ \/_/\/_/ \/___/ 
-//                                                                   
+//   __    __           ______   ______  _____    __  __     
+//  /\ \  /\ \ /'\_/`\ /\  _  \ /\__  _\/\  __`\ /\ \/\ \    
+//  \ `\`\\/'//\      \\ \ \/\ \\/_/\ \/\ \ \/\ \\ \ \ \ \   
+//   `\ `\ /' \ \ \__\ \\ \  __ \  \ \ \ \ \ \ \ \\ \ \ \ \  
+//     `\ \ \  \ \ \_/\ \\ \ \/\ \  \ \ \ \ \ \_\ \\ \ \_\ \ 
+//       \ \_\  \ \_\\ \_\\ \_\ \_\  \ \_\ \ \_____\\ \_____\
+//        \/_/   \/_/ \/_/ \/_/\/_/   \/_/  \/_____/ \/_____/
 //                                                                   
 
 /**
  * @name Requester请求管理类
  * @public
  * @author haiyang5210
- * @date 2014-11-16 19:01
+ * @date 2015-06-25 19:01
  */
 hui.define('hui_requester', [], function () {
 
@@ -77,7 +76,7 @@ hui.define('hui_requester', [], function () {
                  */
                 // 不对事件类型进行验证 
                 if (handler) {
-                    // 如果action已被销毁则直接忽略本次请求结果.由于默认开启连接池,因此无需销毁xhr的fire方法!
+                    // 如果action已被销毁则直接忽略本次请求结果.因此无需销毁xhr的fire方法!
                     if (xhr.eventHandlers.action && !xhr.eventHandlers.action.active) {
                         return;
                     }
@@ -129,7 +128,7 @@ hui.define('hui_requester', [], function () {
                             }
 
                             var text = xhr.xhr.responseText.replace(/^\s+/ig, '');
-                            if (text.indexOf('[') === 0) {
+                            if (text.indexOf('[') === 0 || text.indexOf('{') === 0) {
                                 // {success:true,message: 
                                 // 插入表单验证错误提示 
                                 var JSON_Parser;
@@ -139,24 +138,7 @@ hui.define('hui_requester', [], function () {
                                 }
                                 // 如果json解析出错则尝试移除多于逗号再试 
                                 catch (e) {
-                                    JSON_Parser = new Function('return ' + window.Requester.removeJSONExtComma(text) + ';');
-                                    data = JSON_Parser();
-                                }
-
-                                xhr.responseCallback(handler, data);
-                            }
-                            else if (text.indexOf('{') === 0) {
-                                // {success:true,message: 
-                                // 插入表单验证错误提示 
-                                var JSON_Parser;
-                                try {
-                                    JSON_Parser = new Function('return ' + text + ';');
-                                    data = JSON_Parser();
-                                }
-                                // 如果json解析出错则尝试移除多于逗号再试 
-                                catch (e) {
-                                    JSON_Parser = new Function('return ' + window.Requester.removeJSONExtComma(text) + ';');
-                                    data = JSON_Parser();
+                                    throw new Error('JSON parse error.');
                                 }
                                 xhr.responseCallback(handler, data);
                             }
@@ -520,85 +502,6 @@ hui.define('hui_requester', [], function () {
         }
         return fmt;
     };
-    /**
-     * @name 移除JSON字符串中多余的逗号如{'a':[',],}',],}
-     * @public
-     * @param {String} JSON字符串
-     * @return {String} 处理后的JSON字符串
-     */
-    Requester.removeJSONExtComma = function (str) {
-        var i,
-            j,
-            len,
-            list,
-            c,
-            notValue = null,
-            preQuot = null,
-            lineNum;
-
-        list = String(str).split('');
-        for (i = 0, len = list.length; i < len; i++) {
-            c = list[i];
-            // 单引或双引
-            if (/^[\'\"]$/.test(c)) { //'
-                if (notValue === null && preQuot === null) {
-                    notValue = false;
-                    preQuot = i;
-                    continue;
-                }
-                // 值
-                if (!notValue) {
-                    // 前面反斜杠个数
-                    lineNum = 0;
-                    for (j = i - 1; j > -1; j--) {
-                        if (list[j] === '\\') {
-                            lineNum++;
-                        }
-                        else {
-                            j = -1;
-                        }
-                    }
-                    // 个数为偶数且和开始引号相同
-                    // 结束引号
-                    if (lineNum % 2 === 0) {
-                        if (list[preQuot] === c) {
-                            notValue = true;
-                            preQuot = -1;
-                        }
-                    }
-                }
-                // 非值
-                else {
-                    // 开始引号
-                    if (preQuot == -1) {
-                        preQuot = i;
-                        notValue = false;
-                    }
-                    // 结束引号
-                    else if (list[preQuot] === c) {
-                        notValue = true;
-                        preQuot = -1;
-                    }
-                }
-            }
-            // 逗号
-            else if (c === ']' || c === '}') {
-                // 非值
-                if (notValue) {
-                    for (j = i - 1; j > -1; j--) {
-                        if (/^[\t\r\n\s ]+$/.test(list[j])) {
-                            continue;
-                        }
-                        else {
-                            if (list[j] === ',') list[j] = '';
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        return list.join('').replace(/\n/g, '').replace(/\r/g, '');
-    };
 
     /**
      * @name 发送Requester请求
@@ -724,14 +627,21 @@ hui.define('hui_requester', [], function () {
      */
     Requester.JSONP = function (url, params) {
         var Mockup = Requester.getExtClass('hui.Mockup'),
-            params = params || {},
-            onsuccess = params['onsuccess'] || Function('');
+            params = params || {};
         // 检查是否启用了mockup
         if (!Mockup.stop && Mockup.find(url)) {
             if (window.console && window.console.log) {
                 window.console.log(url);
             }
-            return onsuccess(Mockup.get(url));
+            if (Object.prototype.toString.call(params.callback) === '[object Function]') {
+                return params.callback(Mockup.get(url));
+            }
+            else if (Object.prototype.toString.call(params.callback) === '[object String]') {
+                var callback = Function('return ' + params.callback)();
+                if (Object.prototype.toString.call(callback) === '[object Function]') {
+                    return callback(Mockup.get(url));
+                }
+            }
         }
 
         var me = this,
@@ -739,7 +649,7 @@ hui.define('hui_requester', [], function () {
             proxy = me.getValidProxy(params['action']);
 
         proxy['action'] = params['action'];
-        proxy['onsuccess'] = params['onsuccess'];
+        proxy['callback'] = params['callback'];
         proxy['status'] = 'send';
 
         var args = [];
@@ -750,10 +660,10 @@ hui.define('hui_requester', [], function () {
                 }
             }
         }
-        args.push('rand=' + Math.random());
-        args.push('callback=window.Requester.jsonproxy_callback("' + proxy['id'] + '").callback');
+        !params.norand && args.push('rand=' + Math.random());
+        params.callback && args.push(Object.prototype.toString.call(params.callback) === '[object String]' ? 'callback=' + params.callback : 'callback=window.Requester.jsonproxy_callback("' + proxy['id'] + '").callback');
 
-        document.getElementById(proxy['id']).src = url + (~url.indexOf('?') ? '&' : '?') + args.join('&');
+        document.getElementById(proxy['id']).src = url + (!args.length ? '' : (~url.indexOf('?') ? '&' : '?')) + args.join('&');
     };
     Requester.jsonproxy_callback = function (id) {
         return window.Requester.jsonproxy[id];
@@ -811,8 +721,8 @@ hui.define('hui_requester', [], function () {
             }
 
             // 调用用户传入的回调接口
-            if (proxy.onsuccess) {
-                proxy.onsuccess(data);
+            if (Object.prototype.toString.call(proxy.callback) === '[object Function]') {
+                proxy.callback(data);
             }
         };
     };
@@ -862,7 +772,7 @@ function doit() {
     Requester.get('http://www.5imemo.com/other/ajax/jsonp.php', {onsuccess: function(data){alert(data.success)}});
 
     // 注: JSONP跨域不会导致出错
-    Requester.JSONP('http://www.5imemo.com/other/ajax/jsonp.php', {onsuccess: function(data){ alert(data.id)}});
+    Requester.JSONP('http://www.5imemo.com/other/ajax/jsonp.php', {callback: function(data){ alert(data.id)}});
 }
 */
 
@@ -896,6 +806,12 @@ function doit() {
      * @name 前端构造测试数据
      */
     hui.Mockup = {
+        getIndex: (function () {
+            var guid = 0;
+            return function () {
+                return guid++;
+            };
+        })(),
         find: function (url) {
             var target;
             var list = hui.Mockup.rules;
@@ -911,7 +827,7 @@ function doit() {
                     target = list[i].target;
                 }
             }
-            
+
             if (url && target === undefined) {
                 var str = url.split('#')[0].split('?')[0];
                 if (str !== url) {
@@ -955,128 +871,33 @@ function doit() {
         },
         setRule: function (url, target) {
             hui.Mockup.remove(url, target);
-            hui.Mockup.rules.push({
+            var mock = {
                 rule: url,
-                'target': target
-            });
+                'target': target,
+                index: hui.Mockup.getIndex()
+            };
+            hui.Mockup.rules.push(mock);
+            return mock;
         },
-        remove: function (url, target) {
+        remove: function (opt) {
             var list = hui.Mockup.rules;
-            var equ = hui.Mockup.isEqual;
             for (var i = 0, ilen = list.length; i < ilen; i++) {
-                if (list[i] && equ(list[i].rule, url) && (target === undefined || equ(list[i].target, target))) {
-                    list[i] = null;
+                if (!list[i] ||
+                    (opt.url && String(list[i].rule) !== String(opt.url)) ||
+                    (opt.index && String(list[i].index) !== String(opt.index)) ||
+                    (!opt.url && !opt.index)) {
+                    continue;
                 }
+                list[i] = null;
             }
         },
-        clear: function () {
+        clear: function (url) {
             hui.Mockup.rules = [];
-        },
-        isEqual: function (a, b, aStack, bStack) {
-            // Identical objects are equal. `0 === -0`, but they aren't identical.
-            // See the Harmony `egal` proposal: http://wiki.ecmascript.org/doku.php?id=harmony:egal.
-            if (a === b) {
-                return a !== 0 || 1 / a == 1 / b;
-            }
-            // A strict comparison is necessary because `null == undefined`.
-            if (a === null || b === null) {
-                return a === b;
-            }
-            if (aStack === undefined || bStack === undefined) {
-                aStack = [];
-                bStack = [];
-            }
-            // Compare `[[Class]]` names.
-            var className = Object.prototype.toString.call(a);
-            if (className != Object.prototype.toString.call(b)) {
-                return false;
-            }
-            switch (className) {
-                // Strings, numbers, dates, and booleans are compared by value.
-            case '[object String]':
-                // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
-                // equivalent to `new String("5")`.
-                return a == String(b);
-            case '[object Number]':
-                // `NaN`s are equivalent, but non-reflexive. An `egal` comparison is performed for
-                // other numeric values.
-                return a != +a ? b != +b : (a === 0 ? 1 / a == 1 / b : a == +b);
-            case '[object Date]':
-            case '[object Boolean]':
-                // Coerce dates and booleans to numeric primitive values. Dates are compared by their
-                // millisecond representations. Note that invalid dates with millisecond representations
-                // of `NaN` are not equivalent.
-                return +a == +b;
-                // RegExps are compared by their source patterns and flags.
-            case '[object RegExp]':
-                return a.source == b.source &&
-                    a.global == b.global &&
-                    a.multiline == b.multiline &&
-                    a.ignoreCase == b.ignoreCase;
-            }
-            if (typeof a != 'object' || typeof b != 'object') return false;
-            // Assume equality for cyclic structures. The algorithm for detecting cyclic
-            // structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.
-            var length = aStack.length;
-            while (length--) {
-                // Linear search. Performance is inversely proportional to the number of
-                // unique nested structures.
-                if (aStack[length] == a) return bStack[length] == b;
-            }
-            // Add the first object to the stack of traversed objects.
-            aStack.push(a);
-            bStack.push(b);
-
-            var size = 0,
-                result = true;
-            // Recursively compare objects and arrays.
-            if (className == '[object Array]') {
-                // Compare array lengths to determine if a deep comparison is necessary.
-                size = a.length;
-                result = size == b.length;
-                if (result) {
-                    // Deep compare the contents, ignoring non-numeric properties.
-                    while (size--) {
-                        if (!(result = hui.Mockup.isEqual(a[size], b[size], aStack, bStack))) break;
-                    }
-                }
-            }
-            else {
-                // Objects with different constructors are not equivalent, but `Object`s
-                // from different frames are.
-                var aCtor = a.constructor,
-                    bCtor = b.constructor;
-                if (aCtor !== bCtor && !(Object.prototype.toString.call(aCtor) == '[object Function]' && (aCtor instanceof aCtor) &&
-                    Object.prototype.toString.call(bCtor) == '[object Function]' && (bCtor instanceof bCtor))) {
-                    return false;
-                }
-                // Deep compare objects.
-                for (var key in a) {
-                    if (Object.prototype.hasOwnProperty.call(a, key)) {
-                        // Count the expected number of properties.
-                        size++;
-                        // Deep compare each member.
-                        if (!(result = Object.prototype.hasOwnProperty.call(b, key) && hui.Mockup.isEqual(a[key], b[key], aStack, bStack))) break;
-                    }
-                }
-                // Ensure that both objects contain the same number of properties.
-                if (result) {
-                    for (key in b) {
-                        if (Object.prototype.hasOwnProperty.call(b, key) && !(size--)) break;
-                    }
-                    result = !size;
-                }
-            }
-            // Remove the first object from the stack of traversed objects.
-            aStack.pop();
-            bStack.pop();
-
-            return result;
         }
     };
     hui.Mockup.rules = [];
 
-    hui.Mockup.setRule('/hui_helloworld', {
+    hui.Mockup.setRule('/helloworld', {
         status: 0,
         message: '',
         data: 'Hello world.'
