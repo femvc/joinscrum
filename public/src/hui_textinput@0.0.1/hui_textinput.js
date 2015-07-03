@@ -16,7 +16,6 @@
  * @date 2014-11-14 23:51
  * @param {Object} options 控件初始化参数.
  */
-hui.define.autoload = true;
 hui.define('hui_textinput', ['hui_control', 'hui_util'], function () {
 
     hui.TextInput = function (options, pending) {
